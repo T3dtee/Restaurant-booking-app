@@ -1,5 +1,6 @@
 package com.example.project114;
 
+import com.example.project114.backend.StaffLogin;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -46,7 +47,7 @@ public class staffLoginController {
 
         if (validUsername && validPassword) {
             if (s.login(username, password)) {
-                AppData.loginStaffData = new staffLoginData(username, password);
+                AppData.loginStaffData = new StaffLogin(username, password);
                 goToStaffDashBoard();
             }
             else {
