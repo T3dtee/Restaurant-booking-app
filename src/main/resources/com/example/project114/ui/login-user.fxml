@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="360.0" styleClass="app-background" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.project114.loginUserController">
+   <children>
+      <BorderPane prefHeight="200.0" prefWidth="200.0">
+         <center>
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="380.0" prefWidth="330.0" styleClass="login-box" BorderPane.alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" onMouseClicked="#logoClick" prefHeight="30.0" prefWidth="331.0" styleClass="best-meal-title" text="Best Meal">
+                     <VBox.margin>
+                        <Insets top="35.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="333.0" styleClass="text-label" text="Log in" textAlignment="CENTER">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Label>
+                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="333.0" styleClass="text-label" text="Enter Name and Tel. to login this app">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin></Label>
+                  <TextField fx:id="nameUserField" focusTraversable="false" prefHeight="45.0" prefWidth="290.0" promptText="Name Lastname" styleClass="name-field">
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="10.0" />
+                     </VBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="TEXT" />
+                     </cursor>
+                     <padding>
+                        <Insets left="15.0" right="15.0" />
+                     </padding>
+                  </TextField>
+                  <TextField fx:id="telNumberField" focusTraversable="false" prefHeight="45.0" prefWidth="290.0" promptText="Tel. ex 06XXXXXXXX" styleClass="tel-field">
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="8.0" />
+                     </VBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="TEXT" />
+                     </cursor>
+                     <padding>
+                        <Insets left="15.0" right="15.0" />
+                     </padding>
+                  </TextField>
+                  <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="45.0" prefWidth="290.0" styleClass="login-btn-box">
+                     <children>
+                        <Button fx:id="login" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#loginSubmit" prefHeight="45.0" prefWidth="290.0" styleClass="login-btn" text="Log in">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="28.0" />
+                     </VBox.margin>
+                  </VBox>
+                  <Label fx:id="staffLogin" alignment="CENTER" onMouseClicked="#goToStaffLogin" prefHeight="17.0" prefWidth="331.0" styleClass="link" text="for staff login" visible="false">
+                     <font>
+                        <Font size="8.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="140.0" right="140.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="60.0" />
+               </BorderPane.margin>
+            </VBox>
+         </center>
+      </BorderPane>
+   </children>
+</StackPane>

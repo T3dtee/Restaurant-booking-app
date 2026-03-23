@@ -1,0 +1,186 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url('font/Roboto-Regular.ttf');
+}
+@font-face {
+    font-family: 'Roboto-SemiBold';
+    src: url('font/Roboto_Condensed-SemiBold.ttf');
+}
+
+.app-background {
+    -fx-background-image: url('img/bg-img.png');
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+.book-table-title {
+    -fx-font-family: 'Roboto Condensed SemiBold';
+    -fx-text-fill: #41891C;
+    -fx-font-size: 32;
+}
+.back-btn {
+    -fx-cursor: hand;
+}
+.back-btn:hover {
+    -fx-opacity: 70%;
+}
+.info-box{
+    -fx-background-radius: 16;
+    -fx-background-color: #FFFFFF;
+    -fx-border-radius: 16;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0.3, 0, 8)
+}
+.name .tel{
+    -fx-font-family: 'Roboto Condensed SemiBold';
+    -fx-text-fill: #5F5757;
+    -fx-font-size: 14;
+}
+.text-label{
+    -fx-font-family: 'Roboto Condensed SemiBold';
+    -fx-text-fill: #5F5757;
+}
+
+/* กล่องหลัก */
+.modern-datepicker {
+    -fx-font-family: Roboto;
+    -fx-background-color: white;
+    -fx-font-size: 14px;
+}
+.error-date-picker {
+    -fx-border-color: red;
+}
+
+/* ปุ่มปฏิทิน */
+.modern-datepicker .arrow-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 12;
+}
+
+.modern-datepicker .arrow-button:hover {
+    -fx-background-color: #f2f2f2;
+}
+
+/* popup calendar */
+.date-picker-popup {
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-background-color: white;
+    -fx-border-color: #eaeaea;
+}
+
+/* header (เดือน/ปี) */
+.date-picker-popup .header-pane {
+    -fx-background-color: transparent;
+}
+
+/* วัน */
+.date-picker-popup .day-cell {
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-text-fill: #222;
+}
+
+/* hover วัน */
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: #41891C;
+}
+
+/* วันที่เลือก */
+.date-picker-popup .day-cell:selected {
+    -fx-background-color: linear-gradient(#7bdc5b, #4caf50);
+    -fx-text-fill: white;
+    -fx-background-radius: 14;
+    -fx-font-weight: bold;
+}
+
+/* วันปัจจุบัน */
+.date-picker-popup .today {
+    -fx-border-width: 1;
+    -fx-border-color: #4caf50;
+    -fx-border-radius: 14;
+}
+
+.date-box{
+    -fx-background-radius: 16;
+    -fx-background-color: #FFFFFF;
+    -fx-border-radius: 16;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0.3, 0, 8)
+}
+
+.time-choice{
+    -fx-background-radius: 18;
+    -fx-background-color: #1C9B1C;
+    -fx-border-radius: 18;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0.3, 0, 8);
+    -fx-cursor: hand;
+}
+
+.time-choice:hover{
+    -fx-background-color: #22ba22;
+}
+.no-booked-box{
+    -fx-font-family: Roboto;
+    -fx-background-radius: 18;
+    -fx-background-color: #E4E4E4;
+    -fx-border-radius: 18;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0.3, 0, 8)
+}
+.guest-box{
+    -fx-background-radius: 18;
+    -fx-background-color: #FFFFFF;
+    -fx-border-radius: 18;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0.3, 0, 8)
+}
+.reduce-guest-btn{
+    -fx-cursor: hand;
+}
+.reduce-guest-btn:hover{
+    -fx-opacity: 80%;
+}
+.reduce-guest-btn:pressed{
+    -fx-opacity: 100%;
+    -fx-translate-y: 1;
+}
+.add-guest-btn{
+    -fx-cursor: hand;
+}
+.add-guest-btn:hover{
+    -fx-opacity: 80%;
+}
+.add-guest-btn:pressed{
+    -fx-opacity: 100%;
+    -fx-translate-y: 1;
+}
+.confirm-btn{
+    -fx-background-radius: 64;
+    -fx-background-color: #1C9B1C;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-family: 'Roboto Condensed SemiBold';
+    -fx-font-size: 18;
+    -fx-cursor: hand;
+}
+.confirm-btn:hover{
+    -fx-background-color: #21b321;
+}
+.confirm-btn:pressed{
+    -fx-background-color: #136a13;
+    -fx-translate-y: 1;
+}
+.table-full-btn{
+    -fx-background-radius: 64;
+    -fx-background-color: #8f8f8f;
+    -fx-text-fill: #b8b8b8;
+    -fx-font-family: 'Roboto Condensed SemiBold';
+    -fx-font-size: 18;
+}
+.confirm-btn-box{
+    -fx-border-radius: 64;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0.3, 0, 4)
+}
+

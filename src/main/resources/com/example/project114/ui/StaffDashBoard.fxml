@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="360.0" styleClass="app-background" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.project114.staffDashBoard">
+   <children>
+      <VBox prefHeight="211.0" prefWidth="360.0">
+         <children>
+            <BorderPane prefHeight="80.0" prefWidth="360.0">
+               <left>
+                  <ImageView fitHeight="13.0" fitWidth="13.0" onMouseClicked="#goToStaffLogin" pickOnBounds="true" preserveRatio="true" styleClass="back-btn" BorderPane.alignment="CENTER">
+                     <image>
+                        <Image url="@../style/img/arrow.png" />
+                     </image>
+                     <BorderPane.margin>
+                        <Insets left="20.0" top="10.0" />
+                     </BorderPane.margin>
+                  </ImageView>
+               </left>
+               <center>
+                  <Label alignment="CENTER" prefWidth="231.0" styleClass="best-meal-title" text="Best Meal Staff" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="35.0" />
+                     </font>
+                     <BorderPane.margin>
+                        <Insets right="60.0" top="10.0" />
+                     </BorderPane.margin>
+                  </Label>
+               </center>
+            </BorderPane>
+            <ScrollPane fitToWidth="true" prefHeight="710.0" prefWidth="360.0">
+               <content>
+                  <VBox fx:id="itemBox" alignment="CENTER" prefHeight="200.0" prefWidth="358.0" spacing="10.0" styleClass="bookingContainer">
+                     <padding>
+                        <Insets bottom="15.0" left="10.0" right="10.0" top="15.0" />
+                     </padding>
+                  </VBox>
+               </content>
+            </ScrollPane>
+         </children>
+      </VBox>
+   </children>
+</StackPane>

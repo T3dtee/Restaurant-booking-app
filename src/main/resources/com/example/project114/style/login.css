@@ -1,0 +1,84 @@
+@font-face {
+    font-family: 'Pacifico';
+    src: url('font/Pacifico-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('font/Roboto-Regular.ttf');
+}
+
+.app-background {
+    -fx-background-image: url('img/bg-img.png');
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+.login-box {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0.3, 0, 4);
+}
+.best-meal-title {
+    -fx-font-family: 'Pacifico';
+    -fx-text-fill: linear-gradient(to right,#33611B,#9CE633);
+    -fx-font-size: 45;
+}
+.best-meal-title-staff {
+    -fx-font-family: 'Pacifico';
+    -fx-text-fill: linear-gradient(to right, #458325, #1d4209);
+    -fx-font-size: 45;
+}
+.text-label {
+    -fx-font-family: 'Roboto';
+    -fx-text-fill: #9E9E9E;
+}
+.name-field {
+    -fx-background-radius: 64;
+    -fx-background-color: #F3F3F3;
+    -fx-font-family: 'Roboto';
+}
+.tel-field {
+    -fx-background-radius: 64;
+    -fx-background-color: #F3F3F3;
+    -fx-font-family: 'Roboto';
+}
+.password-field {
+    -fx-background-radius: 64;
+    -fx-background-color: #F3F3F3;
+    -fx-font-family: 'Roboto';
+}
+.error-field {
+    -fx-border-color: red;
+    -fx-border-radius: 64;
+}
+.login-btn{
+    -fx-background-color: #1C9B1C;
+    -fx-font-family: 'Roboto';
+    -fx-font-size: 20;
+    -fx-text-fill: #FFFF;
+    -fx-background-radius: 30;
+    -fx-cursor: hand;
+}
+.login-btn-box{
+    -fx-border-radius: 30;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0.3, 0, 4)
+}
+.login-btn:hover{
+    -fx-background-color: #28b828;
+}
+.login-btn:pressed{
+    -fx-background-color: #0e680e;
+    -fx-translate-y: 2;
+}
+.link{
+    -fx-underline: true;
+    -fx-text-fill: #1E7623;
+    -fx-cursor: hand;
+}
+.link:hover {
+    -fx-text-fill: #ff6a00;
+}

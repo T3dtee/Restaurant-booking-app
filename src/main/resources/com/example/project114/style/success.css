@@ -1,0 +1,60 @@
+@font-face {
+    src: url('font/Roboto-Regular.ttf');
+}
+
+@font-face {
+    src: url('font/Roboto_Condensed-SemiBold.ttf');
+}
+
+.app-background {
+    -fx-background-image: url("img/bg-img.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+.back-btn {
+    -fx-cursor: hand;
+}
+.back-btn:hover {
+    -fx-opacity: 70%;
+}
+.success {
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 30;
+    -fx-text-fill: #136a13;
+}
+
+#container {
+    -fx-background-radius: 100;
+    -fx-background-color: #FFFFFF;
+}
+
+.name {
+    -fx-font-family: Roboto;
+    -fx-font-size: 15;
+    -fx-text-fill: #5F5757;
+}
+
+.date {
+    -fx-font-family: Roboto;
+    -fx-font-size: 15;
+    -fx-text-fill: #5F5757;
+}
+
+.time {
+    -fx-font-family: Roboto;
+    -fx-font-size: 15;
+    -fx-text-fill: #5F5757;
+}
+
+.guest {
+    -fx-font-family: Roboto;
+    -fx-font-size: 15;
+    -fx-text-fill: #5F5757;
+}
+
+.table {
+    -fx-font-family: Roboto;
+    -fx-font-size: 15;
+    -fx-text-fill: #5F5757;
+}

@@ -1,0 +1,71 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url('font/Roboto-Regular.ttf');
+}
+
+.card-container {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #333333;
+    -fx-border-radius: 10;
+}
+
+.close-btn {
+
+    -fx-background-color: #dc1414;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+.close-btn:hover {
+    -fx-background-color: #ff0000;
+}
+
+.close-btn:pressed {
+    -fx-background-color: #7c0f0f;
+    -fx-translate-y: 1;
+}
+
+.confirm-btn {
+
+    -fx-background-color: #17af17;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+.confirm-btn:hover {
+    -fx-background-color: #37DC37;
+}
+
+.confirm-btn:pressed {
+    -fx-background-color: #264a14;
+    -fx-translate-y: 1;
+}
+
+.name-label {
+    -fx-font-family: 'Roboto';
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.label-header {
+    -fx-font-family: 'Roboto';
+    -fx-text-fill: #333333;
+    -fx-font-size: 14px;
+}
+
+.label-data {
+    -fx-font-family: 'Roboto';
+    -fx-text-fill: #808080;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
