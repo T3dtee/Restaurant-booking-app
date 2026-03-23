@@ -43,15 +43,15 @@ public class staffDashBoard {
                 Region regionItem = (Region) item;
 
                 // 1. Fade ออก
-                FadeTransition ft = new FadeTransition(Duration.millis(300), regionItem);
+                FadeTransition ft = new FadeTransition(Duration.millis(250), regionItem);
                 ft.setToValue(0);
 
                 regionItem.setMinHeight(regionItem.getHeight());
 
                 Timeline collapse = new Timeline(
-                        new KeyFrame(Duration.millis(300),
-                                new KeyValue(regionItem.prefHeightProperty(), 0),
-                                new KeyValue(regionItem.minHeightProperty(), 0)
+                        new KeyFrame(Duration.millis(330),
+                                new KeyValue(regionItem.prefHeightProperty(), 0, Interpolator.EASE_BOTH),
+                                new KeyValue(regionItem.minHeightProperty(), 0, Interpolator.EASE_BOTH)
                         )
                 );
 

@@ -38,7 +38,7 @@
             </BorderPane>
             <ScrollPane fitToWidth="true" prefHeight="710.0" prefWidth="360.0">
                <content>
-                  <VBox fx:id="itemBox" alignment="CENTER" prefHeight="200.0" prefWidth="358.0" spacing="10.0" styleClass="bookingContainer">
+                  <VBox fx:id="itemBox" alignment="CENTER" prefHeight="200.0" prefWidth="358.0" styleClass="bookingContainer">
                      <padding>
                         <Insets bottom="15.0" left="10.0" right="10.0" top="15.0" />
                      </padding>

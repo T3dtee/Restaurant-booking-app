@@ -51,24 +51,24 @@ public class successController {
     }
 
     private void playSuccessEffect() {
-        ScaleTransition bounce = new ScaleTransition(Duration.millis(350), container);
+        ScaleTransition bounce = new ScaleTransition(Duration.millis(360), container);
         bounce.setFromX(0);
         bounce.setFromY(0);
-        bounce.setToX(1.5); // ขยายให้ใหญ่กว่าปกตินิดนึง
-        bounce.setToY(1.5);
+        bounce.setToX(1.6); // ขยายให้ใหญ่กว่าปกตินิดนึง
+        bounce.setToY(1.6);
         bounce.setInterpolator(Interpolator.EASE_OUT);
 
         bounce.setOnFinished(e -> {
-            ScaleTransition shrink = new ScaleTransition(Duration.millis(130), container);
-            shrink.setToX(0.9);
-            shrink.setToY(0.9);
-            shrink.setInterpolator(Interpolator.EASE_OUT);
+            ScaleTransition shrink = new ScaleTransition(Duration.millis(150), container);
+            shrink.setToX(0.8);
+            shrink.setToY(0.8);
+            shrink.setInterpolator(Interpolator.EASE_BOTH);
 
             shrink.setOnFinished(a -> {
-                ScaleTransition normal = new ScaleTransition(Duration.millis(100), container);
+                ScaleTransition normal = new ScaleTransition(Duration.millis(110), container);
                 normal.setToX(1.0);
                 normal.setToY(1.0);
-                normal.setInterpolator(Interpolator.EASE_OUT);
+                normal.setInterpolator(Interpolator.EASE_BOTH);
                 normal.play();
             });
             shrink.play();
