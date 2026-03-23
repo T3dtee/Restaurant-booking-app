@@ -8,11 +8,11 @@ import javafx.util.Duration;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 public class bookingController {
-
     @FXML
-    private ChoiceBox<String> timeChoice;
+    private ComboBox<String> timeChoice;
     @FXML
     private Label name;
     @FXML
@@ -26,13 +26,36 @@ public class bookingController {
 
     LocalTime time;
 
+    //config time
+    int gapTime = 90; //minute
+    LocalTime openTime = LocalTime.of(10,0);
+    LocalTime closeTime = LocalTime.of(20,30);
+    int timeIndex = 0; //do not touch
+
     @FXML
     public void initialize() {
-        //date picker set today auto & can't choose past
-        LocalDate today = LocalDate.now();
-        LocalDate maxDate = today.plusDays(3);
+        //หาจำนวนช่วงเวลา
+        while (closeTime.isAfter(openTime.plusMinutes(gapTime * timeIndex))){
+            timeIndex++;
+        }
+        String []timeList = new String[timeIndex];
+        //คำนวนเวลาแต่ละช่วง
+        for (int i = 0; i < timeIndex; i++){
+            timeList[i] = openTime.plusMinutes(gapTime * i).toString();
+        }
 
-        datePicker.setValue(LocalDate.now());
+        //เลือกวันนี้ให้ auto ถ้าเลยเวลาร้านปิดไปแล้วเลือกวันถัดไป
+        LocalDate canBookingDay;
+        if (LocalTime.now().isAfter(closeTime)){
+            canBookingDay = LocalDate.now().plusDays(1);
+        }
+        else {
+            canBookingDay = LocalDate.now();
+        }
+        //config จองล่วงหน้าได้กี่วัน
+        LocalDate maxDate = canBookingDay.plusDays(3);
+
+        datePicker.setValue(canBookingDay);
         datePicker.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
@@ -40,7 +63,7 @@ public class bookingController {
 
                 if (empty) return;
 
-                if (date.isBefore(today) || date.isAfter(maxDate)) {
+                if (date.isBefore(canBookingDay) || date.isAfter(maxDate)) {
                     setDisable(true);  // กดไม่ได้
                     setStyle("-fx-background-color: #f0f0f0;");
                 }
@@ -49,45 +72,34 @@ public class bookingController {
         datePicker.valueProperty().addListener((obs, oldDate, newDate) -> {
             if (newDate != null) {
                 setBookedText();
+                setTimeChoice();
             }
         });
 
         name.setText(AppData.loginUserData.getName());
         tel.setText(AppData.loginUserData.getPhone());
 
-        timeChoice.getItems().addAll(
-                "10:00" ,"11:30" ,"13:00" ,"14:30" ,"16:00" ,"17:30" ,"19:00"
-        );
-        timeChoice.setValue(switchCaseTime(LocalTime.now()).toString());
-        time = switchCaseTime(LocalTime.now());
+        timeChoice.getItems().addAll(timeList);  //ใส่ตัวเลือกช่วงเวลา
+        timeChoice.setValue(timeForBooking(LocalTime.now()).toString());
+        time = timeForBooking(LocalTime.now());
         setBookedText();
         timeChoice.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldVal, newVal) -> {
-                    switch (newVal){
-                        case "10:00" : time = LocalTime.of(10,0); break;
-                        case "11:30" : time = LocalTime.of(11,30); break;
-                        case "13:00" : time = LocalTime.of(13,0); break;
-                        case "14:30" : time = LocalTime.of(14,30); break;
-                        case "16:00" : time = LocalTime.of(16,0); break;
-                        case "17:30" : time = LocalTime.of(17,30); break;
-                        case "19:00" : time = LocalTime.of(19,0); break;
-                    }
+                    time = LocalTime.parse(newVal);
                     setBookedText();
                 }
         );
+        setTimeChoice();
 
         setupButtonAnimation(confirm);
     }
 
-    private LocalTime switchCaseTime(LocalTime time){
-        int gapTime = 90; //minute
-        LocalTime openTime = LocalTime.of(10,0);
-        for (int i = 0;i < 7;i++){
+    private LocalTime timeForBooking(LocalTime time){ //หาช่วงเวลาที่จองได้
+        for (int i = 0;i < timeIndex;i++){
             if (time.isBefore(openTime.plusMinutes(gapTime * i))){
                 return openTime.plusMinutes(gapTime * i);
             }
         }
-
         return openTime;
     }
 
@@ -132,7 +144,29 @@ public class bookingController {
         }
     }
 
-    public void setupButtonAnimation(Button btn) {
+    private void setTimeChoice(){
+        timeChoice.setCellFactory(lv -> new ListCell<String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                    setDisable(false);
+                } else {
+                    setText(item);
+                    if (LocalDateTime.of(datePicker.getValue(),LocalTime.parse(item)).isBefore(LocalDateTime.now())) {
+                        setDisable(true);
+                        setStyle("-fx-text-fill: gray;");
+                    } else {
+                        setDisable(false);
+                    }
+                }
+            }
+        });
+    }
+
+    private void setupButtonAnimation(Button btn) {
         btn.setOnMouseEntered(e -> {
             if (AppData.allBookingData.isTableFull(datePicker.getValue(),time)) return;
 
