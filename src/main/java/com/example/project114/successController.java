@@ -90,7 +90,7 @@ public class successController {
     }
 
     private void playConfetti() {
-        int numberOfPieces = 50; // จำนวนชิ้นกระดาษ
+        int numberOfPieces = 70; // จำนวนชิ้นกระดาษ
         Color[] colors = {Color.web("#2ecc71"), Color.web("#3498db"), Color.web("#f1c40f"), Color.web("#e74c3c"), Color.web("#9b59b6")};
 
         for (int i = 0; i < numberOfPieces; i++) {

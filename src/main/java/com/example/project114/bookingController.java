@@ -157,7 +157,7 @@ public class bookingController {
                     setText(item);
                     if (LocalDateTime.of(datePicker.getValue(),LocalTime.parse(item)).isBefore(LocalDateTime.now())) {
                         setDisable(true);
-                        setStyle("-fx-text-fill: gray;");
+                        setStyle("-fx-text-fill: #989898;");
                     } else {
                         setDisable(false);
                     }
