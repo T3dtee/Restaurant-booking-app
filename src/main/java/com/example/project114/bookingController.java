@@ -26,36 +26,9 @@ public class bookingController {
 
     LocalTime time;
 
-    //config time
-    int gapTime = 90; //minute
-    LocalTime openTime = LocalTime.of(10,0);
-    LocalTime closeTime = LocalTime.of(20,30);
-    int timeIndex = 0; //do not touch
-
     @FXML
     public void initialize() {
-        //หาจำนวนช่วงเวลา
-        while (closeTime.isAfter(openTime.plusMinutes(gapTime * timeIndex))){
-            timeIndex++;
-        }
-        String []timeList = new String[timeIndex];
-        //คำนวนเวลาแต่ละช่วง
-        for (int i = 0; i < timeIndex; i++){
-            timeList[i] = openTime.plusMinutes(gapTime * i).toString();
-        }
-
-        //เลือกวันนี้ให้ auto ถ้าเลยเวลาร้านปิดไปแล้วเลือกวันถัดไป
-        LocalDate canBookingDay;
-        if (LocalTime.now().isAfter(closeTime)){
-            canBookingDay = LocalDate.now().plusDays(1);
-        }
-        else {
-            canBookingDay = LocalDate.now();
-        }
-        //config จองล่วงหน้าได้กี่วัน
-        LocalDate maxDate = canBookingDay.plusDays(3);
-
-        datePicker.setValue(canBookingDay);
+        datePicker.setValue(AppData.bookingService.getCanBookingDate());
         datePicker.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
@@ -63,7 +36,7 @@ public class bookingController {
 
                 if (empty) return;
 
-                if (date.isBefore(canBookingDay) || date.isAfter(maxDate)) {
+                if (date.isBefore(AppData.bookingService.getCanBookingDate()) || date.isAfter(AppData.bookingService.getMaxBookingDate())) {
                     setDisable(true);  // กดไม่ได้
                     setStyle("-fx-background-color: #f0f0f0;");
                 }
@@ -79,9 +52,9 @@ public class bookingController {
         name.setText(AppData.loginUserData.getName());
         tel.setText(AppData.loginUserData.getPhone());
 
-        timeChoice.getItems().addAll(timeList);  //ใส่ตัวเลือกช่วงเวลา
-        timeChoice.setValue(timeForBooking(LocalTime.now()).toString());
-        time = timeForBooking(LocalTime.now());
+        timeChoice.getItems().addAll(AppData.bookingService.getTimeList());  //ใส่ตัวเลือกช่วงเวลา
+        timeChoice.setValue(AppData.bookingService.canBookingTime(LocalTime.now()).toString());
+        time = AppData.bookingService.canBookingTime(LocalTime.now());
         setBookedText();
         timeChoice.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldVal, newVal) -> {
@@ -94,14 +67,6 @@ public class bookingController {
         setupButtonAnimation(confirm);
     }
 
-    private LocalTime timeForBooking(LocalTime time){ //หาช่วงเวลาที่จองได้
-        for (int i = 0;i < timeIndex;i++){
-            if (time.isBefore(openTime.plusMinutes(gapTime * i))){
-                return openTime.plusMinutes(gapTime * i);
-            }
-        }
-        return openTime;
-    }
 
     @FXML
     private Label guestNo;
@@ -110,7 +75,7 @@ public class bookingController {
 
     @FXML
     private void onClickPlus() {
-        if (guest < 6) {
+        if (guest < AppData.bookingService.maxGuest) {
             guest++;
             guestNo.setText(guest + " Guest");
         }
@@ -124,10 +89,8 @@ public class bookingController {
     }
     @FXML
     private void confirmSubmit() {
-        if (!AppData.allBookingData.isTableFull(datePicker.getValue(),time)) {
-            AppData.bookingData = new Reservation(AppData.loginUserData, datePicker.getValue(), time, guest,
-                    AppData.allBookingData.emptyTableNo(datePicker.getValue(),time));
-            AppData.allBookingData.addReservation(AppData.bookingData);
+        AppData.bookingData = AppData.bookingService.book(datePicker.getValue(),time,AppData.loginUserData,guest);
+        if (AppData.bookingData != null){
             goToSuccess();
         }
     }
