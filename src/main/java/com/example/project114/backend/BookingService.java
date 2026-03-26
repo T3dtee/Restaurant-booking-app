@@ -3,6 +3,7 @@ package com.example.project114.backend;
 import com.example.project114.AppData;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class BookingService {
@@ -14,21 +15,21 @@ public class BookingService {
     public final byte maxGuest = 6;
 
     int timeIndex = 0;
-    String []timeList;
+    LocalTime [] timeSlotList;
     LocalDate canBookingDate;
     LocalDate maxBookingDate;
 
     public BookingService() {
-        while (closeTime.isAfter(openTime.plusMinutes(gapTime * timeIndex))){
+        while (closeTime.isAfter(openTime.plusMinutes((long) gapTime * timeIndex))){
             timeIndex++;
         }
-        timeList = new String[timeIndex];
+        timeSlotList = new LocalTime[timeIndex];
         //คำนวนเวลาแต่ละช่วง
         for (int i = 0; i < timeIndex; i++){
-            timeList[i] = openTime.plusMinutes(gapTime * i).toString();
+            timeSlotList[i] = openTime.plusMinutes((long) gapTime * i);
         }
 
-        if (LocalTime.now().isAfter(closeTime)){
+        if (LocalTime.now().isAfter(closeTime.minusMinutes(gapTime))){
             canBookingDate = LocalDate.now().plusDays(1);
         }
         else {
@@ -37,18 +38,26 @@ public class BookingService {
         maxBookingDate = canBookingDate.plusDays(maxBookingDay);
     }
 
-    public LocalTime canBookingTime(LocalTime time){ //หาช่วงเวลาที่จองได้
-        for (int i = 0;i < timeIndex;i++){
-            if (time.isBefore(openTime.plusMinutes(gapTime * i))){
-                return openTime.plusMinutes(gapTime * i);
-            }
+    public LocalTime canBookingTime(LocalDate date, LocalTime startTime) {
+        LocalTime searchFrom;
+        if (date.isAfter(LocalDate.now())) {
+            searchFrom = LocalTime.MIN;
+        } else {
+            searchFrom = startTime;
         }
-        return openTime;
+        int i = 0;
+        while (i < timeIndex - 1) {
+            if (openTime.isAfter(searchFrom) && timeSlotAvailable(date, timeSlotList[i])) {
+                break;
+            }
+            i++;
+        }
+        return timeSlotList[i];
     }
 
     public Reservation book(LocalDate date, LocalTime time, Customer customer, byte guest){
         Reservation data;
-        if (!AppData.allBookingData.isTableFull(date,time)) {
+        if (timeSlotAvailable(date, time)) {
             data = new Reservation(customer,date,time,guest,AppData.allBookingData.emptyTableNo(date,time));
             AppData.allBookingData.addReservation(data);
             return data;
@@ -58,8 +67,12 @@ public class BookingService {
         }
     }
 
-    public String[] getTimeList(){
-        return timeList;
+    public boolean timeSlotAvailable(LocalDate date, LocalTime time){
+        return LocalDateTime.of(date, time).isAfter(LocalDateTime.now()) && !AppData.allBookingData.isTableFull(date, time);
+    }
+
+    public LocalTime[] getTimeSlotList(){
+        return timeSlotList;
     }
     public LocalDate getCanBookingDate(){
         return canBookingDate;

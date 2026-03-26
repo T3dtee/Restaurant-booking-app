@@ -127,7 +127,15 @@
 }
 .combo-box .list-view .list-cell {
     -fx-font-size: 14;
-    -fx-text-fill: #3c3c3c;
+    -fx-text-fill: #008e00;
+    -fx-cursor: hand;
+}
+.combo-box-base .list-cell:hover {
+    -fx-background-color: #d5d5d5;
+}
+.combo-box-base .list-view .list-cell:selected {
+    -fx-text-fill: white;
+    -fx-background-color: #1C9B1C;
 }
 
 .no-booked-box{
