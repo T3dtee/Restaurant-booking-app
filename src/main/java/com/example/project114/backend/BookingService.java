@@ -47,7 +47,7 @@ public class BookingService {
         }
         int i = 0;
         while (i < timeIndex - 1) {
-            if (openTime.isAfter(searchFrom) && timeSlotAvailable(date, timeSlotList[i])) {
+            if (searchFrom.isBefore(timeSlotList[i]) && timeSlotAvailable(date, timeSlotList[i])) {
                 break;
             }
             i++;
