@@ -5,8 +5,12 @@ import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -38,6 +42,7 @@ public class staffDashBoard {
 
             ItemCardController controller = loader.getController();
             controller.setData(data);
+            controller.setOnCancelRequest(this::cancelDialog);
 
             controller.setOnRemove(() -> {
                 Region regionItem = (Region) item;
@@ -67,6 +72,28 @@ public class staffDashBoard {
             });
 
             itemBox.getChildren().add(item);
+        }
+    }
+
+    public boolean cancelDialog() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/project114/ui/CancelDialog.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL); // ล็อคหน้าจอหลักไว้จนกว่าจะปิดอันนี้
+            stage.initStyle(StageStyle.UNDECORATED); // เอาแถบหัวหน้าต่างแบบ Windows/Mac ออกเพื่อให้ Minimal สุดๆ
+            stage.setScene(new Scene(root));
+
+            CancelDialogController controller = loader.getController();
+            controller.setDialogStage(stage);
+
+            stage.showAndWait(); // รอจนกว่าจะปิดหน้าต่าง
+
+            return controller.isConfirmed(); // ส่งค่ากลับว่าตกลงหรือยกเลิก
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

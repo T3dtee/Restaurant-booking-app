@@ -1,0 +1,45 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url('font/Roboto-Regular.ttf');
+}
+@font-face {
+    font-family: 'Roboto-SemiBold';
+    src: url('font/Roboto_Condensed-SemiBold.ttf');
+}
+
+.box {
+    -fx-background-color: #f3f3f3;
+}
+.title {
+    -fx-font-family: 'Roboto Condensed SemiBold';
+    -fx-font-size: 18;
+}
+.text {
+    -fx-font-family: Roboto;
+    -fx-font-size: 12;
+}
+
+.confirm-btn {
+    /*-fx-text-fill: white;*/
+    /*-fx-background-color: red;*/
+    /*-fx-background-radius: 14;*/
+    -fx-border-color: black;
+    -fx-border-radius: 14;
+    -fx-background-color: white;
+    -fx-background-radius: 14;
+}
+.confirm-btn:pressed {
+    -fx-background-color: #e1e1e1;
+}
+.close-btn {
+    /*-fx-border-color: black;*/
+    /*-fx-border-radius: 14;*/
+    /*-fx-background-color: white;*/
+    /*-fx-background-radius: 14;*/
+    -fx-text-fill: white;
+    -fx-background-color: green;
+    -fx-background-radius: 14;
+}
+.close-btn:pressed {
+    -fx-background-color: #006e00;
+}

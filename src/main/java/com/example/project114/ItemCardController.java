@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 import java.time.format.DateTimeFormatter;
+import java.util.function.BooleanSupplier;
 
 public class ItemCardController {
     @FXML
@@ -39,6 +40,10 @@ public class ItemCardController {
     public void setOnRemove(Runnable onRemove) {
         this.onRemove = onRemove;
     }
+    private BooleanSupplier onCancelRequest;
+    public void setOnCancelRequest(BooleanSupplier onCancelRequest) {
+        this.onCancelRequest = onCancelRequest;
+    }
 
     private void handleRemove() {
         if (onRemove != null) {
@@ -53,6 +58,9 @@ public class ItemCardController {
     }
     @FXML
     private void cancelled(){
+        if (onCancelRequest != null && !onCancelRequest.getAsBoolean()) {
+            return;
+        }
         data.cancel();
         handleRemove();
     }
