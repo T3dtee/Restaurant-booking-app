@@ -1,13 +1,14 @@
 package com.example.project114;
 
+import javafx.animation.Interpolator;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.LocalDateTime;
 
 public class bookingController {
     @FXML
@@ -16,6 +17,8 @@ public class bookingController {
     private Label name;
     @FXML
     private Label tel;
+    @FXML
+    private VBox bookedBox;
     @FXML
     private Label booked;
     @FXML
@@ -88,21 +91,45 @@ public class bookingController {
     }
     @FXML
     private void confirmSubmit() {
-        AppData.bookingData = AppData.bookingService.book(datePicker.getValue(),time,AppData.loginUserData,guest);
+        LocalDate date = datePicker.getValue();
+        AppData.bookingData = AppData.bookingService.book(date,time,AppData.loginUserData,guest);
         if (AppData.bookingData != null){
             goToSuccess();
+        }
+        else {
+            if (AppData.allBookingData.isTableFull(date,time)) fullBookedAnimation();
         }
     }
     @FXML
     private void setBookedText() {
         booked.setText(AppData.allBookingData.countByDateTime(datePicker.getValue(),time) + "/" + AppData.allBookingData.MAX_TABLES);
         confirm.getStyleClass().removeAll("confirm-btn", "table-full-btn");
+        booked.getStyleClass().removeAll("booked-full");
         if (!AppData.bookingService.timeSlotAvailable(datePicker.getValue(),time)) {
             confirm.getStyleClass().add("table-full-btn");
+            if (AppData.allBookingData.isTableFull(datePicker.getValue(),time)) {
+                booked.getStyleClass().add("booked-full");
+            }
         }
         else {
             confirm.getStyleClass().add("confirm-btn");
         }
+    }
+
+    public void fullBookedAnimation() {
+        ScaleTransition s1 = new ScaleTransition(Duration.millis(150), bookedBox);
+        s1.setToX(1.1);
+        s1.setToY(1.1);
+        s1.setInterpolator(Interpolator.EASE_BOTH);
+
+        s1.setOnFinished(e -> {
+            ScaleTransition s2 = new ScaleTransition(Duration.millis(170), bookedBox);
+            s2.setToX(1);
+            s2.setToY(1);
+            s2.setInterpolator(Interpolator.EASE_BOTH);
+            s2.play();
+        });
+        s1.play();
     }
 
     private void setTimeChoice(){
@@ -118,7 +145,7 @@ public class bookingController {
                     setText(item.toString());
                     if (!AppData.bookingService.timeSlotAvailable(datePicker.getValue(), item)) {
                         if (AppData.allBookingData.isTableFull(datePicker.getValue(), item)) {
-                            setStyle("-fx-text-fill: #d86161;");
+                            setStyle("-fx-text-fill: #e34646;");
                             setDisable(false);
                         }
                         else { //เลยเวลา

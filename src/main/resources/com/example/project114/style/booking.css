@@ -146,6 +146,15 @@
     -fx-border-width: 2;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0.3, 0, 6)
 }
+
+.booked {
+    -fx-font-family: Roboto;
+    -fx-font-size: 14;
+    -fx-text-fill: #878787;
+}
+.booked-full {
+    -fx-text-fill: #ec3535;
+}
 .guest-box{
     -fx-background-radius: 18;
     -fx-background-color: #FFFFFF;

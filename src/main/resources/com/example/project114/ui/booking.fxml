@@ -114,12 +114,12 @@
                               <Insets left="10.0" />
                            </VBox.margin>
                         </Label>
-                        <VBox prefHeight="40.0" prefWidth="150.0" styleClass="no-booked-box">
+                        <VBox fx:id="bookedBox" prefHeight="40.0" prefWidth="150.0" styleClass="no-booked-box">
                            <VBox.margin>
                               <Insets right="30.0" top="10.0" />
                            </VBox.margin>
                            <children>
-                              <Label fx:id="booked" alignment="CENTER" prefHeight="40.0" prefWidth="122.0" style="-fx-text-fill: #969494;" styleClass="no-booked-table" text="0/10" />
+                              <Label fx:id="booked" alignment="CENTER" prefHeight="40.0" prefWidth="120.0" styleClass="booked" text="0/10" />
                            </children>
                         </VBox>
                      </children>
