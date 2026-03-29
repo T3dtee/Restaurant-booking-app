@@ -28,7 +28,6 @@
 
 .scroll-pane {
     -fx-background-color: transparent;
-    -fx-background: transparent;
 }
 
 .scroll-pane .viewport {
@@ -37,4 +36,9 @@
 
 .bookingContainer {
     -fx-background-color: transparent;
+}
+.text-label {
+    -fx-font-family: 'Pacifico';
+    -fx-font-size: 20;
+    -fx-text-fill: rgba(143, 143, 143, 0.8);
 }

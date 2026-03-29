@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -25,9 +26,13 @@ public class staffDashBoard {
 
     @FXML
     private VBox itemBox;
+    @FXML
+    private Label noOrderText;
+
+    List<Reservation> sortedReservations;
 
     private void loadItems() throws IOException {
-        List<Reservation> sortedReservations = AppData.allBookingData.getAllReservations().stream()
+         sortedReservations = AppData.allBookingData.getAllReservations().stream()
                 .filter(r -> "BOOKED".equals(r.getStatus())) // กรองเอาเฉพาะคิวที่ถูกจอง
                 .sorted(Comparator.comparing(Reservation::getDate)
                         .thenComparing(Reservation::getTime)
@@ -63,6 +68,7 @@ public class staffDashBoard {
                 ParallelTransition pt = new ParallelTransition(collapse);
                 pt.setOnFinished(e -> {
                     itemBox.getChildren().remove(regionItem);
+                    update();
                 });
 
                 ft.setOnFinished(a -> {
@@ -72,6 +78,17 @@ public class staffDashBoard {
             });
 
             itemBox.getChildren().add(item);
+        }
+    }
+
+    public void initialize() {
+        try {
+            loadItems();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (!sortedReservations.isEmpty()) {
+            noOrderText.setVisible(false);
         }
     }
 
@@ -97,12 +114,9 @@ public class staffDashBoard {
         }
     }
 
-    @FXML
-    public void initialize() {
-        try {
-            loadItems();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void update(){
+       if (AppData.allBookingData.getAllReservations().stream().noneMatch(r -> "BOOKED".equals(r.getStatus()))){
+           noOrderText.setVisible(true);
+       }
     }
 }

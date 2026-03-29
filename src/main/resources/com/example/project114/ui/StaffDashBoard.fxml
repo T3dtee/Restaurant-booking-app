@@ -38,7 +38,7 @@
             </BorderPane>
             <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="721.0" prefWidth="360.0" vbarPolicy="NEVER">
                <content>
-                  <VBox fx:id="itemBox" alignment="CENTER" prefHeight="200.0" prefWidth="358.0" styleClass="bookingContainer">
+                  <VBox fx:id="itemBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="358.0" styleClass="bookingContainer">
                      <padding>
                         <Insets bottom="15.0" left="10.0" right="10.0" top="15.0" />
                      </padding>
@@ -47,5 +47,7 @@
             </ScrollPane>
          </children>
       </VBox>
+      <Label fx:id="noOrderText" alignment="CENTER" prefHeight="17.0" prefWidth="210.0" styleClass="text-label" text="No reservations now :)">
+      </Label>
    </children>
 </StackPane>
