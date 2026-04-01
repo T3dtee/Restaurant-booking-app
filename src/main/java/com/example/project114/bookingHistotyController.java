@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -17,35 +16,34 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class staffDashBoard {
-
-    @FXML
-    private void goToStaffLogin() { SceneManager.switchScene("login-staff.fxml", "login.css");}
-
+public class bookingHistotyController {
     @FXML
     private VBox itemBox;
-    @FXML
-    private Label noOrderText;
 
-    List<Reservation> sortedReservations;
+    @FXML
+    private void goToBooking() {SceneManager.switchScene("booking.fxml", "booking.css");}
+
+    public void initialize() {
+        try {
+            loadItems();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private List<Reservation> customerReservations;
 
     private void loadItems() throws IOException {
-         sortedReservations = AppData.allBookingData.getAllReservations().stream()
-                .filter(r -> "BOOKED".equals(r.getStatus())) // กรองเอาเฉพาะคิวที่ถูกจอง
-                .sorted(Comparator.comparing(Reservation::getDate)
-                        .thenComparing(Reservation::getTime)
-                        .thenComparing(Reservation::getTableNo)) // เรียงวันที่ ตามด้วยเวลา แล้วเลขโต๊ะ
-                .collect(Collectors.toList());
+        customerReservations = AppData.allBookingData.getReservationsByCustomer(AppData.loginUserData);
 
-        for (Reservation data : sortedReservations) {
+        for (Reservation data : customerReservations) {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/example/project114/ui/bookingContainer.fxml"));
+                    getClass().getResource("/com/example/project114/ui/bookingHistoryContainer.fxml"));
 
             Parent item = loader.load();
 
-            ItemCardController controller = loader.getController();
+            bookingHistoryCardController controller = loader.getController();
             controller.setData(data);
             controller.setOnCancelRequest(this::cancelDialog);
 
@@ -68,7 +66,6 @@ public class staffDashBoard {
                 ParallelTransition pt = new ParallelTransition(collapse);
                 pt.setOnFinished(e -> {
                     itemBox.getChildren().remove(regionItem);
-                    update();
                 });
 
                 ft.setOnFinished(a -> {
@@ -78,17 +75,6 @@ public class staffDashBoard {
             });
 
             itemBox.getChildren().add(item);
-        }
-    }
-
-    public void initialize() {
-        try {
-            loadItems();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (!sortedReservations.isEmpty()) {
-            noOrderText.setVisible(false);
         }
     }
 
@@ -112,11 +98,5 @@ public class staffDashBoard {
             e.printStackTrace();
             return false;
         }
-    }
-
-    private void update(){
-       if (AppData.allBookingData.getAllReservations().stream().noneMatch(r -> "BOOKED".equals(r.getStatus()))){
-           noOrderText.setVisible(true);
-       }
     }
 }

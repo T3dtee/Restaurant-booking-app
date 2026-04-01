@@ -44,7 +44,7 @@ public class successController {
         date.setText("Date: " + formatted);
         time.setText("Time: " + AppData.bookingData.getTime());
         guestNo.setText("Guest: " + AppData.bookingData.getGuestCount());
-        table.setText("Table: T" + AppData.bookingData.getQueueNumber());
+        table.setText("Table: T" + AppData.bookingData.getTableNo());
         successTitle.setOpacity(0);
         detailBox.setOpacity(0);
         playSuccessEffect();
@@ -124,7 +124,5 @@ public class successController {
     }
 
     @FXML
-    private void goToUserLogin() {
-        SceneManager.switchScene("login-user.fxml", "login.css");
-    }
+    private void goToBooking() {SceneManager.switchScene("booking.fxml", "booking.css");}
 }

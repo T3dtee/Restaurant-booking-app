@@ -6,6 +6,10 @@
     font-family: 'Roboto-SemiBold';
     src: url('font/Roboto_Condensed-SemiBold.ttf');
 }
+@font-face {
+    font-family: 'Pacifico';
+    src: url('font/Pacifico-Regular.ttf');
+}
 
 .app-background {
     -fx-background-image: url('img/bg-img.png');
@@ -13,8 +17,8 @@
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
 }
-.book-table-title {
-    -fx-font-family: 'Roboto Condensed SemiBold';
+.head-title {
+    -fx-font-family: Pacifico;
     -fx-text-fill: #41891C;
     -fx-font-size: 32;
 }
@@ -39,6 +43,18 @@
 .text-label{
     -fx-font-family: 'Roboto Condensed SemiBold';
     -fx-text-fill: #5F5757;
+}
+.history-btn {
+    -fx-background-radius: 16;
+    -fx-background-color: #ffffff;
+    -fx-cursor: hand;
+}
+.history-btn:hover {
+    -fx-background-color: #f2f2f2;
+}
+.history-btn:pressed {
+    -fx-translate-y: 1;
+    -fx-background-color: #e6e6e6;
 }
 
 /* กล่องหลัก */

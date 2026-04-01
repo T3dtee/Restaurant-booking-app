@@ -11,8 +11,10 @@ public class Reservation {
     private LocalDate date;
     private LocalTime time;
     private int guestCount;
-    private int queueNumber;
+    private int tableNo;
     private String status;
+    private Person cancelBy;
+    private LocalDateTime bookingTime;
     private LocalDateTime checkInTime;
 
     // Constructor
@@ -27,9 +29,9 @@ public class Reservation {
         this.date = date;
         this.time = time;
         this.guestCount = guestCount;
-        this.queueNumber = queueNumber;
+        this.tableNo = queueNumber;
         this.status = ReservationStatus.BOOKED;
-
+        bookingTime = LocalDateTime.now();
     }
     public Customer getCustomer() { 
         return customer; 
@@ -43,16 +45,24 @@ public class Reservation {
     public int getGuestCount() { 
         return guestCount; 
     }
-    public int getQueueNumber() { 
-        return queueNumber; 
+    public int getTableNo() {
+        return tableNo;
     }
     public String getStatus() {
          return status; 
     }
+    public LocalDateTime getCheckInTime() {
+        return checkInTime;
+    }
+    public LocalDateTime getBookingTime() {return bookingTime;}
+    public Person getCancelBy() {
+        return cancelBy;
+    }
 
       // method เปลี่ยนสถานะการจอง
-    public void cancel() {
+    public void cancel(Person cancelBy) {
         this.status = ReservationStatus.CANCELLED;
+        this.cancelBy = cancelBy;
     }
 
     public void checkIn() {

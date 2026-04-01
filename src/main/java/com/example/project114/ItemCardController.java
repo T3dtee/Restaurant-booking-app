@@ -33,7 +33,7 @@ public class ItemCardController {
         date.setText("Date : " + formatted);
         time.setText("Time : " + data.getTime());
         guestNo.setText("Guest : " + data.getGuestCount());
-        table.setText("Table : T" + data.getQueueNumber());
+        table.setText("Table : T" + data.getTableNo());
     }
 
     private Runnable onRemove;
@@ -61,7 +61,7 @@ public class ItemCardController {
         if (onCancelRequest != null && !onCancelRequest.getAsBoolean()) {
             return;
         }
-        data.cancel();
+        data.cancel(AppData.loginStaffData);
         handleRemove();
     }
 }

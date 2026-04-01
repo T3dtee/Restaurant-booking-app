@@ -25,11 +25,17 @@ public class bookingController {
     private DatePicker datePicker;
     @FXML
     private Button confirm;
+    @FXML
+    private Button history_btn;
 
     LocalTime time;
 
     @FXML
     public void initialize() {
+        if (AppData.allBookingData.getReservationsByCustomer(AppData.loginUserData).isEmpty()) {
+            history_btn.setDisable(true);
+        }
+
         datePicker.setValue(AppData.bookingService.getCanBookingDate());
         datePicker.setDayCellFactory(picker -> new DateCell() {
             @Override
@@ -71,6 +77,11 @@ public class bookingController {
     }
 
     @FXML
+    private void historyOnClick() {
+        goToHistory();
+    }
+
+    @FXML
     private Label guestNo;
 
     private byte guest = 1;
@@ -100,7 +111,7 @@ public class bookingController {
             if (AppData.allBookingData.isTableFull(date,time)) fullBookedAnimation();
         }
     }
-    @FXML
+
     private void setBookedText() {
         booked.setText(AppData.allBookingData.countByDateTime(datePicker.getValue(),time) + "/" + AppData.allBookingData.MAX_TABLES);
         confirm.getStyleClass().removeAll("confirm-btn", "table-full-btn");
@@ -186,4 +197,6 @@ public class bookingController {
 
     @FXML
     private void goToSuccess() { SceneManager.switchScene("confrim-success.fxml", "success.css");}
+
+    private void goToHistory() { SceneManager.switchScene("BookingHistory.fxml", "BookingHistory.css");}
 }

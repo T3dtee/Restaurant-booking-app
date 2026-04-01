@@ -3,7 +3,9 @@ package com.example.project114.backend;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ReservationService {
     public final int MAX_TABLES = 10;
@@ -40,7 +42,7 @@ public class ReservationService {
         for (Reservation res : reservationList){
             if (res.getDate().equals(date) && res.getTime().equals(time))
                 if (res.getStatus().equals("CANCELLED") || res.getStatus().equals("EXPIRED")){
-                    int queueNum = res.getQueueNumber();
+                    int queueNum = res.getTableNo();
                     reservationList.remove(res);
                     return queueNum;
                 }
@@ -50,6 +52,18 @@ public class ReservationService {
 
     public List<Reservation> getAllReservations() {
         return reservationList;
+    }
+
+    public List<Reservation> getReservationsByCustomer(Customer customer) {
+        return reservationList.stream()
+                .filter(r -> customer.getName().equals(r.getCustomer().getName()))
+                .sorted(
+                        Comparator.comparing((Reservation r) -> !r.getStatus().equals(ReservationStatus.BOOKED)) //ให้ Booked ขึ้นก่อน
+                                .thenComparing(Reservation::getDate)
+                                .thenComparing(Reservation::getTime)
+                                .thenComparing(Reservation::getTableNo)
+                )
+                .toList();
     }
 
     public void updateExpiredReservations() {

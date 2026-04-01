@@ -15,7 +15,7 @@
          <children>
             <BorderPane prefHeight="80.0" prefWidth="360.0">
                <left>
-                  <ImageView fitHeight="13.0" fitWidth="13.0" onMouseClicked="#goToUserLogin" pickOnBounds="true" preserveRatio="true" styleClass="back-btn" BorderPane.alignment="CENTER">
+                  <ImageView fitHeight="13.0" fitWidth="13.0" onMouseClicked="#goToBooking" pickOnBounds="true" preserveRatio="true" styleClass="back-btn" BorderPane.alignment="CENTER">
                      <image>
                         <Image url="@../style/img/arrow.png" />
                      </image>

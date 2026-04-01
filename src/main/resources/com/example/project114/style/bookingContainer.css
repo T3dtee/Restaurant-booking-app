@@ -11,12 +11,9 @@
 }
 
 .close-btn {
-
     -fx-background-color: #dc1414;
     -fx-text-fill: white;
     -fx-background-radius: 10;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
     -fx-cursor: hand;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
 }
@@ -35,8 +32,6 @@
     -fx-background-color: #17af17;
     -fx-text-fill: white;
     -fx-background-radius: 10;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
     -fx-cursor: hand;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
 }

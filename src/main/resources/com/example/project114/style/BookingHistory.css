@@ -1,0 +1,30 @@
+@font-face {
+    font-family: 'Pacifico';
+    src: url('font/Pacifico-Regular.ttf');
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+.app-background {
+    -fx-background-image: url('img/bg-img.png');
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+.title-label {
+    -fx-font-family: Pacifico;
+    -fx-text-fill: #41891C;
+    -fx-font-size: 32;
+}
+.back-btn {
+    -fx-cursor: hand;
+}
+.back-btn:hover {
+    -fx-opacity: 70%;
+}

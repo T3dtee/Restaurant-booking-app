@@ -1,0 +1,56 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url('font/Roboto-Regular.ttf');
+}
+
+.box {
+    -fx-background-radius: 10;
+    -fx-background-color: white;
+    -fx-border-radius: 10;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0.3, 0, 4)
+}
+.status-bar {
+    -fx-background-color: green;
+    -fx-background-radius: 10 0 0 10;
+}
+.id {
+    -fx-font-family: Roboto;
+    -fx-text-fill: #d5d5d5;
+    -fx-font-size: 16;
+}
+.status {
+    -fx-font-family: Roboto;
+    -fx-font-size: 16;
+}
+.top-box {
+    -fx-border-color: #d5d5d5;
+    -fx-border-width: 0 0 1 0;
+}
+.head-label {
+    -fx-font-family: Roboto;
+    -fx-font-size: 14;
+    -fx-text-fill: #aeaeae;
+}
+.info-label {
+    -fx-font-family: Roboto;
+    -fx-font-size: 14;
+
+}
+.booked-time {
+    -fx-font-size: 10;
+    -fx-text-fill: #aeaeae;
+}
+.cancel-btn {
+    -fx-background-radius: 10;
+    -fx-font-family: Roboto;
+    -fx-font-size: 12;
+    -fx-border-color: red;
+    -fx-border-radius: 10;
+    -fx-background-color: #ffffff;
+    -fx-cursor: hand;
+}
+.cancel-btn:hover {
+    -fx-background-color: red;
+    -fx-text-fill: white;
+}
