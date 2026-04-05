@@ -57,11 +57,13 @@ public class ReservationService {
     public List<Reservation> getReservationsByCustomer(Customer customer) {
         return reservationList.stream()
                 .filter(r -> customer.getName().equals(r.getCustomer().getName()))
-                .sorted(
-                        Comparator.comparing((Reservation r) -> !r.getStatus().equals(ReservationStatus.BOOKED)) //ให้ Booked ขึ้นก่อน
-                                .thenComparing(Reservation::getDate)
-                                .thenComparing(Reservation::getTime)
-                                .thenComparing(Reservation::getTableNo)
+                .sorted(Comparator.comparing((Reservation r) -> {
+                        if (r.getStatus().equals(ReservationStatus.BOOKED)) return -1;
+                        else if (r.getStatus().equals(ReservationStatus.CHECKED_IN)) return 0;
+                        else return 1;}) //ให้ Booked ขึ้นก่อน ตามด้วย Checked in
+                        .thenComparing(Reservation::getDate)
+                        .thenComparing(Reservation::getTime)
+                        .thenComparing(Reservation::getTableNo)
                 )
                 .toList();
     }
