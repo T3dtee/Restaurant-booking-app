@@ -49,11 +49,11 @@ public class bookingHistoryCardController {
             statusBar.setStyle("-fx-background-color: #41891C");
             statusTime.setText("Booking Time : " + reservation.getBookingTime().format(formatter));
         } else if (reservation.getStatus().equals(ReservationStatus.CHECKED_IN)) {
-            cancel.setDisable(true);
+            cancel.setVisible(false);
             statusBar.setStyle("-fx-background-color: #dcdc00");
             statusTime.setText("Check in Time : " + reservation.getCheckInTime().format(formatter));
         } else if (reservation.getStatus().equals(ReservationStatus.CANCELLED)) {
-            cancel.setDisable(true);
+            cancel.setVisible(false);
             statusBar.setStyle("-fx-background-color: #b9b4b4");
             if (reservation.getCancelBy().getRole().equals("Staff")) {
                 statusTime.setText("Cancel By Staff");
