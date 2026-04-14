@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 public class ReservationService {
     public final int MAX_TABLES = 10;
+
     private List<Reservation> reservationList = new ArrayList<>();
 
     // เพิ่มการจอง
@@ -66,6 +67,13 @@ public class ReservationService {
                         .thenComparing(Reservation::getTableNo)
                 )
                 .toList();
+    }
+
+    public boolean customerBooked(Customer customer, LocalDate date, LocalTime time) {
+        for (Reservation r : getReservationsByCustomer(customer)) {
+            if (r.getDate().equals(date) && r.getTime().equals(time) && r.getStatus().equals(ReservationStatus.BOOKED)) return true;
+        }
+        return false;
     }
 
     public void updateExpiredReservations() {

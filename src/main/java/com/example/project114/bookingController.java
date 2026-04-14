@@ -1,9 +1,13 @@
 package com.example.project114;
 
+import com.example.project114.backend.BookingService;
 import javafx.animation.Interpolator;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -27,6 +31,15 @@ public class bookingController {
     private Button confirm;
     @FXML
     private Button history_btn;
+
+    @FXML
+    private VBox mainContainer;
+    @FXML
+    private AnchorPane bookingPane;
+    @FXML
+    private AnchorPane popUp;
+    @FXML
+    private Pane blurOverlay;
 
     LocalTime time;
 
@@ -103,13 +116,33 @@ public class bookingController {
     @FXML
     private void confirmSubmit() {
         LocalDate date = datePicker.getValue();
-        AppData.bookingData = AppData.bookingService.book(date,time,AppData.loginUserData,guest);
-        if (AppData.bookingData != null){
-            goToSuccess();
+        if (AppData.bookingService.timeSlotAvailable(datePicker.getValue(), time)) { //ว่าง
+            if (!AppData.allBookingData.customerBooked(AppData.loginUserData, datePicker.getValue(), time)) { //ยังไม่เคยจอง
+                AppData.bookingData = AppData.bookingService.book(date,time,AppData.loginUserData,guest);
+                if (AppData.bookingData != null){
+                    goToSuccess();
+                }
+            }
+            else { //จองแล้ว
+                showPopUp();
+            }
         }
-        else {
+        else { //ไม่ว่างแล้วพยายามกด
             if (AppData.allBookingData.isTableFull(date,time)) fullBookedAnimation();
         }
+
+
+
+    }
+
+    @FXML
+    private void popUpCloseClick() {
+        hidePopUp();
+    }
+    @FXML
+    private void popUpBHClick() {
+        hidePopUp();
+        goToHistory();
     }
 
     private void setBookedText() {
@@ -125,6 +158,20 @@ public class bookingController {
         else {
             confirm.getStyleClass().add("confirm-btn");
         }
+    }
+
+    private void showPopUp() {
+        GaussianBlur blur = new GaussianBlur(20); // เลข 15 คือความฟุ้ง ยิ่งเยอะยิ่งเบลอ
+        mainContainer.setEffect(blur);
+
+        blurOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.15);");
+
+        popUp.setVisible(true);
+    }
+
+    private void hidePopUp() {
+        mainContainer.setEffect(null);
+        popUp.setVisible(false);
     }
 
     public void fullBookedAnimation() {

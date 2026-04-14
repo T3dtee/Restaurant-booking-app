@@ -226,3 +226,32 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0.3, 0, 4)
 }
 
+.pop-up-box{
+    -fx-background-color: #f3f3f3;
+    -fx-background-radius: 12;
+}
+.pop-up-title{
+    -fx-font-size: 16;
+    -fx-font-family: "Roboto Condensed SemiBold";
+}
+.pop-up-text{
+    -fx-font-size: 12;
+    -fx-font-family: Roboto;
+}
+.pop-up-close-bth{
+    -fx-font-size: 13;
+    -fx-font-family: Roboto;
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 12;
+    -fx-border-color: black;
+    -fx-border-radius: 12;
+}
+.pop-up-bh-bth{
+    -fx-font-size: 13;
+    -fx-font-family: Roboto;
+    -fx-text-fill: white;
+    -fx-background-color: #1C9B1C;
+    -fx-background-radius: 12;
+    -fx-border-color: #1C9B1C;
+    -fx-border-radius: 12;
+}
