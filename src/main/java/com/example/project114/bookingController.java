@@ -1,13 +1,15 @@
 package com.example.project114;
 
-import javafx.animation.Interpolator;
-import javafx.animation.ScaleTransition;
+import javafx.animation.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.time.LocalDate;
@@ -32,13 +34,15 @@ public class bookingController {
     private Button history_btn;
 
     @FXML
-    private VBox mainContainer;
+    private VBox mainContent;
     @FXML
     private AnchorPane bookingPane;
     @FXML
     private AnchorPane popUp;
     @FXML
     private Pane blurOverlay;
+    @FXML
+    private VBox popUpBox;
 
     LocalTime time;
 
@@ -157,16 +161,57 @@ public class bookingController {
     }
 
     private void showPopUp() {
-        GaussianBlur blur = new GaussianBlur(20); // เลข 15 คือความฟุ้ง ยิ่งเยอะยิ่งเบลอ
-        mainContainer.setEffect(blur);
+        GaussianBlur blur = new GaussianBlur(0);
+        mainContent.setEffect(blur);
 
-        blurOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.15);");
+        ScaleTransition s1 = new ScaleTransition(Duration.millis(120), popUpBox);
+        s1.setFromX(0.8);
+        s1.setFromY(0.8);
+        s1.setToX(1);
+        s1.setToY(1);
+
+        FadeTransition f = new FadeTransition(Duration.millis(120), popUpBox);
+        f.setFromValue(0);
+        f.setToValue(1);
+
+        Timeline t = new Timeline(
+                new KeyFrame(Duration.seconds(0.2),
+                        new KeyValue(blur.radiusProperty(), 10)
+                )
+        );
+
+        ObjectProperty<Color> color = new SimpleObjectProperty<>(
+                Color.rgb(0, 0, 0, 0.0)
+        );
+
+        color.addListener((obs, oldV, newV) -> {
+            blurOverlay.setStyle(String.format(
+                    "-fx-background-color: rgba(%d,%d,%d,%.3f);",
+                    (int)(newV.getRed() * 255),
+                    (int)(newV.getGreen() * 255),
+                    (int)(newV.getBlue() * 255),
+                    newV.getOpacity()
+            ));
+        });
+
+        Timeline t1 = new Timeline(
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(color, Color.rgb(0,0,0,0.0))
+                ),
+                new KeyFrame(Duration.seconds(0.2),
+                        new KeyValue(color, Color.rgb(0,0,0,0.15))
+                )
+        );
 
         popUp.setVisible(true);
+        f.play();
+        s1.play();
+        t.play();
+        t1.play();
     }
 
     private void hidePopUp() {
-        mainContainer.setEffect(null);
+        mainContent.setEffect(null);
         popUp.setVisible(false);
     }
 

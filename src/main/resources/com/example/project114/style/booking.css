@@ -227,7 +227,7 @@
 }
 
 .pop-up-box{
-    -fx-background-color: #f3f3f3;
+    -fx-background-color: white;
     -fx-background-radius: 12;
 }
 .pop-up-title{
