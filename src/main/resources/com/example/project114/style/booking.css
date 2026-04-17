@@ -245,6 +245,11 @@
     -fx-background-radius: 12;
     -fx-border-color: black;
     -fx-border-radius: 12;
+    -fx-cursor: hand;
+}
+.pop-up-close-bth:pressed{
+    -fx-background-color: #dcdcdc;
+    -fx-translate-y: 1;
 }
 .pop-up-bh-bth{
     -fx-font-size: 13;
@@ -252,6 +257,9 @@
     -fx-text-fill: white;
     -fx-background-color: #1C9B1C;
     -fx-background-radius: 12;
-    -fx-border-color: #1C9B1C;
-    -fx-border-radius: 12;
+    -fx-cursor: hand;
+}
+.pop-up-bh-bth:pressed{
+    -fx-background-color: #136a13;
+    -fx-translate-y: 1;
 }

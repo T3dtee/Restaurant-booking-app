@@ -5,7 +5,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ReservationService {
     public final int MAX_TABLES = 10;
@@ -69,9 +68,11 @@ public class ReservationService {
                 .toList();
     }
 
-    public boolean customerBooked(Customer customer, LocalDate date, LocalTime time) {
+    public boolean isCustomerBooked(Customer customer, LocalDate date, LocalTime time) {
         for (Reservation r : getReservationsByCustomer(customer)) {
-            if (r.getDate().equals(date) && r.getTime().equals(time) && r.getStatus().equals(ReservationStatus.BOOKED)) return true;
+            if (r.getDate().equals(date) && r.getTime().equals(time) && r.getStatus().equals(ReservationStatus.BOOKED)
+                    || r.getStatus().equals(ReservationStatus.CHECKED_IN))
+                return true;
         }
         return false;
     }
