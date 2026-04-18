@@ -169,6 +169,7 @@ public class bookingController {
         s1.setFromY(0.8);
         s1.setToX(1);
         s1.setToY(1);
+        s1.setInterpolator(Interpolator.EASE_OUT);
 
         FadeTransition f = new FadeTransition(Duration.millis(120), popUpBox);
         f.setFromValue(0);
@@ -211,8 +212,54 @@ public class bookingController {
     }
 
     private void hidePopUp() {
-        mainContent.setEffect(null);
-        popUp.setVisible(false);
+        GaussianBlur blur = new GaussianBlur(10);
+        mainContent.setEffect(blur);
+
+        ScaleTransition s1 = new ScaleTransition(Duration.millis(120), popUpBox);
+        s1.setFromX(1);
+        s1.setFromY(1);
+        s1.setToX(0.8);
+        s1.setToY(0.8);
+
+        FadeTransition f = new FadeTransition(Duration.millis(120), popUpBox);
+        f.setFromValue(1);
+        f.setToValue(0);
+        f.setOnFinished(e -> {
+            popUp.setVisible(false);
+            mainContent.setEffect(null);});
+
+        Timeline t = new Timeline(
+                new KeyFrame(Duration.seconds(0.12),
+                        new KeyValue(blur.radiusProperty(), 0)
+                )
+        );
+
+        ObjectProperty<Color> color = new SimpleObjectProperty<>(
+                Color.rgb(0, 0, 0, 0.0)
+        );
+        color.addListener((obs, oldV, newV) -> {
+            blurOverlay.setStyle(String.format(
+                    "-fx-background-color: rgba(%d,%d,%d,%.3f);",
+                    (int)(newV.getRed() * 255),
+                    (int)(newV.getGreen() * 255),
+                    (int)(newV.getBlue() * 255),
+                    newV.getOpacity()
+            ));
+        });
+
+        Timeline t1 = new Timeline(
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(color, Color.rgb(0,0,0,0.15))
+                ),
+                new KeyFrame(Duration.seconds(0.12),
+                        new KeyValue(color, Color.rgb(0,0,0,0.0))
+                )
+        );
+
+        f.play();
+        s1.play();
+        t.play();
+        t1.play();
     }
 
     public void fullBookedAnimation() {
