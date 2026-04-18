@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class ReservationService {
     public final int MAX_TABLES = 10;
@@ -23,31 +24,27 @@ public class ReservationService {
 
     // นับจำนวนโต๊ะในวันและเวลาเดียวกัน
     public int countByDateTime(LocalDate date, LocalTime time) {
-
-        int count = 0;
-
-        for (Reservation r : reservationList) {
-            if (r.getDate().equals(date)
-                    && r.getTime().equals(time)
-                    && !ReservationStatus.CANCELLED.equals(r.getStatus())
-                    && !ReservationStatus.EXPIRED.equals(r.getStatus())) {
-                count++;
-            }
-        }
-
-        return count;
+        return (int) reservationList.stream()
+                .filter(r -> r.getDate().equals(date)
+                        && r.getTime().equals(time)
+                        && r.getStatus() != ReservationStatus.CANCELLED
+                        && r.getStatus() != ReservationStatus.EXPIRED)
+                .count();
     }
 
-    public int emptyTableNo(LocalDate date, LocalTime time){
-        for (Reservation res : reservationList){
-            if (res.getDate().equals(date) && res.getTime().equals(time))
-                if (res.getStatus().equals("CANCELLED") || res.getStatus().equals("EXPIRED")){
-                    int queueNum = res.getTableNo();
-                    reservationList.remove(res);
-                    return queueNum;
-                }
+    public int emptyTableNo(LocalDate date, LocalTime time) {
+        Optional<Reservation> reusable = reservationList.stream()
+                .filter(res -> res.getDate().equals(date) && res.getTime().equals(time))
+                .filter(res -> res.getStatus() == ReservationStatus.CANCELLED || res.getStatus() == ReservationStatus.EXPIRED)
+                .findFirst();
+
+        if (reusable.isPresent()) {
+            int tableNo = reusable.get().getTableNo();
+            reservationList.remove(reusable.get());
+            return tableNo;
         }
-        return countByDateTime(date,time) + 1;
+
+        return countByDateTime(date, time) + 1;
     }
 
     public List<Reservation> getAllReservations() {
@@ -58,8 +55,8 @@ public class ReservationService {
         return reservationList.stream()
                 .filter(r -> customer.getName().equals(r.getCustomer().getName()))
                 .sorted(Comparator.comparing((Reservation r) -> {
-                        if (r.getStatus().equals(ReservationStatus.BOOKED)) return -1;
-                        else if (r.getStatus().equals(ReservationStatus.CHECKED_IN)) return 0;
+                        if (r.getStatus() == ReservationStatus.BOOKED) return -1;
+                        else if (r.getStatus() == ReservationStatus.CHECKED_IN) return 0;
                         else return 1;}) //ให้ Booked ขึ้นก่อน ตามด้วย Checked in
                         .thenComparing(Reservation::getDate)
                         .thenComparing(Reservation::getTime)
@@ -70,8 +67,10 @@ public class ReservationService {
 
     public boolean isCustomerBooked(Customer customer, LocalDate date, LocalTime time) {
         for (Reservation r : getReservationsByCustomer(customer)) {
-            if (r.getDate().equals(date) && r.getTime().equals(time) && r.getStatus().equals(ReservationStatus.BOOKED)
-                    || r.getStatus().equals(ReservationStatus.CHECKED_IN))
+            if (r.getDate().equals(date)
+                    && r.getTime().equals(time)
+                    && (r.getStatus() == ReservationStatus.BOOKED
+                    || r.getStatus() == ReservationStatus.CHECKED_IN))
                 return true;
         }
         return false;

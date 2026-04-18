@@ -43,16 +43,16 @@ public class bookingHistoryCardController {
     }
 
     private void updateStatus() {
-        status.setText(reservation.getStatus());
+        status.setText(reservation.getStatus().name());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
-        if (reservation.getStatus().equals(ReservationStatus.BOOKED)) {
+        if (reservation.getStatus() == ReservationStatus.BOOKED) {
             statusBar.setStyle("-fx-background-color: #41891C");
             statusTime.setText("Booking Time : " + reservation.getBookingTime().format(formatter));
-        } else if (reservation.getStatus().equals(ReservationStatus.CHECKED_IN)) {
+        } else if (reservation.getStatus() == ReservationStatus.CHECKED_IN) {
             cancel.setVisible(false);
             statusBar.setStyle("-fx-background-color: #dcdc00");
             statusTime.setText("Check in Time : " + reservation.getCheckInTime().format(formatter));
-        } else if (reservation.getStatus().equals(ReservationStatus.CANCELLED)) {
+        } else if (reservation.getStatus() == ReservationStatus.CANCELLED) {
             cancel.setVisible(false);
             statusBar.setStyle("-fx-background-color: #b9b4b4");
             if (reservation.getCancelBy().getRole().equals("Staff")) {

@@ -1,6 +1,7 @@
 package com.example.project114;
 
 import com.example.project114.backend.Reservation;
+import com.example.project114.backend.ReservationStatus;
 import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,7 +34,7 @@ public class staffDashBoard {
 
     private void loadItems() throws IOException {
          sortedReservations = AppData.allBookingData.getAllReservations().stream()
-                .filter(r -> "BOOKED".equals(r.getStatus())) // กรองเอาเฉพาะคิวที่ถูกจอง
+                .filter(r -> r.getStatus() == ReservationStatus.BOOKED) // กรองเอาเฉพาะคิวที่ถูกจอง
                 .sorted(Comparator.comparing(Reservation::getDate)
                         .thenComparing(Reservation::getTime)
                         .thenComparing(Reservation::getTableNo)) // เรียงวันที่ ตามด้วยเวลา แล้วเลขโต๊ะ
@@ -68,11 +69,11 @@ public class staffDashBoard {
                 ParallelTransition pt = new ParallelTransition(collapse);
                 pt.setOnFinished(e -> {
                     itemBox.getChildren().remove(regionItem);
-                    update();
                 });
 
                 ft.setOnFinished(a -> {
                     pt.play();
+                    update();
                 });
                 ft.play();
             });
@@ -115,7 +116,7 @@ public class staffDashBoard {
     }
 
     private void update(){
-       if (AppData.allBookingData.getAllReservations().stream().noneMatch(r -> "BOOKED".equals(r.getStatus()))){
+       if (AppData.allBookingData.getAllReservations().stream().noneMatch(r -> r.getStatus() == ReservationStatus.BOOKED)){
            noOrderText.setVisible(true);
        }
     }

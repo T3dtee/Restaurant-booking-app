@@ -12,7 +12,7 @@ public class Reservation {
     private LocalTime time;
     private int guestCount;
     private int tableNo;
-    private String status;
+    private ReservationStatus status;
     private Person cancelBy;
     private LocalDateTime bookingTime;
     private LocalDateTime checkInTime;
@@ -48,7 +48,7 @@ public class Reservation {
     public int getTableNo() {
         return tableNo;
     }
-    public String getStatus() {
+    public ReservationStatus getStatus() {
          return status; 
     }
     public LocalDateTime getCheckInTime() {
@@ -76,7 +76,7 @@ public class Reservation {
 
     // ใช้เช็คหมดเวลา 1 ชั่วโมงครึ่ง
     public boolean isOverTime() {
-        if (status.equals (ReservationStatus.CHECKED_IN) && checkInTime != null) {
+        if (status == ReservationStatus.CHECKED_IN && checkInTime != null) {
             return checkInTime.plusMinutes(90).isBefore(LocalDateTime.now());
         }
         return false;
