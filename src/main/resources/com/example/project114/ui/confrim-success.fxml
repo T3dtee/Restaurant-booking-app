@@ -11,25 +11,6 @@
 
 <StackPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="360.0" styleClass="app-background" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.project114.successController">
    <children>
-      <VBox prefHeight="200.0" prefWidth="100.0">
-         <children>
-            <BorderPane prefHeight="80.0" prefWidth="360.0">
-               <left>
-                  <ImageView fitHeight="13.0" fitWidth="13.0" onMouseClicked="#goToBooking" pickOnBounds="true" preserveRatio="true" styleClass="back-btn" BorderPane.alignment="CENTER">
-                     <image>
-                        <Image url="@../style/img/arrow.png" />
-                     </image>
-                     <BorderPane.margin>
-                        <Insets left="20.0" top="10.0" />
-                     </BorderPane.margin>
-                  </ImageView>
-               </left>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </BorderPane>
-         </children>
-      </VBox>
       <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="380.0" prefWidth="330.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30; -fx-border-radius: 30; -fx-border-width: 2; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0.3, 0, 8);" StackPane.alignment="TOP_CENTER">
          <StackPane.margin>
             <Insets top="120.0" />
@@ -89,6 +70,19 @@
             </VBox>
          </children>
       </VBox>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <VBox alignment="CENTER" layoutX="11.0" layoutY="30.0" onMouseClicked="#goToBooking" prefHeight="30.0" prefWidth="30.0" styleClass="back-btn">
+               <children>
+                  <ImageView fitHeight="13.0" fitWidth="13.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../style/img/arrow.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
       <AnchorPane fx:id="confettiPane" mouseTransparent="true" prefHeight="800.0" prefWidth="360.0" />
    </children>
 </StackPane>

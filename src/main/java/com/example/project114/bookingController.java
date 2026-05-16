@@ -34,7 +34,7 @@ public class bookingController {
     private Button history_btn;
 
     @FXML
-    private VBox mainContent;
+    private AnchorPane mainContent;
     @FXML
     private AnchorPane bookingPane;
     @FXML
@@ -163,17 +163,19 @@ public class bookingController {
     private void showPopUp() {
         GaussianBlur blur = new GaussianBlur(0);
         mainContent.setEffect(blur);
+        popUpBox.setOpacity(0);
 
-        ScaleTransition s1 = new ScaleTransition(Duration.millis(120), popUpBox);
-        s1.setFromX(0.8);
-        s1.setFromY(0.8);
+        ScaleTransition s1 = new ScaleTransition(Duration.millis(80), popUpBox);
+        s1.setFromX(0.9);
+        s1.setFromY(0.9);
         s1.setToX(1);
         s1.setToY(1);
         s1.setInterpolator(Interpolator.EASE_OUT);
 
-        FadeTransition f = new FadeTransition(Duration.millis(120), popUpBox);
+        FadeTransition f = new FadeTransition(Duration.millis(80), popUpBox);
         f.setFromValue(0);
         f.setToValue(1);
+        f.setInterpolator(Interpolator.EASE_OUT);
 
         Timeline t = new Timeline(
                 new KeyFrame(Duration.seconds(0.2),
@@ -203,12 +205,16 @@ public class bookingController {
                         new KeyValue(color, Color.rgb(0,0,0,0.15))
                 )
         );
+        Timeline t2 = new Timeline(
+                new KeyFrame(Duration.millis(80),event -> {
+                    s1.play();
+                    f.play();})
+        );
 
         popUp.setVisible(true);
-        f.play();
-        s1.play();
         t.play();
         t1.play();
+        t2.play();
     }
 
     private void hidePopUp() {

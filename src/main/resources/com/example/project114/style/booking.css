@@ -24,9 +24,10 @@
 }
 .back-btn {
     -fx-cursor: hand;
+    -fx-background-radius: 15;
 }
 .back-btn:hover {
-    -fx-opacity: 70%;
+    -fx-background-color: rgba(0,0,0,0.1);
 }
 .info-box{
     -fx-background-radius: 16;

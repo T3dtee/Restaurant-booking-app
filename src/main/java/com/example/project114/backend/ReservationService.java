@@ -77,10 +77,10 @@ public class ReservationService {
     }
 
     public void updateExpiredReservations() {
-    for (Reservation r : reservationList) {
-        if (r.isOverTime()) {
-            r.expire();
+        for (Reservation r : reservationList) {
+            if (r.isOverTime()) {
+                r.expire();
+            }
         }
     }
-}
 }
