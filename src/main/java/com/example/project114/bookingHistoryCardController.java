@@ -8,7 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
 import java.time.format.DateTimeFormatter;
-import java.util.function.BooleanSupplier;
 
 public class bookingHistoryCardController {
     @FXML
@@ -63,8 +62,8 @@ public class bookingHistoryCardController {
         }
     }
 
-    private BooleanSupplier onCancelRequest;
-    public void setOnCancelRequest(BooleanSupplier onCancelRequest) {
+    private Runnable onCancelRequest;
+    public void setOnCancelRequest(Runnable onCancelRequest) {
         this.onCancelRequest = onCancelRequest;
     }
     private Runnable onRemove;
@@ -78,12 +77,15 @@ public class bookingHistoryCardController {
         }
     }
 
-    @FXML
-    private void cancelOnClick() {
-        if (onCancelRequest != null && !onCancelRequest.getAsBoolean()) {
-            return;
-        }
+    public void confirmCancel() {
         reservation.cancel(AppData.loginUserData);
         updateStatus();
+    }
+
+    @FXML
+    private void cancelOnClick() {
+        if (onCancelRequest != null) {
+            onCancelRequest.run();
+        }
     }
 }

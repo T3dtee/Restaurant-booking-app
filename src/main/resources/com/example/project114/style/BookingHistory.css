@@ -2,6 +2,14 @@
     font-family: 'Pacifico';
     src: url('font/Pacifico-Regular.ttf');
 }
+@font-face {
+    font-family: 'Roboto';
+    src: url('font/Roboto-Regular.ttf');
+}
+@font-face {
+    font-family: 'Roboto-SemiBold';
+    src: url('font/Roboto_Condensed-SemiBold.ttf');
+}
 
 .scroll-pane {
     -fx-background-color: transparent;
@@ -28,4 +36,36 @@
 }
 .back-btn:hover {
     -fx-background-color: rgba(0,0,0,0.1);
+}
+
+/*pop_up*/
+.box {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+}
+.pop-up-title {
+    -fx-font-family: 'Roboto Condensed SemiBold';
+    -fx-font-size: 18;
+}
+.pop-up-text {
+    -fx-font-family: Roboto;
+    -fx-font-size: 12;
+}
+
+.confirm-btn {
+    -fx-text-fill: white;
+    -fx-background-color: #ff1c1c;
+    -fx-background-radius: 12;
+}
+.confirm-btn:pressed {
+    -fx-background-color: #d21c1c;
+}
+.close-btn {
+    -fx-border-color: black;
+    -fx-border-radius: 12;
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+}
+.close-btn:pressed {
+    -fx-background-color: #d8d8d8;
 }
