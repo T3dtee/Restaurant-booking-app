@@ -12,31 +12,38 @@
 
 <StackPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="360.0" styleClass="app-background" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.project114.staffDashBoard">
    <children>
-      <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="360.0">
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
-            <Label alignment="CENTER" prefHeight="80.0" prefWidth="231.0" styleClass="best-meal-title" text="Best Meal Staff">
-               <font>
-                  <Font size="35.0" />
-               </font>
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </Label>
-            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="721.0" prefWidth="360.0" vbarPolicy="NEVER">
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="800.0" prefWidth="360.0" vbarPolicy="NEVER">
                <content>
-                  <VBox fx:id="itemBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="358.0" styleClass="bookingContainer">
-                     <padding>
-                        <Insets bottom="15.0" left="10.0" right="10.0" top="15.0" />
-                     </padding>
+                  <VBox alignment="TOP_CENTER" prefWidth="360.0">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="80.0">
+                           <children>
+                              <Label alignment="CENTER" styleClass="best-meal-title" text="Best Meal Staff">
+                                 <font>
+                                    <Font size="35.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </VBox>
+                        <VBox fx:id="itemBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="360.0" spacing="10.0" styleClass="bookingContainer">
+                           <padding>
+                              <Insets bottom="15.0" left="10.0" right="10.0" top="15.0" />
+                           </padding>
+                        </VBox>
+                     </children>
                   </VBox>
                </content>
             </ScrollPane>
-         </children>
-      </VBox>
-      <Label fx:id="noOrderText" alignment="CENTER" prefHeight="17.0" prefWidth="210.0" styleClass="text-label" text="No reservations now :)">
+            <Label fx:id="noOrderText" alignment="CENTER" prefHeight="17.0" prefWidth="210.0" styleClass="text-label" text="No reservations :)" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="400.0">
       </Label>
-      <AnchorPane pickOnBounds="false" prefHeight="369.0" prefWidth="360.0">
-         <children>
             <VBox alignment="CENTER" layoutX="11.0" layoutY="30.0" onMouseClicked="#goToStaffLogin" prefHeight="30.0" prefWidth="30.0" styleClass="back-btn">
                <children>
                   <ImageView fitHeight="13.0" fitWidth="13.0" pickOnBounds="true" preserveRatio="true">
