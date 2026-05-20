@@ -1,115 +1,24 @@
 package com.example.project114;
 
-import com.example.project114.backend.Reservation;
 import javafx.animation.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.function.BooleanSupplier;
 
-public class bookingHistotyController {
-    @FXML
-    private VBox itemBox;
-    @FXML
-    private AnchorPane mainContent;
-    @FXML
-    private AnchorPane popUp;
-    @FXML
-    private VBox popUpBox;
-    @FXML
-    private Pane blurOverlay;
-
-
-    @FXML
-    private void goToBooking() {SceneManager.switchScene("booking.fxml", "booking.css");}
-
-    public void initialize() {
-        try {
-            loadItems();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private List<Reservation> customerReservations;
-    private Runnable pendingCancelAction;
-
-    private void loadItems() throws IOException {
-        customerReservations = AppData.allBookingData.getReservationsByCustomer(AppData.loginUserData);
-
-        for (Reservation data : customerReservations) {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/example/project114/ui/bookingHistoryContainer.fxml"));
-
-            Parent item = loader.load();
-
-            bookingHistoryCardController controller = loader.getController();
-            controller.setData(data);
-            controller.setOnCancelRequest(() -> {
-                pendingCancelAction = controller::confirmCancel;
-                showPopUp();
-            });
-
-            controller.setOnRemove(() -> {
-                Region regionItem = (Region) item;
-
-                // 1. Fade ออก
-                FadeTransition ft = new FadeTransition(Duration.millis(250), regionItem);
-                ft.setToValue(0);
-
-                regionItem.setMinHeight(regionItem.getHeight());
-
-                Timeline collapse = new Timeline(
-                        new KeyFrame(Duration.millis(330),
-                                new KeyValue(regionItem.prefHeightProperty(), 0, Interpolator.EASE_BOTH),
-                                new KeyValue(regionItem.minHeightProperty(), 0, Interpolator.EASE_BOTH)
-                        )
-                );
-
-                ParallelTransition pt = new ParallelTransition(collapse);
-                pt.setOnFinished(e -> {
-                    itemBox.getChildren().remove(regionItem);
-                });
-
-                ft.setOnFinished(a -> {
-                    pt.play();
-                });
-                ft.play();
-            });
-
-            itemBox.getChildren().add(item);
-        }
-    }
-
-    @FXML
-    private void closeOnClick() {
-        hidePopUp();
-        pendingCancelAction = null;
-    }
-    @FXML
-    private void confirmOnClick() {
-        hidePopUp();
-        if (pendingCancelAction != null) {
-            pendingCancelAction.run();
-            pendingCancelAction = null;
-        }
-    }
-
-    private void showPopUp() {
+public class AnimationUtils {
+    public static void popUpShow(AnchorPane mainContent, AnchorPane popUp, Pane blurPane, Node popUpBox) {
         GaussianBlur blur = new GaussianBlur(0);
         mainContent.setEffect(blur);
         popUpBox.setOpacity(0);
+
         ScaleTransition s1 = new ScaleTransition(Duration.millis(80), popUpBox);
         s1.setFromX(0.9);
         s1.setFromY(0.9);
@@ -133,7 +42,7 @@ public class bookingHistotyController {
         );
 
         color.addListener((obs, oldV, newV) -> {
-            blurOverlay.setStyle(String.format(
+            blurPane.setStyle(String.format(
                     "-fx-background-color: rgba(%d,%d,%d,%.3f);",
                     (int)(newV.getRed() * 255),
                     (int)(newV.getGreen() * 255),
@@ -162,7 +71,7 @@ public class bookingHistotyController {
         t2.play();
     }
 
-    private void hidePopUp() {
+    public static void popUpHide(AnchorPane mainContent, AnchorPane popUp, Pane blurPane, Node popUpBox) {
         GaussianBlur blur = new GaussianBlur(10);
         mainContent.setEffect(blur);
 
@@ -189,7 +98,7 @@ public class bookingHistotyController {
                 Color.rgb(0, 0, 0, 0.0)
         );
         color.addListener((obs, oldV, newV) -> {
-            blurOverlay.setStyle(String.format(
+            blurPane.setStyle(String.format(
                     "-fx-background-color: rgba(%d,%d,%d,%.3f);",
                     (int)(newV.getRed() * 255),
                     (int)(newV.getGreen() * 255),
@@ -211,5 +120,28 @@ public class bookingHistotyController {
         s1.play();
         t.play();
         t1.play();
+    }
+
+    public static void buttonHover(Button btn, int size, int time) {
+        buttonHover(btn, size, time, () -> true);
+    }
+
+    public static void buttonHover(Button btn, int size, int time, BooleanSupplier condition) {
+        btn.setOnMouseEntered(e -> {
+            if (!condition.getAsBoolean()) return;
+
+            ScaleTransition st = new ScaleTransition(Duration.millis(time), btn);
+            st.setToX(1 + (double) size / 100);
+            st.setToY(1 + (double) size / 100);
+            st.play();
+        });
+        btn.setOnMouseExited(e -> {
+            if (!condition.getAsBoolean()) return;
+
+            ScaleTransition st = new ScaleTransition(Duration.millis(time), btn);
+            st.setToX(1.0);
+            st.setToY(1.0);
+            st.play();
+        });
     }
 }

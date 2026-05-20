@@ -14,8 +14,7 @@ public class ReservationService {
 
     // เพิ่มการจอง
     public void addReservation(Reservation reservation) {
-        if (!isTableFull(reservation.getDate(),reservation.getTime()))
-            reservationList.add(reservation);
+        reservationList.add(reservation);
     }
 
     public boolean isTableFull(LocalDate date, LocalTime time){

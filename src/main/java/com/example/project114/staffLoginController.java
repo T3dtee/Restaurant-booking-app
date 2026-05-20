@@ -29,7 +29,7 @@ public class staffLoginController {
             passwordField.setText(AppData.loginStaffData.getPassword());
         }
 
-        setupButtonAnimation(login);
+        AnimationUtils.buttonHover(login, 3, 100);
     }
 
     @FXML
@@ -60,22 +60,6 @@ public class staffLoginController {
             if (!validUsername) usernameField.getStyleClass().add("error-field");
             if (!validPassword) passwordField.getStyleClass().add("error-field");
         }
-    }
-
-    public void setupButtonAnimation(Button btn) {
-        btn.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(100), btn);
-            st.setToX(1.03);
-            st.setToY(1.03);
-            st.play();
-        });
-
-        btn.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(100), btn);
-            st.setToX(1.0);
-            st.setToY(1.0);
-            st.play();
-        });
     }
 
     @FXML

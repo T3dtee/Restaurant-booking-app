@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 import java.time.format.DateTimeFormatter;
-import java.util.function.BooleanSupplier;
 
 public class ItemCardController {
     @FXML
@@ -21,28 +20,28 @@ public class ItemCardController {
     @FXML
     private Label table;
 
-    private Reservation data;
+    private Reservation reservation;
 
-    public void setData(Reservation data) {
-        this.data = data;
+    public void setData(Reservation reservation) {
+        this.reservation = reservation;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
-        String formatted = data.getDate().format(formatter);
+        String formatted = reservation.getDate().format(formatter);
 
-        name.setText(data.getCustomer().getName());
-        phone.setText("Phone : " + data.getCustomer().getPhone());
+        name.setText(reservation.getCustomer().getName());
+        phone.setText("Phone : " + reservation.getCustomer().getPhone());
         date.setText("Date : " + formatted);
-        time.setText("Time : " + data.getTime());
-        guestNo.setText("Guest : " + data.getGuestCount());
-        table.setText("Table : T" + data.getTableNo());
+        time.setText("Time : " + reservation.getTime());
+        guestNo.setText("Guest : " + reservation.getGuestCount());
+        table.setText("Table : T" + reservation.getTableNo());
     }
 
+    private Runnable onCancelRequest;
+    public void setOnCancelRequest(Runnable onCancelRequest) {
+        this.onCancelRequest = onCancelRequest;
+    }
     private Runnable onRemove;
     public void setOnRemove(Runnable onRemove) {
         this.onRemove = onRemove;
-    }
-    private BooleanSupplier onCancelRequest;
-    public void setOnCancelRequest(BooleanSupplier onCancelRequest) {
-        this.onCancelRequest = onCancelRequest;
     }
 
     private void handleRemove() {
@@ -53,15 +52,19 @@ public class ItemCardController {
 
     @FXML
     private void checkedIn(){
-        data.checkIn();
+        reservation.checkIn();
         handleRemove();
     }
+
     @FXML
-    private void cancelled(){
-        if (onCancelRequest != null && !onCancelRequest.getAsBoolean()) {
-            return;
+    private void cancelled() {
+        if (onCancelRequest != null) {
+            onCancelRequest.run();
         }
-        data.cancel(AppData.loginStaffData);
+    }
+
+    public void confirmCancel() {
+        reservation.cancel(AppData.loginStaffData);
         handleRemove();
     }
 }

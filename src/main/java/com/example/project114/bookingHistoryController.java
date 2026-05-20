@@ -1,36 +1,22 @@
 package com.example.project114;
 
 import com.example.project114.backend.Reservation;
-import com.example.project114.backend.ReservationStatus;
 import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class staffDashBoard {
-
-    @FXML
-    private void goToStaffLogin() { SceneManager.switchScene("login-staff.fxml", "login.css");}
-
+public class bookingHistoryController {
     @FXML
     private VBox itemBox;
-    @FXML
-    private Label noOrderText;
     @FXML
     private AnchorPane mainContent;
     @FXML
@@ -40,24 +26,30 @@ public class staffDashBoard {
     @FXML
     private Pane blurOverlay;
 
-    List<Reservation> sortedReservations;
+
+    @FXML
+    private void goToBooking() {SceneManager.switchScene("booking.fxml", "booking.css");}
+
+    public void initialize() {
+        try {
+            loadItems();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private Runnable pendingCancelAction;
 
     private void loadItems() throws IOException {
-         sortedReservations = AppData.allBookingData.getAllReservations().stream()
-                .filter(r -> r.getStatus() == ReservationStatus.BOOKED) // กรองเอาเฉพาะคิวที่ถูกจอง
-                .sorted(Comparator.comparing(Reservation::getDate)
-                        .thenComparing(Reservation::getTime)
-                        .thenComparing(Reservation::getTableNo)) // เรียงวันที่ ตามด้วยเวลา แล้วเลขโต๊ะ
-                .collect(Collectors.toList());
+        List<Reservation> customerReservations = AppData.allBookingData.getReservationsByCustomer(AppData.loginUserData);
 
-        for (Reservation data : sortedReservations) {
+        for (Reservation data : customerReservations) {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/example/project114/ui/bookingContainer.fxml"));
+                    getClass().getResource("/com/example/project114/ui/bookingHistoryContainer.fxml"));
 
             Parent item = loader.load();
 
-            ItemCardController controller = loader.getController();
+            bookingHistoryCardController controller = loader.getController();
             controller.setData(data);
             controller.setOnCancelRequest(() -> {
                 pendingCancelAction = controller::confirmCancel;
@@ -85,25 +77,11 @@ public class staffDashBoard {
                     itemBox.getChildren().remove(regionItem);
                 });
 
-                ft.setOnFinished(a -> {
-                    pt.play();
-                    update();
-                });
+                ft.setOnFinished(e -> pt.play());
                 ft.play();
             });
 
             itemBox.getChildren().add(item);
-        }
-    }
-
-    public void initialize() {
-        try {
-            loadItems();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (!sortedReservations.isEmpty()) {
-            noOrderText.setVisible(false);
         }
     }
 
@@ -127,11 +105,5 @@ public class staffDashBoard {
 
     private void hidePopUp() {
         AnimationUtils.popUpHide(mainContent, popUp, blurOverlay, popUpBox);
-    }
-
-    private void update(){
-       if (AppData.allBookingData.getAllReservations().stream().noneMatch(r -> r.getStatus() == ReservationStatus.BOOKED)){
-           noOrderText.setVisible(true);
-       }
     }
 }

@@ -41,7 +41,7 @@ public class loginUserController {
             staffLogin.setVisible(true);
         }
 
-        setupButtonAnimation(login);
+        AnimationUtils.buttonHover(login, 3, 100);
     }
 
     @FXML
@@ -72,22 +72,6 @@ public class loginUserController {
     @FXML
     private void logoClick() {
         staffLogin.setVisible(true);
-    }
-
-    public void setupButtonAnimation(Button btn) {
-        btn.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(100), btn);
-            st.setToX(1.03);
-            st.setToY(1.03);
-            st.play();
-        });
-
-        btn.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(100), btn);
-            st.setToX(1.0);
-            st.setToY(1.0);
-            st.play();
-        });
     }
 
     @FXML
