@@ -262,3 +262,6 @@
     -fx-background-color: #136a13;
     -fx-translate-y: 1;
 }
+.blurPane{
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+}

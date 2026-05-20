@@ -69,3 +69,6 @@
 .close-btn:pressed {
     -fx-background-color: #d8d8d8;
 }
+.blurPane{
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+}

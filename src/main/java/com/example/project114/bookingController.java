@@ -207,7 +207,6 @@ public class bookingController {
     @FXML
     private void goToUserLogin() { SceneManager.switchScene("login-user.fxml", "login.css");}
 
-    @FXML
     private void goToSuccess() { SceneManager.switchScene("confrim-success.fxml", "success.css");}
 
     private void goToHistory() { SceneManager.switchScene("BookingHistory.fxml", "BookingHistory.css");}
