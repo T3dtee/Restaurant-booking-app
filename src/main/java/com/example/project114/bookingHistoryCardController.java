@@ -62,6 +62,10 @@ public class bookingHistoryCardController {
         }
     }
 
+    public Button getCancelBtn() {
+        return cancel;
+    }
+
     private Runnable onCancelRequest;
     public void setOnCancelRequest(Runnable onCancelRequest) {
         this.onCancelRequest = onCancelRequest;

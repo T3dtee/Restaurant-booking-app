@@ -5,6 +5,7 @@ import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
@@ -53,7 +54,7 @@ public class bookingHistoryController {
             controller.setData(data);
             controller.setOnCancelRequest(() -> {
                 pendingCancelAction = controller::confirmCancel;
-                showPopUp();
+                showPopUp(controller.getCancelBtn());
             });
 
             controller.setOnRemove(() -> {
@@ -99,8 +100,8 @@ public class bookingHistoryController {
         }
     }
 
-    private void showPopUp() {
-        AnimationUtils.popUpShow(mainContent, popUp, blurOverlay, popUpBox);
+    private void showPopUp(Button button) {
+        AnimationUtils.popUpShow(mainContent, popUp, blurOverlay, popUpBox, button);
     }
 
     private void hidePopUp() {

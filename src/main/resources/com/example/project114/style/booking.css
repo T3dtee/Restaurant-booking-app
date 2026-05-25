@@ -263,5 +263,5 @@
     -fx-translate-y: 1;
 }
 .blurPane{
-    -fx-background-color: rgba(0, 0, 0, 0.2);
+    -fx-background-color: rgba(0, 0, 0, 0.3);
 }

@@ -119,7 +119,7 @@ public class bookingController {
                 }
             }
             else { //จองแล้ว
-                showPopUp();
+                showPopUp(confirm);
             }
         }
         else { //ไม่ว่างแล้วพยายามกด
@@ -152,8 +152,8 @@ public class bookingController {
         }
     }
 
-    private void showPopUp() {
-        AnimationUtils.popUpShow(mainContent, popUp, blurOverlay, popUpBox);
+    private void showPopUp(Button button) {
+        AnimationUtils.popUpShow(mainContent, popUp, blurOverlay, popUpBox, button);
     }
     private void hidePopUp() {
         AnimationUtils.popUpHide(mainContent, popUp, blurOverlay, popUpBox);

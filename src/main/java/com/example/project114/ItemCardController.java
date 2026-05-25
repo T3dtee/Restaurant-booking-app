@@ -2,6 +2,7 @@ package com.example.project114;
 
 import com.example.project114.backend.Reservation;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.time.format.DateTimeFormatter;
@@ -19,6 +20,8 @@ public class ItemCardController {
     private Label guestNo;
     @FXML
     private Label table;
+    @FXML
+    private Button cancel;
 
     private Reservation reservation;
 
@@ -33,6 +36,10 @@ public class ItemCardController {
         time.setText("Time : " + reservation.getTime());
         guestNo.setText("Guest : " + reservation.getGuestCount());
         table.setText("Table : T" + reservation.getTableNo());
+    }
+
+    public Button getCancelBtn() {
+        return cancel;
     }
 
     private Runnable onCancelRequest;
