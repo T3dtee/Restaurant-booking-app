@@ -1,10 +1,12 @@
-module com.example.project114 {
+module com.theerayut.app {
     requires javafx.controls;
     requires javafx.fxml;
 
 
-    opens com.example.project114 to javafx.fxml;
-    exports com.example.project114;
-    exports com.example.project114.backend;
-    opens com.example.project114.backend to javafx.fxml;
+    exports com.theerayut.app;
+    exports com.theerayut.app.controller;
+    exports com.theerayut.app.model;
+    exports com.theerayut.app.service;
+    exports com.theerayut.app.util;
+    opens com.theerayut.app.controller to javafx.fxml;
 }
