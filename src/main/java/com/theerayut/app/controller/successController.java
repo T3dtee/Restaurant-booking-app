@@ -1,10 +1,13 @@
 package com.theerayut.app.controller;
 
 import com.theerayut.app.AppData;
+import com.theerayut.app.util.AnimationUtils;
 import com.theerayut.app.util.SceneManager;
 import javafx.animation.*;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -33,7 +36,11 @@ public class successController {
     @FXML
     private StackPane container;
     @FXML
-    private VBox detailBox;
+    private VBox backBtnBox;
+    @FXML
+    private ImageView icon;
+    @FXML
+    private Button doneBtn;
 
     @FXML private Pane confettiPane; // Pane เปล่าๆ ที่ใช้วางพลุ
     private final Random random = new Random();
@@ -42,21 +49,22 @@ public class successController {
     public void initialize() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String formatted = AppData.bookingData.getDate().format(formatter);
-        name.setText("Name: " + AppData.bookingData.getCustomer().getName());
-        date.setText("Date: " + formatted);
-        time.setText("Time: " + AppData.bookingData.getTime());
-        guestNo.setText("Guest: " + AppData.bookingData.getGuestCount());
-        table.setText("Table: T" + AppData.bookingData.getTableNo());
-        successTitle.setOpacity(0);
-        detailBox.setOpacity(0);
+        name.setText(AppData.bookingData.getCustomer().getName());
+        date.setText(formatted);
+        time.setText(AppData.bookingData.getTime().toString());
+        guestNo.setText("" + AppData.bookingData.getGuestCount());
+        table.setText("T" + AppData.bookingData.getTableNo());
+
+        AnimationUtils.buttonHover(doneBtn, 4, 110);
+        AnimationUtils.backToHomeBtn(backBtnBox, icon);
         playSuccessEffect();
     }
 
     private void playSuccessEffect() {
         ScaleTransition bounce = new ScaleTransition(Duration.millis(360), container);
-        bounce.setFromX(0);
-        bounce.setFromY(0);
-        bounce.setToX(1.6); // ขยายให้ใหญ่กว่าปกตินิดนึง
+        bounce.setFromX(0.1);
+        bounce.setFromY(0.1);
+        bounce.setToX(1.6);
         bounce.setToY(1.6);
         bounce.setInterpolator(Interpolator.EASE_OUT);
 
@@ -79,16 +87,27 @@ public class successController {
         playConfetti();
 
         FadeTransition fadeInTitle = new FadeTransition(Duration.millis(300), successTitle);
+        fadeInTitle.setFromValue(0);
         fadeInTitle.setToValue(1);
-        ParallelTransition titleAnim = new ParallelTransition(fadeInTitle);
-        titleAnim.setDelay(Duration.millis(400));
-        titleAnim.play();
 
-        FadeTransition fadeInDetail = new FadeTransition(Duration.millis(300), detailBox);
-        fadeInDetail.setToValue(1);
-        ParallelTransition detailAnim = new ParallelTransition(fadeInDetail);
-        detailAnim.setDelay(Duration.millis(500));
-        detailAnim.play();
+        FadeTransition fadeBtn = new FadeTransition(Duration.millis(500), doneBtn);
+        fadeBtn.setFromValue(0);
+        fadeBtn.setToValue(1);
+        fadeBtn.setInterpolator(Interpolator.EASE_OUT);
+
+        Timeline t =  new Timeline(
+                new KeyFrame(Duration.ZERO, e -> {
+                    doneBtn.setVisible(false);
+                    successTitle.setOpacity(0);
+                    doneBtn.setOpacity(0);}),
+                new KeyFrame(Duration.millis(500), event -> fadeInTitle.play()),
+                new KeyFrame(Duration.millis(2500), event -> {
+
+                    doneBtn.setVisible(true);
+                    fadeBtn.play();})
+        );
+
+        t.play();
     }
 
     private void playConfetti() {
@@ -127,4 +146,8 @@ public class successController {
 
     @FXML
     private void goToBooking() {SceneManager.switchScene("booking.fxml", "booking.css");}
+    @FXML
+    private void doneOnClicked() {
+        goToBooking();
+    }
 }

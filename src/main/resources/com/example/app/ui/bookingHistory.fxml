@@ -42,9 +42,9 @@
                   </VBox>
                </content>
             </ScrollPane>
-            <VBox alignment="CENTER" layoutX="11.0" layoutY="30.0" onMouseClicked="#goToBooking" prefHeight="30.0" prefWidth="30.0" styleClass="back-btn">
+            <VBox fx:id="backBtnBox" alignment="CENTER" layoutX="11.0" layoutY="30.0" onMouseClicked="#goToBooking" prefHeight="30.0" prefWidth="30.0" styleClass="back-btn">
                <children>
-                  <ImageView fitHeight="13.0" fitWidth="13.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="icon" fitHeight="13.0" fitWidth="13.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../style/img/arrow.png" />
                      </image>

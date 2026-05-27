@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
@@ -29,12 +30,17 @@ public class bookingHistoryController {
     private VBox popUpBox;
     @FXML
     private Pane blurOverlay;
+    @FXML
+    private VBox backBtnBox;
+    @FXML
+    private ImageView icon;
 
 
     @FXML
     private void goToBooking() {SceneManager.switchScene("booking.fxml", "booking.css");}
 
     public void initialize() {
+        AnimationUtils.backToHomeBtn(backBtnBox, icon);
         try {
             loadItems();
         } catch (IOException e) {

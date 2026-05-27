@@ -29,33 +29,32 @@
     -fx-background-radius: 100;
     -fx-background-color: #FFFFFF;
 }
-
-.name {
+.head-detail {
+    -fx-font-family: Roboto;
+    -fx-font-size: 14;
+    -fx-text-fill: #b1a9a9;
+}
+.detail {
     -fx-font-family: Roboto;
     -fx-font-size: 15;
     -fx-text-fill: #5F5757;
 }
-
-.date {
-    -fx-font-family: Roboto;
-    -fx-font-size: 15;
-    -fx-text-fill: #5F5757;
+.button {
+    -fx-background-radius: 20;
+    -fx-background-color: #1C9B1C;
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 20;
+    -fx-text-fill : white;
+    -fx-cursor: hand;
 }
-
-.time {
-    -fx-font-family: Roboto;
-    -fx-font-size: 15;
-    -fx-text-fill: #5F5757;
+.button:hover{
+    -fx-background-color: #28b828;
 }
-
-.guest {
-    -fx-font-family: Roboto;
-    -fx-font-size: 15;
-    -fx-text-fill: #5F5757;
+.button:pressed{
+    -fx-background-color: #0e680e;
+    -fx-translate-y: 2;
 }
-
-.table {
-    -fx-font-family: Roboto;
-    -fx-font-size: 15;
-    -fx-text-fill: #5F5757;
+.btn-box{
+    -fx-border-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0.3, 0, 4)
 }

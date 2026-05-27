@@ -5,13 +5,19 @@ import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.util.function.BooleanSupplier;
 
 public class AnimationUtils {
+    private static final Image BACK_IMAGE = new Image(AnimationUtils.class.getResourceAsStream("/com/example/app/style/img/arrow.png"));
+    private static final Image HOME_IMAGE = new Image(AnimationUtils.class.getResourceAsStream("/com/example/app/style/img/home.png"));
+
     public static void popUpShow(AnchorPane mainContent, AnchorPane popUp, Pane blurPane, Node popUpBox, Button button) {
         Bounds buttonBounds = button.localToScene(button.getBoundsInLocal());
         double startX = buttonBounds.getMinX() + (buttonBounds.getWidth() / 2);
@@ -41,7 +47,7 @@ public class AnimationUtils {
         s1.setToY(1.04);
         s1.setInterpolator(Interpolator.EASE_OUT);
 
-        ScaleTransition s2 = new ScaleTransition(Duration.millis(130), popUpBox);
+        ScaleTransition s2 = new ScaleTransition(Duration.millis(150), popUpBox);
         s2.setFromX(1.04);
         s2.setFromY(1.04);
         s2.setToX(1);
@@ -162,6 +168,44 @@ public class AnimationUtils {
             st.setToX(1.0);
             st.setToY(1.0);
             st.setInterpolator(Interpolator.EASE_OUT);
+            st.play();
+        });
+    }
+
+    public static void backToHomeBtn(VBox backBtn, ImageView icon) {
+        backBtn.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(100), icon);
+            st.setToX(0);
+            st.setToY(0);
+            st.setInterpolator(Interpolator.EASE_IN);
+
+            ScaleTransition st2 = new ScaleTransition(Duration.millis(100), icon);
+            st2.setToX(1);
+            st2.setToY(1);
+            st2.setInterpolator(Interpolator.EASE_OUT);
+
+            st.setOnFinished(event -> {
+                icon.setImage(HOME_IMAGE);
+                st2.play();
+            });
+            st.play();
+        });
+
+        backBtn.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(100), icon);
+            st.setToX(0);
+            st.setToY(0);
+            st.setInterpolator(Interpolator.EASE_IN);
+
+            ScaleTransition st2 = new ScaleTransition(Duration.millis(100), icon);
+            st2.setToX(1);
+            st2.setToY(1);
+            st2.setInterpolator(Interpolator.EASE_OUT);
+
+            st.setOnFinished(event -> {
+                icon.setImage(BACK_IMAGE);
+                st2.play();
+            });
             st.play();
         });
     }
