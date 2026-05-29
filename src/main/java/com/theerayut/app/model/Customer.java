@@ -3,10 +3,10 @@ package com.theerayut.app.model;
 //คลาสลูกค้า
 public class Customer extends Person{
     
-    private String phone;
+    private final String phone;
 
     public Customer(String name, String phone) {
-        super(name);   // เรียก constructor ของ Person
+        super(name, phone);   // เรียก constructor ของ Person
         this.phone = phone;
     }
 

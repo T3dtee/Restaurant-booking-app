@@ -56,7 +56,7 @@ public class ReservationService {
 
     public List<Reservation> getReservationsByCustomer(Customer customer) {
         return reservationList.stream()
-                .filter(r -> customer.getName().equals(r.getCustomer().getName()))
+                .filter(r -> customer.getId().equals(r.getCustomerId()))
                 .sorted(Comparator.comparing((Reservation r) -> {
                         if (r.getStatus() == ReservationStatus.BOOKED) return -1;
                         else if (r.getStatus() == ReservationStatus.CHECKED_IN) return 0;
@@ -79,11 +79,11 @@ public class ReservationService {
         return false;
     }
 
-    public void updateExpiredReservations() {
-        for (Reservation r : reservationList) {
-            if (r.isOverTime()) {
-                r.expire();
-            }
-        }
-    }
+//    public void updateExpiredReservations() {
+//        for (Reservation r : reservationList) {
+//            if (r.isOverTime()) {
+//                r.expire();
+//            }
+//        }
+//    }
 }

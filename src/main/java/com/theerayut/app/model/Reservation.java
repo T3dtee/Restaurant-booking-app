@@ -1,5 +1,7 @@
 package com.theerayut.app.model;
 
+import com.theerayut.app.AppData;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -7,25 +9,25 @@ import java.time.LocalTime;
 //คลาสการจองต่อ1คิว
 public class Reservation {
 
-    private Customer customer;
-    private LocalDate date;
-    private LocalTime time;
-    private int guestCount;
-    private int tableNo;
+    private final String customerId;
+    private final LocalDate date;
+    private final LocalTime time;
+    private final int guestCount;
+    private final int tableNo;
     private ReservationStatus status;
     private Person cancelBy;
-    private LocalDateTime bookingTime;
+    private final LocalDateTime bookingTime;
     private LocalDateTime checkInTime;
 
     // Constructor
-    public Reservation(Customer customer,
+    public Reservation(String customerId,
                        LocalDate date,
                        LocalTime time,
                        int guestCount,
                        int queueNumber
                        ) {
 
-        this.customer = customer;
+        this.customerId = customerId;
         this.date = date;
         this.time = time;
         this.guestCount = guestCount;
@@ -33,14 +35,20 @@ public class Reservation {
         this.status = ReservationStatus.BOOKED;
         bookingTime = LocalDateTime.now();
     }
-    public Customer getCustomer() { 
-        return customer; 
+
+    public Customer getCustomer() {
+        Customer customer = AppData.loginService.findCustomerById(customerId);
+        if (customer == null) {
+            return new Customer("Not fond", "404");
+        }
+        return customer;
     }
-    public LocalDate getDate() { 
-        return date; 
+
+    public LocalDate getDate() {
+        return date;
     }
     public LocalTime getTime() {
-        return time; 
+        return time;
     }
     public int getGuestCount() { 
         return guestCount; 
@@ -57,6 +65,9 @@ public class Reservation {
     public LocalDateTime getBookingTime() {return bookingTime;}
     public Person getCancelBy() {
         return cancelBy;
+    }
+    public String getCustomerId() {
+        return customerId;
     }
 
       // method เปลี่ยนสถานะการจอง

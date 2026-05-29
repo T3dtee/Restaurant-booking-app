@@ -20,6 +20,8 @@ public class loginUserController {
     private Label staffLogin;
     @FXML
     private Button login;
+    @FXML
+    private Label invalidText;
 
     @FXML
     public void initialize() {
@@ -49,26 +51,32 @@ public class loginUserController {
         String name = nameUserField.getText().trim();
         String tel  = telNumberField.getText().trim();
 
-        boolean validName = name.length() > 2; // ชื่อต้องยาวตั้งแต่ 3 ตัวขึ้นไป
+        boolean validName = name.length() > 3; // ชื่อต้องยาวตั้งแต่ 4 ตัวขึ้นไป
         boolean validTel  = tel.matches("\\d{10}");  // tel มีเลขครบ 10 ตัว
 
         // reset style
         nameUserField.getStyleClass().remove("error-field");
         telNumberField.getStyleClass().remove("error-field");
+        invalidText.setVisible(false);
 
         if (validName && validTel) {
-            if (AppData.loginUserData == null) {
-                AppData.loginUserData = new Customer(name, tel);
+            Customer c = AppData.loginService.customerLogin(name, tel);
+            if (c == null){
+                //ชื่อไม่ตรง id (เบอร์)
+                nameUserField.getStyleClass().add("error-field");
+                telNumberField.getStyleClass().add("error-field");
+                invalidText.setVisible(true);
+            } else {
+                AppData.loginUserData = c;
+                goToBooking();
             }
-            else if (!name.equals(AppData.loginUserData.getName()) || !tel.equals(AppData.loginUserData.getPhone())){
-                AppData.loginUserData = new Customer(name, tel);
-            }
-            goToBooking();
+
         } else {
             if (!validName) nameUserField.getStyleClass().add("error-field");
             if (!validTel)  telNumberField.getStyleClass().add("error-field");
         }
     }
+
     @FXML
     private void logoClick() {
         staffLogin.setVisible(true);

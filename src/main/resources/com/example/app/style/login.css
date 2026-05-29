@@ -2,10 +2,13 @@
     font-family: 'Pacifico';
     src: url('font/Pacifico-Regular.ttf');
 }
-
 @font-face {
     font-family: 'Roboto';
     src: url('font/Roboto-Regular.ttf');
+}
+@font-face {
+    font-family: 'Roboto-SemiBold';
+    src: url('font/Roboto_Condensed-SemiBold.ttf');
 }
 
 .app-background {
@@ -39,16 +42,19 @@
     -fx-background-radius: 64;
     -fx-background-color: #F3F3F3;
     -fx-font-family: 'Roboto';
+    -fx-font-size: 15;
 }
 .tel-field {
     -fx-background-radius: 64;
     -fx-background-color: #F3F3F3;
     -fx-font-family: 'Roboto';
+    -fx-font-size: 15;
 }
 .password-field {
     -fx-background-radius: 64;
     -fx-background-color: #F3F3F3;
     -fx-font-family: 'Roboto';
+    -fx-font-size: 15;
 }
 .error-field {
     -fx-border-color: red;
@@ -58,7 +64,7 @@
     -fx-background-color: #1C9B1C;
     -fx-font-family: 'Roboto';
     -fx-font-size: 20;
-    -fx-text-fill: #FFFF;
+    -fx-text-fill: #f3f3f3;
     -fx-background-radius: 30;
     -fx-cursor: hand;
 }

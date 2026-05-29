@@ -59,8 +59,9 @@ public class BookingService {
 
     public Reservation book(LocalDate date, LocalTime time, Customer customer, byte guest){
         Reservation data;
+        String customerId = customer.getId();
         if (timeSlotAvailable(date, time)) {
-            data = new Reservation(customer,date,time,guest,AppData.allBookingData.emptyTableNo(date,time));
+            data = new Reservation(customerId,date,time,guest,AppData.allBookingData.emptyTableNo(date,time));
             AppData.allBookingData.addReservation(data);
             return data;
         }
