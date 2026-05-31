@@ -26,12 +26,55 @@ public class loginUserController {
     @FXML
     public void initialize() {
         telNumberField.setTextFormatter(new TextFormatter<>(change -> {
-            String newText = change.getControlNewText();
-            // รับเฉพาะตัวเลข และไม่เกิน 10 ตัว
-            if (newText.matches("\\d*") && newText.length() <= 10) {
+            // 1. ถ้าเป็นการลบข้อความ (BackSpace / Delete) ให้ยอมให้ทำทันที ไม่ต้องคำนวณเพิ่ม
+            if (change.isDeleted() && change.getText().isEmpty()) {
+                int start = change.getRangeStart();
+                String currentText = change.getControlText();
+
+                // เช็คว่าตำแหน่งที่กำลังจะโดนลบ อยู่ข้างหลังเครื่องหมายขีดพอดีหรือไม่ (ตำแหน่งที่ 4 และ 8)
+                if ((start == 4 || start == 8) && currentText.charAt(start - 1) == '-') {
+                    // ขยายขอบเขตการลบ (Range) ให้กินพื้นที่ไปลบตัวเลขก่อนหน้าขีดด้วย 1 ตัว
+                    change.setRange(start - 1, change.getRangeEnd());
+                    return change;
+                }
                 return change;
             }
-            return null;
+
+            String newText = change.getControlNewText();
+
+            // 2. ดึงเอาเฉพาะตัวเลขออกมาเช็ค (คัดขีดออกไปก่อน) เพื่อตรวจสอบความยาว
+            String digitsOnly = newText.replaceAll("-", "");
+
+            // 3. ตรวจสอบว่าหลังจากคัดขีดออกแล้ว ต้องเป็นตัวเลขล้วน และยาวไม่เกิน 10 ตัว
+            if (!digitsOnly.matches("\\d*") || digitsOnly.length() > 10) {
+                return null; // ปฏิเสธการพิมพ์
+            }
+
+            // 4. ขั้นตอนการแปลงร่าง (Formatting Logic) ในขณะพิมพ์
+            StringBuilder formatted = new StringBuilder();
+            int digitCount = digitsOnly.length();
+
+            // วางโครงสร้างตามแพทเทิร์น 000-000-0000
+            if (digitCount > 0) {
+                // ใส่ 3 ตัวแรก
+                formatted.append(digitsOnly.substring(0, Math.min(digitCount, 3)));
+            }
+            if (digitCount > 3) {
+                // เติมขีดแรก แล้วใส่ตัวที่ 4-6
+                formatted.append("-").append(digitsOnly.substring(3, Math.min(digitCount, 6)));
+            }
+            if (digitCount > 6) {
+                // เติมขีดที่สอง แล้วใส่ตัวที่ 7-10
+                formatted.append("-").append(digitsOnly.substring(6, digitCount));
+            }
+
+            // 5. อัปเดตข้อความใหม่ลงไปในช่องกรอก และตั้งตำแหน่งเคอร์เซอร์ (Caret) ไว้ท้ายสุด
+            change.setText(formatted.toString());
+            change.setRange(0, change.getControlText().length());
+            change.setCaretPosition(formatted.length());
+            change.setAnchor(formatted.length());
+
+            return change;
         }));
 
         //ถ้ามีข้อมูล login แล้ว ย้อนกลับมาหน้านี้ ให้ใส่ข้อมูลลงให้ช่องเติมข้อมูลเลย
@@ -49,7 +92,7 @@ public class loginUserController {
     @FXML
     private void loginSubmit() {
         String name = nameUserField.getText().trim();
-        String tel  = telNumberField.getText().trim();
+        String tel  = telNumberField.getText().trim().replace("-","");
 
         boolean validName = name.length() > 3; // ชื่อต้องยาวตั้งแต่ 4 ตัวขึ้นไป
         boolean validTel  = tel.matches("\\d{10}");  // tel มีเลขครบ 10 ตัว

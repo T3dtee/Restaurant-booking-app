@@ -1,9 +1,10 @@
 package com.theerayut.app.util;
 
-import javafx.animation.FadeTransition;
+import javafx.animation.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -12,6 +13,12 @@ public class SceneManager {
 
     private static Stage stage;
     private static StackPane mainContainer;
+
+    public enum TransitionType {
+        FADE,
+        SLIDE_IN,
+        SLIDE_OUT
+    }
 
     public static void setStage(Stage s) {
         stage = s;
@@ -22,6 +29,9 @@ public class SceneManager {
     }
 
     public static void switchScene(String fxml, String css) {
+        switchScene(fxml, css, TransitionType.FADE);
+    }
+    public static void switchScene(String fxml, String css, TransitionType transition) {
         try {
             Parent nextRoot = FXMLLoader.load(
                     SceneManager.class.getResource("/com/example/app/ui/" + fxml)
@@ -37,7 +47,11 @@ public class SceneManager {
             if (mainContainer.getChildren().isEmpty()) {
                 mainContainer.getChildren().add(nextRoot);
             } else {
-                playFadeAnimation(nextRoot);
+                switch (transition) {
+                    case FADE -> playFadeAnimation(nextRoot);
+                    case SLIDE_IN -> playSlideInAnimation(nextRoot);
+                    case SLIDE_OUT -> playSlideOutAnimation(nextRoot);
+                }
             }
 
         } catch (Exception e) {
@@ -46,7 +60,6 @@ public class SceneManager {
     }
 
     private static void playFadeAnimation(Parent nextScene) {
-        // ตรวจสอบก่อนว่ามีหน้าเก่าอยู่จริงไหม (กัน Error .get(0))
         if (mainContainer.getChildren().isEmpty()) {
             mainContainer.getChildren().add(nextScene);
             return;
@@ -60,9 +73,68 @@ public class SceneManager {
 
         fadeIn.setOnFinished(e -> {
             if (mainContainer.getChildren().size() > 1) {
-                mainContainer.getChildren().remove(0); // ลบหน้าเก่าออกหลังจาก Fade เสร็จ
+                mainContainer.getChildren().removeFirst(); // ลบหน้าเก่าออกหลังจาก Fade เสร็จ
             }
         });
         fadeIn.play();
+    }
+
+    private static void playSlideInAnimation(Parent nextScene) {
+        if (mainContainer.getChildren().isEmpty()) {
+            mainContainer.getChildren().add(nextScene);
+            return;
+        }
+
+        mainContainer.getChildren().add(nextScene);
+        nextScene.setTranslateX(360);
+
+        TranslateTransition moveOut = new TranslateTransition(Duration.millis(270), mainContainer.getChildren().getFirst());
+        moveOut.setToX(-100);
+        moveOut.setInterpolator(Interpolator.SPLINE(0.4, 0.1, 0.7, 0.7));
+
+        TranslateTransition moveIn = new TranslateTransition(Duration.millis(270), nextScene);
+        moveIn.setToX(0);
+        moveIn.setInterpolator(Interpolator.SPLINE(0.3, 0.3, 0.6, 0.95));
+
+        moveIn.setOnFinished(event -> {
+            if (mainContainer.getChildren().size() > 1) {
+                mainContainer.getChildren().removeFirst();
+            }
+        });
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, event ->  {
+                    moveOut.play();
+                }),
+                new KeyFrame(Duration.millis(50), event -> {
+                    moveIn.play();
+                }));
+        timeline.play();
+    }
+    private static void playSlideOutAnimation(Parent nextScene) {
+        if (mainContainer.getChildren().isEmpty()) {
+            mainContainer.getChildren().add(nextScene);
+            return;
+        }
+
+        mainContainer.getChildren().addFirst(nextScene);
+        nextScene.setTranslateX(-80);
+
+        TranslateTransition moveOut = new TranslateTransition(Duration.millis(300), mainContainer.getChildren().getLast());
+        moveOut.setToX(360);
+        moveOut.setInterpolator(Interpolator.SPLINE(0.4, 0.05, 0.7, 0.7));
+
+        TranslateTransition moveIn = new TranslateTransition(Duration.millis(300), nextScene);
+        moveIn.setToX(0);
+        moveIn.setInterpolator(Interpolator.SPLINE(0.3, 0.3, 0.6, 0.95));
+
+        moveIn.setOnFinished(event -> {
+            if (mainContainer.getChildren().size() > 1) {
+                mainContainer.getChildren().removeLast();
+            }
+        });
+
+        moveOut.play();
+        moveIn.play();
     }
 }

@@ -61,7 +61,7 @@ public class AnimationUtils {
         s3.setToY(0.985);
         s3.setInterpolator(Interpolator.EASE_BOTH);
 
-        s1.setOnFinished(event -> {s2.play();});
+        s1.setOnFinished(event -> s2.play());
 
         FadeTransition f = new FadeTransition(Duration.millis(150), popUpBox);
         f.setFromValue(0);
@@ -80,9 +80,7 @@ public class AnimationUtils {
         overlayFade.setInterpolator(Interpolator.EASE_OUT);
 
         Timeline t1 = new Timeline(
-                new KeyFrame(Duration.millis(60), event -> {
-                    move.play();
-                })
+                new KeyFrame(Duration.millis(60), event -> move.play())
         );
 
         Timeline t2 = new Timeline(

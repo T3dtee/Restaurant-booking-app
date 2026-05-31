@@ -19,7 +19,7 @@
     -fx-background-radius: 15;
 }
 .back-btn:hover {
-    -fx-background-color: rgba(0,0,0,0.1);
+    -fx-background-color: rgba(0,0,0,0.15);
 }
 .best-meal-title {
     -fx-font-family: 'Pacifico';
