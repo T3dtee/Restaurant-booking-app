@@ -47,6 +47,7 @@ public class staffDBCardController {
     public void setOnCancelRequest(Runnable onCancelRequest) {
         this.onCancelRequest = onCancelRequest;
     }
+
     private Runnable onRemove;
     public void setOnRemove(Runnable onRemove) {
         this.onRemove = onRemove;
@@ -61,7 +62,7 @@ public class staffDBCardController {
     @FXML
     private void checkedIn(){
         reservation.checkIn();
-        handleRemove();
+        onRemove.run();
     }
 
     @FXML
@@ -73,6 +74,6 @@ public class staffDBCardController {
 
     public void confirmCancel() {
         reservation.cancel(AppData.loginStaffData);
-        handleRemove();
+        onRemove.run();
     }
 }

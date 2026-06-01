@@ -145,7 +145,7 @@ public class successController {
     }
 
     @FXML
-    private void goToBooking() {SceneManager.switchScene("booking.fxml", "booking.css");}
+    private void goToBooking() {SceneManager.switchScene("booking.fxml");}
     @FXML
     private void doneOnClicked() {
         goToBooking();

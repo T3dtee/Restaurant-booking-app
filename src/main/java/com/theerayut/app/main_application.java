@@ -10,7 +10,7 @@ public class main_application extends Application {
         stage.setTitle("Best Meal");
         SceneManager.setStage(stage);
         stage.setResizable(false);
-        SceneManager.switchScene("login-user.fxml", "login.css");
+        SceneManager.switchScene("login-user.fxml");
         stage.show();
     }
 }

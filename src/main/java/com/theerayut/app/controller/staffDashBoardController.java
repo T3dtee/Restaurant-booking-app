@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class staffDashBoardController {
 
     @FXML
-    private void goToStaffLogin() { SceneManager.switchScene("login-staff.fxml", "login.css");}
+    private void goToStaffLogin() { SceneManager.switchScene("login-staff.fxml");}
 
     @FXML
     private VBox itemBox;
@@ -68,28 +68,26 @@ public class staffDashBoardController {
                 Region regionItem = (Region) item;
 
                 // 1. Fade ออก
-                FadeTransition ft = new FadeTransition(Duration.millis(250), regionItem);
+                FadeTransition ft = new FadeTransition(Duration.millis(300), regionItem);
                 ft.setToValue(0);
 
-                regionItem.setMinHeight(regionItem.getHeight());
-
                 Timeline collapse = new Timeline(
-                        new KeyFrame(Duration.millis(330),
-                                new KeyValue(regionItem.prefHeightProperty(), 0, Interpolator.EASE_BOTH),
-                                new KeyValue(regionItem.minHeightProperty(), 0, Interpolator.EASE_BOTH)
+                        new KeyFrame(Duration.millis(300),
+                                new KeyValue(regionItem.prefHeightProperty(), 0, Interpolator.SPLINE(0.3, 0.2, 0.6, 0.95))
                         )
                 );
 
-                ParallelTransition pt = new ParallelTransition(collapse);
-                pt.setOnFinished(e -> {
-                    itemBox.getChildren().remove(regionItem);
-                });
+                Timeline timeline = new Timeline(
+                        new KeyFrame(Duration.ZERO, event -> ft.play()),
+                        new KeyFrame(Duration.millis(100), event -> collapse.play())
+                );
 
-                ft.setOnFinished(a -> {
-                    pt.play();
+                collapse.setOnFinished(event -> {
+                    itemBox.getChildren().remove(regionItem);
                     update();
                 });
-                ft.play();
+
+                timeline.play();
             });
 
             itemBox.getChildren().add(item);

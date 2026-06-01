@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="330.0" stylesheets="@../style/bookingContainer.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.theerayut.app.controller.staffDBCardController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="330.0" stylesheets="@../style/bookingContainer.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.theerayut.app.controller.staffDBCardController">
    <children>
-      <HBox prefHeight="140.0" prefWidth="330.0" spacing="5.0" styleClass="card-container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox prefHeight="140.0" prefWidth="330.0" spacing="5.0" styleClass="card-container" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="15.45" fitWidth="14.45" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -66,12 +66,12 @@
                   </HBox>
                   <HBox prefHeight="20.0" prefWidth="210.0" spacing="5.0">
                      <children>
-                        <Label fx:id="guestNo" prefWidth="215.0" styleClass="label-header" text="Guest :">
+                        <Label fx:id="guestNo" prefWidth="102.0" styleClass="label-header" text="Guest :">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
                         </Label>
-                        <Label fx:id="table" prefWidth="215.0" styleClass="label-header" text="Table :">
+                        <Label fx:id="table" prefWidth="90.0" styleClass="label-header" text="Table :">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
@@ -80,7 +80,7 @@
                   </HBox>
                </children>
             </VBox>
-            <VBox alignment="CENTER" prefHeight="140.0" prefWidth="70.0" spacing="12.0">
+            <VBox spacing="12.0">
                <children>
                   <Button alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#checkedIn" prefHeight="36.0" prefWidth="36.0" styleClass="confirm-btn">
                      <graphic>
@@ -101,6 +101,9 @@
                      </graphic>
                   </Button>
                </children>
+               <HBox.margin>
+                  <Insets top="12.0" />
+               </HBox.margin>
             </VBox>
          </children>
          <padding>

@@ -64,10 +64,10 @@ public class loginStaffController {
 
     @FXML
     private void goToUserLogin() {
-        SceneManager.switchScene("login-user.fxml", "login.css");
+        SceneManager.switchScene("login-user.fxml");
     }
     @FXML
     private void goToStaffDashBoard() {
-        SceneManager.switchScene("staffDashBoard.fxml", "staffDashBoard.css");
+        SceneManager.switchScene("staffDashBoard.fxml");
     }
 }

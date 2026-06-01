@@ -4,7 +4,6 @@ import javafx.animation.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -28,21 +27,15 @@ public class SceneManager {
         stage.setScene(scene);
     }
 
-    public static void switchScene(String fxml, String css) {
-        switchScene(fxml, css, TransitionType.FADE);
+    public static void switchScene(String fxml) {
+        switchScene(fxml, TransitionType.FADE);
     }
-    public static void switchScene(String fxml, String css, TransitionType transition) {
+    public static void switchScene(String fxml, TransitionType transition) {
         try {
             Parent nextRoot = FXMLLoader.load(
                     SceneManager.class.getResource("/com/example/app/ui/" + fxml)
             );
 
-            if (css != null && !css.isEmpty()) {
-                nextRoot.getStylesheets().add(
-                        SceneManager.class.getResource("/com/example/app/style/" + css)
-                                .toExternalForm()
-                );
-            }
             // ถ้าเป็นหน้าแรก (ไม่มีหน้าก่อนหน้า) ให้แสดงเลย
             if (mainContainer.getChildren().isEmpty()) {
                 mainContainer.getChildren().add(nextRoot);

@@ -35,9 +35,8 @@ public class bookingHistoryController {
     @FXML
     private ImageView icon;
 
-
     @FXML
-    private void goToBooking() {SceneManager.switchScene("booking.fxml", "booking.css",  SceneManager.TransitionType.SLIDE_OUT);}
+    private void goToBooking() {SceneManager.switchScene("booking.fxml", SceneManager.TransitionType.SLIDE_OUT);}
 
     public void initialize() {
         AnimationUtils.backToHomeBtn(backBtnBox, icon);

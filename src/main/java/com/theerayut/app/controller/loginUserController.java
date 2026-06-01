@@ -127,11 +127,11 @@ public class loginUserController {
 
     @FXML
     private void goToStaffLogin() {
-        SceneManager.switchScene("login-staff.fxml", "login.css");
+        SceneManager.switchScene("login-staff.fxml");
     }
 
     @FXML
-    private void goToBooking() {SceneManager.switchScene("booking.fxml", "booking.css");}
+    private void goToBooking() {SceneManager.switchScene("booking.fxml");}
 
 
 }
