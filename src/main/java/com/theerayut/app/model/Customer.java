@@ -4,6 +4,7 @@ package com.theerayut.app.model;
 public class Customer extends Person{
     
     private final String phone;
+    private transient boolean isFirstTimeLogin = false;
 
     public Customer(String name, String phone) {
         super(name, phone);   // เรียก constructor ของ Person
@@ -13,6 +14,9 @@ public class Customer extends Person{
     public String getPhone() {
         return phone;
     }
+
+    public boolean isFirstTimeLogin() { return isFirstTimeLogin; }
+    public void setFirstTimeLogin(boolean isNewInstance) { this.isFirstTimeLogin = isNewInstance; }
 
     @Override
     public String getRole() {

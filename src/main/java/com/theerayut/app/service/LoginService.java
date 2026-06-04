@@ -17,7 +17,7 @@ public class LoginService {
 
     public Customer customerLogin(String name, String phone){
         for (Customer c : customers){
-            if (c.getName().equals(name) && c.getPhone().equals(phone)){ //เคย login แล้วทุกอย่างตรง
+            if (c.getName().equals(name) && c.getPhone().equals(phone)){//เคย login แล้วทุกอย่างตรง
                 return c;
             }
             else if (c.getPhone().equals(phone) && !c.getName().equals(name)){ //เบอร์ถูกใช้ไปแล้ว แต่ชื่อไม่ตรง
@@ -26,6 +26,7 @@ public class LoginService {
         }
         // ไม่เคย login
         Customer c = new Customer(name, phone);
+        c.setFirstTimeLogin(true);
         addCustomer(c);
         return c;
     }
