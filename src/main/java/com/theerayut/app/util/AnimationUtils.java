@@ -29,12 +29,12 @@ public class AnimationUtils {
         popUpBox.setTranslateX(startX - (mainContent.getWidth() / 2));
         popUpBox.setTranslateY(startY - (mainContent.getHeight() / 2));
 
-        Interpolator SCurve_OUT = Interpolator.SPLINE(0.3, 0.2, 0.6, 0.95);
+        Interpolator Curve_OUT = Interpolator.SPLINE(0.6, 1, 0.8, 1);
 
         TranslateTransition move = new TranslateTransition(Duration.millis(190), popUpBox);
         move.setToX(targetX);
         move.setToY(targetY);
-        move.setInterpolator(SCurve_OUT);
+        move.setInterpolator(Curve_OUT);
 
         GaussianBlur blur = new GaussianBlur(0);
         mainContent.setEffect(blur);

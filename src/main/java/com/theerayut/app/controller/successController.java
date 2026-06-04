@@ -1,6 +1,7 @@
 package com.theerayut.app.controller;
 
 import com.theerayut.app.AppData;
+import com.theerayut.app.model.Reservation;
 import com.theerayut.app.util.AnimationUtils;
 import com.theerayut.app.util.SceneManager;
 import javafx.animation.*;
@@ -45,15 +46,17 @@ public class successController {
     @FXML private Pane confettiPane; // Pane เปล่าๆ ที่ใช้วางพลุ
     private final Random random = new Random();
 
+    private final Reservation reservation = AppData.allBookingData.findReservationById(AppData.bookingId);
+
     @FXML
     public void initialize() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String formatted = AppData.bookingData.getDate().format(formatter);
-        name.setText(AppData.bookingData.getCustomer().getName());
+        String formatted = reservation.getDate().format(formatter);
+        name.setText(reservation.getCustomer().getName());
         date.setText(formatted);
-        time.setText(AppData.bookingData.getTime().toString());
-        guestNo.setText("" + AppData.bookingData.getGuestCount());
-        table.setText("T" + AppData.bookingData.getTableNo());
+        time.setText(reservation.getTime().toString());
+        guestNo.setText("" + reservation.getGuestCount());
+        table.setText("T" + reservation.getTableNo());
 
         AnimationUtils.buttonHover(doneBtn, 4, 110);
         AnimationUtils.backToHomeBtn(backBtnBox, icon);
@@ -148,6 +151,7 @@ public class successController {
     private void goToBooking() {SceneManager.switchScene("booking.fxml");}
     @FXML
     private void doneOnClicked() {
-        goToBooking();
+        reservation.setDoneBooking(true);
+        SceneManager.switchScene("bookingHistory.fxml");
     }
 }

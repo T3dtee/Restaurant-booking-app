@@ -5,8 +5,10 @@ import com.theerayut.app.model.Reservation;
 import com.theerayut.app.util.AnimationUtils;
 import com.theerayut.app.util.SceneManager;
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.CacheHint;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -45,9 +47,11 @@ public class bookingHistoryController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (cardMoveInAction != null) Platform.runLater(cardMoveInAction);
     }
 
     private Runnable pendingCancelAction;
+    private Runnable cardMoveInAction;
 
     private void loadItems() throws IOException {
         List<Reservation> customerReservations = AppData.allBookingData.getReservationsByCustomer(AppData.loginUserData);
@@ -57,6 +61,9 @@ public class bookingHistoryController {
                     getClass().getResource("/com/example/app/ui/bookingHistoryContainer.fxml"));
 
             Parent item = loader.load();
+
+            item.setCache(true);
+            item.setCacheHint(CacheHint.SPEED);
 
             bookingHistoryCardController controller = loader.getController();
             controller.setData(data);
@@ -89,6 +96,45 @@ public class bookingHistoryController {
                 ft.setOnFinished(e -> pt.play());
                 ft.play();
             });
+
+            if (data.getReservationId().equals(AppData.bookingId)) {
+                controller.setOnAdd(() -> {
+                    Region regionItem = (Region) item;
+
+                    double height = regionItem.prefHeightProperty().get();
+                    regionItem.setTranslateX(-440);
+                    regionItem.setPrefHeight(0);
+
+                    Timeline collapse = new Timeline(
+                            new KeyFrame(Duration.millis(250),
+                                    new KeyValue(regionItem.prefHeightProperty(), height, Interpolator.SPLINE(0.3, 0.2, 0.6, 0.95))
+                            )
+                    );
+
+                    TranslateTransition trans = new TranslateTransition(Duration.millis(300), regionItem);
+                    trans.setToX(0);
+                    trans.setInterpolator(Interpolator.SPLINE(0.4, 1, 0.6, 1));
+
+                    ScaleTransition s1 = new ScaleTransition(Duration.millis(120), regionItem);
+                    s1.setToX(0.94); s1.setToY(1.04);
+                    s1.setInterpolator(Interpolator.SPLINE(0.4, 0, 0.6, 1));
+
+                    ScaleTransition s2 = new ScaleTransition(Duration.millis(100), regionItem);
+                    s2.setToX(1.0); s2.setToY(1.0);
+                    s2.setInterpolator(Interpolator.SPLINE(0.4, 0, 0.6, 1));
+
+                    s1.setOnFinished(e -> s2.play());
+
+                    Timeline timeline = new Timeline(
+                            new KeyFrame(Duration.millis(100), event -> collapse.play()),
+                            new KeyFrame(Duration.millis(150), event -> trans.play()),
+                            new KeyFrame(Duration.millis(350), event -> s1.play())
+                    );
+
+                    timeline.play();
+                });
+                cardMoveInAction = controller::moveInAction;
+            }
 
             itemBox.getChildren().add(item);
         }

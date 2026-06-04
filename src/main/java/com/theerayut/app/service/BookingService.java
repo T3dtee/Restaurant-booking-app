@@ -7,6 +7,7 @@ import com.theerayut.app.model.Reservation;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class BookingService {
     //config
@@ -20,6 +21,7 @@ public class BookingService {
     LocalTime [] timeSlotList;
     LocalDate canBookingDate;
     LocalDate maxBookingDate;
+    private final AtomicInteger idCounter = new AtomicInteger(1);
 
     public BookingService() {
         while (closeTime.isAfter(openTime.plusMinutes((long) gapTime * timeIndex))){
@@ -61,7 +63,8 @@ public class BookingService {
         Reservation data;
         String customerId = customer.getId();
         if (timeSlotAvailable(date, time)) {
-            data = new Reservation(customerId,date,time,guest,AppData.allBookingData.emptyTableNo(date,time));
+            String reservationId = String.format("RES-%04d", idCounter.getAndIncrement());
+            data = new Reservation(reservationId,customerId,date,time,guest,AppData.allBookingData.emptyTableNo(date,time));
             AppData.allBookingData.addReservation(data);
             return data;
         }

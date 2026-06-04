@@ -116,8 +116,8 @@ public class bookingController {
         LocalDate date = datePicker.getValue();
         if (AppData.bookingService.timeSlotAvailable(datePicker.getValue(), time)) { //ว่าง
             if (!AppData.allBookingData.isCustomerBooked(AppData.loginUserData, datePicker.getValue(), time)) { //ยังไม่เคยจอง
-                AppData.bookingData = AppData.bookingService.book(date,time,AppData.loginUserData,guest);
-                if (AppData.bookingData != null){
+                AppData.bookingId = AppData.bookingService.book(date,time,AppData.loginUserData,guest).getReservationId();
+                if (AppData.bookingId != null){
                     goToSuccess();
                 }
             }

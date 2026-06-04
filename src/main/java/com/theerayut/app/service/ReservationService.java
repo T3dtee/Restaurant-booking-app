@@ -6,28 +6,23 @@ import com.theerayut.app.model.ReservationStatus;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class ReservationService {
     public final int MAX_TABLES = 10;
 
-    private List<Reservation> reservationList = new ArrayList<>();
+    private final Map<String, Reservation> reservationMap = new HashMap<>();
 
-    // เพิ่มการจอง
     public void addReservation(Reservation reservation) {
-        reservationList.add(reservation);
+        reservationMap.put(reservation.getReservationId(), reservation);
     }
 
     public boolean isTableFull(LocalDate date, LocalTime time){
         return countByDateTime(date, time) >= MAX_TABLES;
     }
 
-    // นับจำนวนโต๊ะในวันและเวลาเดียวกัน
     public int countByDateTime(LocalDate date, LocalTime time) {
-        return (int) reservationList.stream()
+        return (int) reservationMap.values().stream()
                 .filter(r -> r.getDate().equals(date)
                         && r.getTime().equals(time)
                         && r.getStatus() != ReservationStatus.CANCELLED
@@ -36,14 +31,14 @@ public class ReservationService {
     }
 
     public int emptyTableNo(LocalDate date, LocalTime time) {
-        Optional<Reservation> reusable = reservationList.stream()
+        Optional<Reservation> reusable = reservationMap.values().stream()
                 .filter(res -> res.getDate().equals(date) && res.getTime().equals(time))
                 .filter(res -> res.getStatus() == ReservationStatus.CANCELLED || res.getStatus() == ReservationStatus.EXPIRED)
                 .findFirst();
 
         if (reusable.isPresent()) {
             int tableNo = reusable.get().getTableNo();
-            reservationList.remove(reusable.get());
+            reservationMap.remove(reusable.get());
             return tableNo;
         }
 
@@ -51,11 +46,11 @@ public class ReservationService {
     }
 
     public List<Reservation> getAllReservations() {
-        return reservationList;
+        return reservationMap.values().stream().toList();
     }
 
     public List<Reservation> getReservationsByCustomer(Customer customer) {
-        return reservationList.stream()
+        return reservationMap.values().stream()
                 .filter(r -> customer.getId().equals(r.getCustomerId()))
                 .sorted(Comparator.comparing((Reservation r) -> {
                         if (r.getStatus() == ReservationStatus.BOOKED) return -1;
@@ -66,6 +61,10 @@ public class ReservationService {
                         .thenComparing(Reservation::getTableNo)
                 )
                 .toList();
+    }
+
+    public Reservation findReservationById(String id) {
+        return reservationMap.get(id);
     }
 
     public boolean isCustomerBooked(Customer customer, LocalDate date, LocalTime time) {

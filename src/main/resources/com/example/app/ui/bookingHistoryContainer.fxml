@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="180.0" prefWidth="320.0" stylesheets="@../style/bookingHistoryContainer.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.theerayut.app.controller.bookingHistoryCardController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="320.0" stylesheets="@../style/bookingHistoryContainer.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.theerayut.app.controller.bookingHistoryCardController">
    <children>
       <HBox prefHeight="150.0" prefWidth="320.0" styleClass="box">
          <children>
@@ -27,7 +27,7 @@
                               <Insets left="15.0" />
                            </HBox.margin>
                         </Label>
-                        <Label styleClass="id" text="#000000">
+                        <Label fx:id="bookingId" styleClass="id" text="#000000">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin>

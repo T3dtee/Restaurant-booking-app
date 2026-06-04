@@ -27,6 +27,8 @@ public class bookingHistoryCardController {
     private Label statusTime;
     @FXML
     private Button cancel;
+    @FXML
+    private Label bookingId;
 
     private Reservation reservation;
 
@@ -35,6 +37,7 @@ public class bookingHistoryCardController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
         String formatted = reservation.getDate().format(formatter);
 
+        bookingId.setText("#" + reservation.getReservationId());
         date.setText(formatted);
         time.setText(reservation.getTime().toString());
         table.setText("T" + reservation.getTableNo());
@@ -74,6 +77,17 @@ public class bookingHistoryCardController {
     private Runnable onRemove;
     public void setOnRemove(Runnable onRemove) {
         this.onRemove = onRemove;
+    }
+
+    private Runnable onAdd;
+    public void setOnAdd(Runnable onAdd) {
+        this.onAdd = onAdd;
+    }
+    public void moveInAction() {
+        if (reservation.isDoneBooking()){
+            reservation.setDoneBooking(false);
+            onAdd.run();
+        }
     }
 
     private void handleRemove() {
