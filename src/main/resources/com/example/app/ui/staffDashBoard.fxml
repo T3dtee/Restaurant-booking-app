@@ -47,11 +47,11 @@
             </ScrollPane>
             <Label fx:id="noOrderText" alignment="CENTER" prefHeight="17.0" prefWidth="210.0" styleClass="text-label" text="No reservations :)" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="400.0">
       </Label>
-            <VBox alignment="CENTER" layoutX="11.0" layoutY="30.0" onMouseClicked="#goToStaffLogin" prefHeight="30.0" prefWidth="30.0" styleClass="back-btn">
+            <VBox alignment="CENTER" layoutX="14.0" layoutY="27.0" onMouseClicked="#goToStaffLogin" prefHeight="40.0" prefWidth="40.0" styleClass="back-btn">
                <children>
-                  <ImageView fitHeight="13.0" fitWidth="13.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../style/img/arrow.png" />
+                        <Image url="@../style/img/triangle.png" />
                      </image>
                   </ImageView>
                </children>

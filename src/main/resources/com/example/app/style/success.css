@@ -14,10 +14,11 @@
 }
 .back-btn {
     -fx-cursor: hand;
-    -fx-background-radius: 15;
+    -fx-background-radius: 20;
+    -fx-background-color: rgba(240, 240, 240, 0.5);
 }
 .back-btn:hover {
-    -fx-background-color: rgba(0,0,0,0.1);
+    -fx-background-color: rgba(230, 230, 230, 0.9);
 }
 .success {
     -fx-font-family: "Roboto Condensed SemiBold";

@@ -31,16 +31,11 @@ public class bookingHistoryController {
     private VBox popUpBox;
     @FXML
     private Pane blurOverlay;
-    @FXML
-    private VBox backBtnBox;
-    @FXML
-    private ImageView icon;
 
     @FXML
     private void goToBooking() {SceneManager.switchScene("booking.fxml", SceneManager.TransitionType.SLIDE_OUT);}
 
     public void initialize() {
-        AnimationUtils.backToHomeBtn(backBtnBox, icon);
         try {
             loadItems();
         } catch (IOException e) {
@@ -94,10 +89,6 @@ public class bookingHistoryController {
                 pendingCancelAction = controller::confirmCancel;
                 showPopUp(controller.getCancelBtn());
             });
-
-            controller.setOnRemove(() ->
-                AnimationUtils.cardRemove((Region) item, () -> itemBox.getChildren().remove(item))
-            );
 
             Region regionItem = (Region) item;
             final double naturalHeight = regionItem.getPrefHeight();

@@ -16,7 +16,7 @@ import javafx.util.Duration;
 import java.util.function.BooleanSupplier;
 
 public class AnimationUtils {
-    private static final Image BACK_IMAGE = new Image(AnimationUtils.class.getResourceAsStream("/com/example/app/style/img/arrow.png"));
+    private static final Image BACK_IMAGE = new Image(AnimationUtils.class.getResourceAsStream("/com/example/app/style/img/triangle.png"));
     private static final Image HOME_IMAGE = new Image(AnimationUtils.class.getResourceAsStream("/com/example/app/style/img/home.png"));
 
     public static void popUpShow(AnchorPane mainContent, AnchorPane popUp, Pane blurPane, Node popUpBox, Button button) {
@@ -176,14 +176,14 @@ public class AnimationUtils {
         ft.setToValue(0);
 
         Timeline collapse = new Timeline(
-                new KeyFrame(Duration.millis(300),
-                        new KeyValue(regionItem.prefHeightProperty(), 0, Interpolator.SPLINE(0.3, 0.2, 0.6, 0.95))
+                new KeyFrame(Duration.millis(400),
+                        new KeyValue(regionItem.prefHeightProperty(), 0, Interpolator.SPLINE(0.4, 1, 0.6, 1))
                 )
         );
 
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.ZERO, event -> ft.play()),
-                new KeyFrame(Duration.millis(100), event -> collapse.play())
+                new KeyFrame(Duration.millis(50), event -> collapse.play())
         );
 
         collapse.setOnFinished(event -> {
@@ -199,14 +199,14 @@ public class AnimationUtils {
         ft.setToValue(0);
 
         Timeline collapse = new Timeline(
-                new KeyFrame(Duration.millis(300),
-                        new KeyValue(regionItem.prefHeightProperty(), 0, Interpolator.SPLINE(0.3, 0.2, 0.6, 0.95))
+                new KeyFrame(Duration.millis(350),
+                        new KeyValue(regionItem.prefHeightProperty(), 0, Interpolator.SPLINE(0.4, 0.4, 0.5, 1))
                 )
         );
 
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.ZERO, event -> ft.play()),
-                new KeyFrame(Duration.millis(100), event -> collapse.play())
+                new KeyFrame(Duration.millis(50), event -> collapse.play())
         );
 
         timeline.play();
@@ -262,6 +262,8 @@ public class AnimationUtils {
                 icon.setImage(HOME_IMAGE);
                 st2.play();
             });
+            st.stop();
+            st2.stop();
             st.play();
         });
 
@@ -280,6 +282,8 @@ public class AnimationUtils {
                 icon.setImage(BACK_IMAGE);
                 st2.play();
             });
+            st.stop();
+            st2.stop();
             st.play();
         });
     }

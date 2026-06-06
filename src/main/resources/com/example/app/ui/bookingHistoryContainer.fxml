@@ -12,7 +12,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="320.0" stylesheets="@../style/bookingHistoryContainer.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.theerayut.app.controller.bookingHistoryCardController">
    <children>
-      <HBox prefHeight="150.0" prefWidth="320.0" styleClass="box">
+      <HBox prefHeight="150.0" prefWidth="320.0" styleClass="box" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Pane fx:id="statusBar" prefHeight="150.0" prefWidth="20.0" styleClass="status-bar" />
             <VBox prefHeight="150.0" prefWidth="320.0" spacing="5.0">
