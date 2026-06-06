@@ -2,9 +2,9 @@ package com.theerayut.app.controller;
 
 import com.theerayut.app.AppData;
 import com.theerayut.app.model.Reservation;
+import com.theerayut.app.model.ReservationStatus;
 import com.theerayut.app.util.AnimationUtils;
 import com.theerayut.app.util.SceneManager;
-import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,7 +16,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.List;
@@ -55,8 +54,32 @@ public class bookingHistoryController {
 
     private void loadItems() throws IOException {
         List<Reservation> customerReservations = AppData.allBookingData.getReservationsByCustomer(AppData.loginUserData);
+        ReservationStatus lastStatus = null;
 
+        boolean multipleStatuses = customerReservations.stream()
+                .map(Reservation::getStatus)
+                .distinct()
+                .limit(2)  // ไม่ต้องนับทั้งหมด แค่เจอ 2 อันก็หยุด
+                .count() > 1;
+
+        bookingHeadStatusCard statusController = null;
         for (Reservation data : customerReservations) {
+
+            if (multipleStatuses && (lastStatus == null || lastStatus != data.getStatus())) {
+                FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource("/com/example/app/ui/headStatus.fxml")
+                );
+                Parent head =  loader.load();
+                head.setCache(true);
+                head.setCacheHint(CacheHint.SPEED);
+
+                statusController = loader.getController();
+                statusController.setData(data.getStatus());
+                lastStatus = data.getStatus();
+
+                itemBox.getChildren().add(head);
+            }
+
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/com/example/app/ui/bookingHistoryContainer.fxml"));
 
@@ -72,67 +95,22 @@ public class bookingHistoryController {
                 showPopUp(controller.getCancelBtn());
             });
 
-            controller.setOnRemove(() -> {
-                Region regionItem = (Region) item;
+            controller.setOnRemove(() ->
+                AnimationUtils.cardRemove((Region) item, () -> itemBox.getChildren().remove(item))
+            );
 
-                // 1. Fade ออก
-                FadeTransition ft = new FadeTransition(Duration.millis(250), regionItem);
-                ft.setToValue(0);
+            Region regionItem = (Region) item;
+            final double naturalHeight = regionItem.getPrefHeight();
 
-                regionItem.setMinHeight(regionItem.getHeight());
+            controller.setOnHide(() -> AnimationUtils.cardHide(regionItem));
+            controller.setOnAdd(() -> AnimationUtils.cardMoveIn(regionItem, naturalHeight));
 
-                Timeline collapse = new Timeline(
-                        new KeyFrame(Duration.millis(330),
-                                new KeyValue(regionItem.prefHeightProperty(), 0, Interpolator.EASE_BOTH),
-                                new KeyValue(regionItem.minHeightProperty(), 0, Interpolator.EASE_BOTH)
-                        )
-                );
-
-                ParallelTransition pt = new ParallelTransition(collapse);
-                pt.setOnFinished(e -> {
-                    itemBox.getChildren().remove(regionItem);
-                });
-
-                ft.setOnFinished(e -> pt.play());
-                ft.play();
-            });
+            if (statusController != null) {
+                statusController.addHideCard(controller::handleHide);
+                statusController.addShowCard(controller::showCard);
+            }
 
             if (data.getReservationId().equals(AppData.bookingId)) {
-                controller.setOnAdd(() -> {
-                    Region regionItem = (Region) item;
-
-                    double height = regionItem.prefHeightProperty().get();
-                    regionItem.setTranslateX(-440);
-                    regionItem.setPrefHeight(0);
-
-                    Timeline collapse = new Timeline(
-                            new KeyFrame(Duration.millis(250),
-                                    new KeyValue(regionItem.prefHeightProperty(), height, Interpolator.SPLINE(0.3, 0.2, 0.6, 0.95))
-                            )
-                    );
-
-                    TranslateTransition trans = new TranslateTransition(Duration.millis(300), regionItem);
-                    trans.setToX(0);
-                    trans.setInterpolator(Interpolator.SPLINE(0.4, 1, 0.6, 1));
-
-                    ScaleTransition s1 = new ScaleTransition(Duration.millis(120), regionItem);
-                    s1.setToX(0.94); s1.setToY(1.04);
-                    s1.setInterpolator(Interpolator.SPLINE(0.4, 0, 0.6, 1));
-
-                    ScaleTransition s2 = new ScaleTransition(Duration.millis(100), regionItem);
-                    s2.setToX(1.0); s2.setToY(1.0);
-                    s2.setInterpolator(Interpolator.SPLINE(0.4, 0, 0.6, 1));
-
-                    s1.setOnFinished(e -> s2.play());
-
-                    Timeline timeline = new Timeline(
-                            new KeyFrame(Duration.millis(100), event -> collapse.play()),
-                            new KeyFrame(Duration.millis(150), event -> trans.play()),
-                            new KeyFrame(Duration.millis(350), event -> s1.play())
-                    );
-
-                    timeline.play();
-                });
                 cardMoveInAction = controller::moveInAction;
             }
 

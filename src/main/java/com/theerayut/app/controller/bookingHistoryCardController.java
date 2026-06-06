@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.time.format.DateTimeFormatter;
 
@@ -29,6 +30,8 @@ public class bookingHistoryCardController {
     private Button cancel;
     @FXML
     private Label bookingId;
+    @FXML
+    private VBox statusBox;
 
     private Reservation reservation;
 
@@ -46,16 +49,24 @@ public class bookingHistoryCardController {
     }
 
     private void updateStatus() {
-        status.setText(reservation.getStatus().name());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
         if (reservation.getStatus() == ReservationStatus.BOOKED) {
+            status.setText("Booked");
+            status.setStyle("-fx-text-fill: #3b6d11;");
+            statusBox.setStyle("-fx-background-color: #eaf3de");
             statusBar.setStyle("-fx-background-color: #41891C");
             statusTime.setText("Booking Time : " + reservation.getBookingTime().format(formatter));
         } else if (reservation.getStatus() == ReservationStatus.CHECKED_IN) {
+            status.setText("Checked In");
+            status.setStyle("-fx-text-fill: #aa9a31;");
+            statusBox.setStyle("-fx-background-color: #ece4c6");
             cancel.setVisible(false);
             statusBar.setStyle("-fx-background-color: #dcdc00");
             statusTime.setText("Check in Time : " + reservation.getCheckInTime().format(formatter));
         } else if (reservation.getStatus() == ReservationStatus.CANCELLED) {
+            status.setText("Cancelled");
+            status.setStyle("-fx-text-fill: #5c5c5c;");
+            statusBox.setStyle("-fx-background-color: #e4e4e4");
             cancel.setVisible(false);
             statusBar.setStyle("-fx-background-color: #b9b4b4");
             if (reservation.getCancelBy().getRole().equals("Staff")) {
@@ -78,6 +89,10 @@ public class bookingHistoryCardController {
     public void setOnRemove(Runnable onRemove) {
         this.onRemove = onRemove;
     }
+    private Runnable onHide;
+    public void setOnHide(Runnable onHide) {
+        this.onHide = onHide;
+    }
 
     private Runnable onAdd;
     public void setOnAdd(Runnable onAdd) {
@@ -89,11 +104,18 @@ public class bookingHistoryCardController {
             onAdd.run();
         }
     }
-
-    private void handleRemove() {
-        if (onRemove != null) {
-            onRemove.run();
+    public void showCard(){
+        if (onAdd != null) {
+            onAdd.run();
         }
+    }
+
+    public void handleRemove() {
+        if (onRemove != null) onRemove.run();
+    }
+
+    public void handleHide() {
+        if (onHide != null) onHide.run();
     }
 
     public void confirmCancel() {

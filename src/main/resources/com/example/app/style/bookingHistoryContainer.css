@@ -16,12 +16,17 @@
 }
 .id {
     -fx-font-family: Roboto;
-    -fx-text-fill: #d5d5d5;
+    -fx-text-fill: #aeaeae;
     -fx-font-size: 16;
 }
 .status {
     -fx-font-family: Roboto;
-    -fx-font-size: 16;
+    -fx-font-size: 12;
+    -fx-text-fill: #547c51;
+}
+.status-box {
+    -fx-background-color: #eaf3de;
+    -fx-background-radius: 12;
 }
 .top-box {
     -fx-border-color: #d5d5d5;

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<StackPane maxWidth="320.0" stylesheets="@../style/headStatus.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.theerayut.app.controller.bookingHeadStatusCard">
+   <children>
+      <HBox fx:id="box" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClick" prefHeight="40.0" prefWidth="320.0" styleClass="box">
+         <StackPane.margin>
+            <Insets bottom="10.0" />
+         </StackPane.margin>
+         <children>
+            <Circle fx:id="circle" fill="#3b6d11" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+               <HBox.margin>
+                  <Insets left="15.0" />
+               </HBox.margin>
+            </Circle>
+            <Label fx:id="status" prefHeight="17.0" prefWidth="160.0" styleClass="title" text="BOOKED">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Label>
+            <VBox fx:id="arrow" alignment="CENTER">
+               <HBox.margin>
+                  <Insets left="100.0" />
+               </HBox.margin>
+               <children>
+                  <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                     <image>
+                        <Image url="@../style/img/triangle.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</StackPane>

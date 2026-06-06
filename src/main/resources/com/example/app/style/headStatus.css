@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Roboto-SemiBold';
+    src: url('font/Roboto_Condensed-SemiBold.ttf');
+}
+
+.title {
+    -fx-font-family: 'Roboto Condensed SemiBold';
+    -fx-font-size: 14;
+    -fx-text-fill: #636363;
+}
+.box {
+    -fx-background-radius: 8;
+}

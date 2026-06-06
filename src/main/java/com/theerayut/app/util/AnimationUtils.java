@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -168,6 +169,81 @@ public class AnimationUtils {
             st.setInterpolator(Interpolator.EASE_OUT);
             st.play();
         });
+    }
+
+    public static void cardRemove(Region regionItem, Runnable onFinished) {
+        FadeTransition ft = new FadeTransition(Duration.millis(300), regionItem);
+        ft.setToValue(0);
+
+        Timeline collapse = new Timeline(
+                new KeyFrame(Duration.millis(300),
+                        new KeyValue(regionItem.prefHeightProperty(), 0, Interpolator.SPLINE(0.3, 0.2, 0.6, 0.95))
+                )
+        );
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, event -> ft.play()),
+                new KeyFrame(Duration.millis(100), event -> collapse.play())
+        );
+
+        collapse.setOnFinished(event -> {
+            if (onFinished != null) onFinished.run();
+        });
+
+        timeline.play();
+    }
+
+    public static void cardHide(Region regionItem) {
+        FadeTransition ft = new FadeTransition(Duration.millis(300), regionItem);
+        ft.setFromValue(100);
+        ft.setToValue(0);
+
+        Timeline collapse = new Timeline(
+                new KeyFrame(Duration.millis(300),
+                        new KeyValue(regionItem.prefHeightProperty(), 0, Interpolator.SPLINE(0.3, 0.2, 0.6, 0.95))
+                )
+        );
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, event -> ft.play()),
+                new KeyFrame(Duration.millis(100), event -> collapse.play())
+        );
+
+        timeline.play();
+    }
+
+    public static void cardMoveIn(Region regionItem, double height) {
+        regionItem.setTranslateX(-440);
+        regionItem.setPrefHeight(0);
+        regionItem.setOpacity(100);
+
+        Timeline collapse = new Timeline(
+                new KeyFrame(Duration.millis(250),
+                        new KeyValue(regionItem.prefHeightProperty(), height, Interpolator.SPLINE(0.3, 0.2, 0.6, 0.95))
+                )
+        );
+
+        TranslateTransition trans = new TranslateTransition(Duration.millis(300), regionItem);
+        trans.setToX(0);
+        trans.setInterpolator(Interpolator.SPLINE(0.4, 1, 0.6, 1));
+
+        ScaleTransition s1 = new ScaleTransition(Duration.millis(120), regionItem);
+        s1.setToX(0.94); s1.setToY(1.04);
+        s1.setInterpolator(Interpolator.SPLINE(0.4, 0, 0.6, 1));
+
+        ScaleTransition s2 = new ScaleTransition(Duration.millis(100), regionItem);
+        s2.setToX(1.0); s2.setToY(1.0);
+        s2.setInterpolator(Interpolator.SPLINE(0.4, 0, 0.6, 1));
+
+        s1.setOnFinished(e -> s2.play());
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.millis(100), event -> collapse.play()),
+                new KeyFrame(Duration.millis(150), event -> trans.play()),
+                new KeyFrame(Duration.millis(350), event -> s1.play())
+        );
+
+        timeline.play();
     }
 
     public static void backToHomeBtn(VBox backBtn, ImageView icon) {

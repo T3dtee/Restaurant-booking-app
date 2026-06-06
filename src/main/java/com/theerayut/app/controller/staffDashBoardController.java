@@ -5,7 +5,6 @@ import com.theerayut.app.model.Reservation;
 import com.theerayut.app.model.ReservationStatus;
 import com.theerayut.app.util.AnimationUtils;
 import com.theerayut.app.util.SceneManager;
-import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,7 +14,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -64,31 +62,12 @@ public class staffDashBoardController {
                 showPopUp(controller.getCancelBtn());
             });
 
-            controller.setOnRemove(() -> {
-                Region regionItem = (Region) item;
-
-                // 1. Fade ออก
-                FadeTransition ft = new FadeTransition(Duration.millis(300), regionItem);
-                ft.setToValue(0);
-
-                Timeline collapse = new Timeline(
-                        new KeyFrame(Duration.millis(300),
-                                new KeyValue(regionItem.prefHeightProperty(), 0, Interpolator.SPLINE(0.3, 0.2, 0.6, 0.95))
-                        )
-                );
-
-                Timeline timeline = new Timeline(
-                        new KeyFrame(Duration.ZERO, event -> ft.play()),
-                        new KeyFrame(Duration.millis(100), event -> collapse.play())
-                );
-
-                collapse.setOnFinished(event -> {
-                    itemBox.getChildren().remove(regionItem);
+            controller.setOnRemove(() ->
+                AnimationUtils.cardRemove((Region) item, () -> {
+                    itemBox.getChildren().remove(item);
                     update();
-                });
-
-                timeline.play();
-            });
+                })
+            );
 
             itemBox.getChildren().add(item);
         }
