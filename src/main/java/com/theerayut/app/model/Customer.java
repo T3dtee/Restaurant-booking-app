@@ -17,10 +17,5 @@ public class Customer extends Person{
 
     public boolean isFirstTimeLogin() { return isFirstTimeLogin; }
     public void setFirstTimeLogin(boolean isNewInstance) { this.isFirstTimeLogin = isNewInstance; }
-
-    @Override
-    public String getRole() {
-        return "Customer";
-    }
     
 }

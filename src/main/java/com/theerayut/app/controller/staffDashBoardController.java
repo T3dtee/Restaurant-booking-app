@@ -1,6 +1,7 @@
 package com.theerayut.app.controller;
 
 import com.theerayut.app.AppData;
+import com.theerayut.app.model.Person;
 import com.theerayut.app.model.Reservation;
 import com.theerayut.app.model.ReservationStatus;
 import com.theerayut.app.util.AnimationUtils;
@@ -37,6 +38,8 @@ public class staffDashBoardController {
     private VBox popUpBox;
     @FXML
     private Pane blurOverlay;
+    @FXML
+    private VBox adminButton;
 
     List<Reservation> sortedReservations;
     private Runnable pendingCancelAction;
@@ -74,6 +77,9 @@ public class staffDashBoardController {
     }
 
     public void initialize() {
+        if (AppData.loginStaffData.getRole() == Person.Roles.Admin) {
+            adminButton.setVisible(true);
+        }
         try {
             loadItems();
         } catch (IOException e) {
@@ -110,5 +116,10 @@ public class staffDashBoardController {
        if (AppData.allBookingData.getAllReservations().stream().noneMatch(r -> r.getStatus() == ReservationStatus.BOOKED)){
            noOrderText.setVisible(true);
        }
+    }
+
+    @FXML
+    private void goToAdmin() {
+        SceneManager.switchScene("admin.fxml", SceneManager.TransitionType.SLIDE_IN);
     }
 }

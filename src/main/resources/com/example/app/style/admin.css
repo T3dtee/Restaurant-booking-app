@@ -1,0 +1,174 @@
+@font-face {
+    font-family: 'Pacifico';
+    src: url('font/Pacifico-Regular.ttf');
+}
+@font-face {
+    font-family: 'Roboto';
+    src: url('font/Roboto-Regular.ttf');
+}
+@font-face {
+    font-family: 'Roboto Condensed SemiBold';
+    src: url('font/Roboto_Condensed-SemiBold.ttf');
+}
+
+.head-title {
+    -fx-font-family: Pacifico;
+    -fx-text-fill: #33611B;
+    -fx-font-size: 32;
+}
+.app-background {
+    -fx-background-image: url('img/bg-img.png');
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+.back-btn {
+    -fx-cursor: hand;
+    -fx-background-radius: 20;
+    -fx-background-color: rgba(240, 240, 240, 0.5);
+}
+.back-btn:hover {
+    -fx-background-color: rgba(230, 230, 230, 0.9);
+}
+.module {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0.4, 0, 2)
+}
+.state-title {
+    -fx-font-family: 'Roboto';
+    -fx-text-fill: #7a7a7a;
+    -fx-font-size: 10;
+}
+.state-num{
+    -fx-font-family: 'Roboto Condensed SemiBold';
+    -fx-text-fill: #656565;
+    -fx-font-size: 26;
+}
+.line-box {
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #dadada;
+}
+.module-title{
+    -fx-font-family: 'Roboto Condensed SemiBold';
+    -fx-text-fill: #656565;
+    -fx-font-size: 16;
+}
+.module-label {
+    -fx-font-family: 'Roboto';
+    -fx-text-fill: #7a7a7a;
+    -fx-font-size: 13;
+}
+.field-box{
+    -fx-background-radius: 6;
+    -fx-font-family: 'Roboto';
+    -fx-font-size: 14;
+    -fx-background-color: #F3F3F3;
+    -fx-text-fill: #4e4e4e;
+}
+.save-box{
+    -fx-background-radius: 6;
+    -fx-background-color: #e4e4e4;
+}
+.save-label{
+    -fx-font-family: 'Roboto Condensed SemiBold';
+}
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+/* ตัว table */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #e5e5e5;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 0;
+}
+
+/* clip เนื้อหาด้านในให้โค้งตามขอบ table */
+.table-view .virtual-flow {
+    -fx-background-radius: 0 0 8 8;
+}
+
+/* ซ่อน border แนวตั้งระหว่าง column + โค้งมุมบน */
+.table-view .column-header-background {
+    -fx-background-color: #f5f5f4;
+    -fx-background-radius: 8 8 0 0;
+    -fx-border-color: transparent transparent #e5e5e5 transparent;
+}
+
+/* ช่องว่างมุมขวาบน (filler) ให้สีเดียวกับ header */
+.table-view .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+
+/* มุมขวาล่างที่ scrollbar มาบรรจบ */
+.table-view .corner {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #888780;
+    -fx-font-weight: normal;
+}
+
+/* แถวปกติ */
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #f0f0f0 transparent;
+    -fx-cell-size: 40px;
+}
+
+/* hover */
+.table-row-cell:hover {
+    -fx-background-color: #f9f9f9;
+}
+
+/* selected */
+.table-row-cell:selected {
+    -fx-background-color: #E6F1FB;
+}
+
+/* ข้อความใน cell */
+.table-cell {
+    -fx-font-size: 12px;
+    -fx-text-fill: #1a1a1a;
+    -fx-padding: 0 12px;
+}
+
+/* ซ่อน focus border */
+.table-view:focused {
+    -fx-border-color: transparent;
+}
+
+.btn-icon {
+    -fx-background-color: transparent;
+    -fx-border-color: #e5e5e5;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 4 6 4 6;
+    -fx-cursor: hand;
+}
+
+.btn-icon:hover {
+    -fx-background-color: #f5f5f4;
+}
+
+.btn-icon-danger:hover {
+    -fx-background-color: #FCEBEB;
+    -fx-border-color: #f09595;
+    -fx-text-fill: #A32D2D;
+}
+.popUpBox{
+    -fx-background-color: #fff;
+    -fx-background-radius: 8;
+}

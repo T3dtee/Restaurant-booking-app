@@ -10,36 +10,36 @@ import java.time.LocalTime;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BookingService {
-    //config
-    int gapTime = 90; //minute
-    public final LocalTime openTime = LocalTime.of(10,0);
-    public final LocalTime closeTime = LocalTime.of(20,30);
-    public final int maxBookingDay = 3;
-    public final byte maxGuest = 6;
-
     int timeIndex = 0;
-    LocalTime [] timeSlotList;
+    LocalTime[] timeSlotList;
     LocalDate canBookingDate;
     LocalDate maxBookingDate;
     private final AtomicInteger idCounter = new AtomicInteger(1);
 
     public BookingService() {
-        while (closeTime.isAfter(openTime.plusMinutes((long) gapTime * timeIndex))){
+        recalculate();
+    }
+
+    public void recalculate() {
+        int gapTime = AppData.config.getGapTimeMinutes();
+        LocalTime openTime = AppData.config.getOpenTime();
+        LocalTime closeTime = AppData.config.getCloseTime();
+
+        timeIndex = 0;
+        while (closeTime.isAfter(openTime.plusMinutes((long) gapTime * timeIndex))) {
             timeIndex++;
         }
         timeSlotList = new LocalTime[timeIndex];
-        //คำนวนเวลาแต่ละช่วง
-        for (int i = 0; i < timeIndex; i++){
+        for (int i = 0; i < timeIndex; i++) {
             timeSlotList[i] = openTime.plusMinutes((long) gapTime * i);
         }
 
-        if (LocalTime.now().isAfter(closeTime.minusMinutes(gapTime))){
+        if (LocalTime.now().isAfter(closeTime.minusMinutes(gapTime))) {
             canBookingDate = LocalDate.now().plusDays(1);
-        }
-        else {
+        } else {
             canBookingDate = LocalDate.now();
         }
-        maxBookingDate = canBookingDate.plusDays(maxBookingDay);
+        maxBookingDate = canBookingDate.plusDays(AppData.config.getMaxAdvanceDays());
     }
 
     public LocalTime canBookingTime(LocalDate date, LocalTime startTime) {

@@ -1,16 +1,25 @@
 package com.theerayut.app.model;
 
-public abstract class Person {
+public class Person {
      
     protected String name;
     protected String id;
+    protected Roles role;
 
-    protected Person(String name) {
+    public enum Roles {
+        Staff,
+        Admin,
+        Customer,
+    }
+
+    protected Person(String name, Roles role) {
         this.name = name;
+        this.role = role;
     }
     protected Person(String name, String phone) {
         this.name = name;
         this.id = phone;
+        role = Roles.Customer;
     }
 
     public String getName() {
@@ -21,5 +30,7 @@ public abstract class Person {
     }
 
     // เกิด polymorphism
-    public abstract String getRole();
+    public Roles getRole() {
+        return role;
+    }
 }

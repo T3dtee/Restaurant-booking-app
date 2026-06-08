@@ -99,7 +99,7 @@ public class bookingController {
 
     @FXML
     private void onClickPlus() {
-        if (guest < AppData.bookingService.maxGuest) {
+        if (guest < AppData.config.getMaxGuest()) {
             guest++;
             guestNo.setText(guest + " Guest");
         }
@@ -141,7 +141,7 @@ public class bookingController {
     }
 
     private void setBookedText() {
-        booked.setText(AppData.allBookingData.countByDateTime(datePicker.getValue(),time) + "/" + AppData.allBookingData.MAX_TABLES);
+        booked.setText(AppData.allBookingData.countByDateTime(datePicker.getValue(),time) + "/" + AppData.config.getMaxTables());
         confirm.getStyleClass().removeAll("confirm-btn", "table-full-btn");
         booked.getStyleClass().removeAll("booked-full");
         if (!AppData.bookingService.timeSlotAvailable(datePicker.getValue(),time)) {

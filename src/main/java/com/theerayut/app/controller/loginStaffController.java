@@ -1,8 +1,9 @@
 package com.theerayut.app.controller;
 
 import com.theerayut.app.AppData;
-import com.theerayut.app.model.StaffLogin;
-import com.theerayut.app.service.Staff;
+import com.theerayut.app.model.Person;
+import com.theerayut.app.model.Staff;
+import com.theerayut.app.service.StaffService;
 import com.theerayut.app.util.AnimationUtils;
 import com.theerayut.app.util.SceneManager;
 import javafx.fxml.FXML;
@@ -43,18 +44,23 @@ public class loginStaffController {
         usernameField.getStyleClass().remove("error-field");
         passwordField.getStyleClass().remove("error-field");
 
-        Staff s = new Staff();
-
         if (validUsername && validPassword) {
-            if (s.login(username, password)) {
-                AppData.loginStaffData = new StaffLogin(username, password);
-                goToStaffDashBoard();
+            switch (AppData.staffService.login(username, password)) {
+                case Admin :
+                    AppData.loginStaffData = new Staff(username, password, Person.Roles.Admin);
+                    goToStaffDashBoard();
+                    break;
+                case Staff :
+                    AppData.loginStaffData = new Staff(username, password, Person.Roles.Staff);
+                    goToStaffDashBoard();
+                    break;
+                case null :
+                    usernameField.getStyleClass().add("error-field");
+                    passwordField.getStyleClass().add("error-field");
+                    invalidText.setVisible(true);
+                    break;
             }
-            else {
-                usernameField.getStyleClass().add("error-field");
-                passwordField.getStyleClass().add("error-field");
-                invalidText.setVisible(true);
-            }
+
         }
         else {
             if (!validUsername) usernameField.getStyleClass().add("error-field");

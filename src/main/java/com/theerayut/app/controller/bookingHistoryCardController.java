@@ -1,6 +1,7 @@
 package com.theerayut.app.controller;
 
 import com.theerayut.app.AppData;
+import com.theerayut.app.model.Person;
 import com.theerayut.app.model.Reservation;
 import com.theerayut.app.model.ReservationStatus;
 import javafx.fxml.FXML;
@@ -69,9 +70,9 @@ public class bookingHistoryCardController {
             statusBox.setStyle("-fx-background-color: #e4e4e4");
             cancel.setVisible(false);
             statusBar.setStyle("-fx-background-color: #b9b4b4");
-            if (reservation.getCancelBy().getRole().equals("Staff")) {
+            if (reservation.getCancelBy().getRole() == Person.Roles.Staff) {
                 statusTime.setText("Cancel By Staff");
-            } else if (reservation.getCancelBy().getRole().equals("Customer")) {
+            } else if (reservation.getCancelBy().getRole() == Person.Roles.Customer) {
                 statusTime.setText("Cancel By You");
             }
         }

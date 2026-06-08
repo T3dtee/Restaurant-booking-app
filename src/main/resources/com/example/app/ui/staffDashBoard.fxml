@@ -56,6 +56,11 @@
                   </ImageView>
                </children>
             </VBox>
+            <VBox fx:id="adminButton" alignment="CENTER" layoutY="730.0" onMouseClicked="#goToAdmin" prefHeight="40.0" styleClass="admin-box" visible="false" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0">
+               <children>
+                  <Label styleClass="admin-label" text="Admin panel" />
+               </children>
+            </VBox>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="popUp" pickOnBounds="false" prefHeight="800.0" prefWidth="360.0" visible="false">

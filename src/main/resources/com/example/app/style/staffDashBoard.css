@@ -79,3 +79,14 @@
 .blurPane{
     -fx-background-color: rgba(0, 0, 0, 0.3);
 }
+.admin-box{
+    -fx-background-radius: 24;
+    -fx-background-color: rgba(240, 240, 240, 0.5);
+}
+.admin-box:hover{
+    -fx-background-color: rgba(230, 230, 230, 0.9);
+}
+.admin-label{
+    -fx-font-family: 'Roboto';
+    -fx-text-fill: #858585;
+}

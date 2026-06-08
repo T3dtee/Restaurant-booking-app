@@ -1,5 +1,6 @@
 package com.theerayut.app.service;
 
+import com.theerayut.app.AppData;
 import com.theerayut.app.model.Customer;
 import com.theerayut.app.model.Reservation;
 import com.theerayut.app.model.ReservationStatus;
@@ -9,7 +10,6 @@ import java.time.LocalTime;
 import java.util.*;
 
 public class ReservationService {
-    public final int MAX_TABLES = 10;
 
     private final Map<String, Reservation> reservationMap = new HashMap<>();
 
@@ -18,7 +18,7 @@ public class ReservationService {
     }
 
     public boolean isTableFull(LocalDate date, LocalTime time){
-        return countByDateTime(date, time) >= MAX_TABLES;
+        return countByDateTime(date, time) >= AppData.config.getMaxTables();
     }
 
     public int countByDateTime(LocalDate date, LocalTime time) {
@@ -60,6 +60,14 @@ public class ReservationService {
                         .thenComparing(Reservation::getTime)
                         .thenComparing(Reservation::getTableNo)
                 )
+                .toList();
+    }
+
+    public List<Reservation> getReservationsByDate(LocalDate date) {
+        return reservationMap.values().stream()
+                .filter(r -> r.getDate().equals(date))
+                .sorted(Comparator.comparing(Reservation::getTime)
+                        .thenComparing(Reservation::getTableNo))
                 .toList();
     }
 

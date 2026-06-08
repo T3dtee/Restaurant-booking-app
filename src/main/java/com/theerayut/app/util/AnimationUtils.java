@@ -19,7 +19,7 @@ public class AnimationUtils {
     private static final Image BACK_IMAGE = new Image(AnimationUtils.class.getResourceAsStream("/com/example/app/style/img/triangle.png"));
     private static final Image HOME_IMAGE = new Image(AnimationUtils.class.getResourceAsStream("/com/example/app/style/img/home.png"));
 
-    public static void popUpShow(AnchorPane mainContent, AnchorPane popUp, Pane blurPane, Node popUpBox, Button button) {
+    public static void popUpShow(AnchorPane mainContent, AnchorPane popUp, Pane blurPane, Node popUpBox, Node button) {
         Bounds buttonBounds = button.localToScene(button.getBoundsInLocal());
         double startX = buttonBounds.getMinX() + (buttonBounds.getWidth() / 2);
         double startY = buttonBounds.getMinY() + (buttonBounds.getHeight() / 2);
