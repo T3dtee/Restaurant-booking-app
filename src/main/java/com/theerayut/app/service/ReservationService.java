@@ -1,20 +1,33 @@
 package com.theerayut.app.service;
 
+import com.google.gson.reflect.TypeToken;
 import com.theerayut.app.AppData;
 import com.theerayut.app.model.Customer;
 import com.theerayut.app.model.Reservation;
 import com.theerayut.app.model.ReservationStatus;
+import com.theerayut.app.model.RestaurantConfig;
+import com.theerayut.app.util.JsonStorage;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
 public class ReservationService {
 
-    private final Map<String, Reservation> reservationMap = new HashMap<>();
+    private Map<String, Reservation> reservationMap;
+
+    public ReservationService(){
+        reservationMap = JsonStorage.load("reservations.json",new TypeToken <Map<String, Reservation>>(){}.getType());
+        if (reservationMap == null) reservationMap = new HashMap<>();
+        else {
+            updateExpiredReservations();
+        }
+    }
 
     public void addReservation(Reservation reservation) {
         reservationMap.put(reservation.getReservationId(), reservation);
+        updateJson();
     }
 
     public boolean isTableFull(LocalDate date, LocalTime time){
@@ -50,12 +63,14 @@ public class ReservationService {
     }
 
     public List<Reservation> getReservationsByCustomer(Customer customer) {
+        updateExpiredReservations();
         return reservationMap.values().stream()
                 .filter(r -> customer.getId().equals(r.getCustomerId()))
                 .sorted(Comparator.comparing((Reservation r) -> {
                         if (r.getStatus() == ReservationStatus.BOOKED) return -1;
                         else if (r.getStatus() == ReservationStatus.CHECKED_IN) return 0;
-                        else return 1;}) //ให้ Booked ขึ้นก่อน ตามด้วย Checked in
+                        else if (r.getStatus() == ReservationStatus.EXPIRED) return 1;
+                        else return 2;}) //ให้ Booked ขึ้นก่อน ตามด้วย Checked in
                         .thenComparing(Reservation::getDate)
                         .thenComparing(Reservation::getTime)
                         .thenComparing(Reservation::getTableNo)
@@ -86,11 +101,17 @@ public class ReservationService {
         return false;
     }
 
-//    public void updateExpiredReservations() {
-//        for (Reservation r : reservationList) {
-//            if (r.isOverTime()) {
-//                r.expire();
-//            }
-//        }
-//    }
+    public void updateExpiredReservations() {
+        for (Reservation r : reservationMap.values().stream().toList()) {
+            if (r.getStatus() == ReservationStatus.BOOKED
+                    && LocalDateTime.of(r.getDate(), r.getTime()).plusMinutes(RestaurantConfig.load().getGapTimeMinutes()).isBefore(LocalDateTime.now())) {
+                r.expire();
+            }
+        }
+        updateJson();
+    }
+
+    public void updateJson(){
+        JsonStorage.save(reservationMap, "reservations.json");
+    }
 }

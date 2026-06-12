@@ -18,6 +18,24 @@ public class BookingService {
 
     public BookingService() {
         recalculate();
+        initIdCounter();
+    }
+
+    // ตั้ง counter ต่อจาก id สูงสุดที่มีอยู่ กันเลขซ้ำหลังเปิดแอปใหม่
+    private void initIdCounter() {
+        int maxId = AppData.allBookingData.getAllReservations().stream()
+                .map(Reservation::getReservationId)        // เช่น "RES-0007"
+                .filter(id -> id != null && id.startsWith("RES-"))
+                .mapToInt(id -> {
+                    try {
+                        return Integer.parseInt(id.substring(4));
+                    } catch (NumberFormatException e) {
+                        return 0;
+                    }
+                })
+                .max()
+                .orElse(0);
+        idCounter.set(maxId + 1);
     }
 
     public void recalculate() {

@@ -49,6 +49,11 @@ public class bookingHeadStatusCard {
                 circle.setStyle("-fx-fill: #5c5c5c;");
                 this.status.setStyle("-fx-text-fill: #5c5c5c");
             }
+            case EXPIRED -> {
+                box.setStyle("-fx-background-color: #abbbea;");
+                circle.setStyle("-fx-fill: #354263;");
+                this.status.setStyle("-fx-text-fill: #354263");
+            }
         }
     }
 

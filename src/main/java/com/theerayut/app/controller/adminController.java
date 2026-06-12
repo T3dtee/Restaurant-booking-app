@@ -278,6 +278,8 @@ public class adminController {
         AppData.config.setMaxTables(parseIntOr(totalTableField, AppData.config.getMaxTables()));
         AppData.config.setMaxGuest(parseIntOr(maxGuestField, AppData.config.getMaxGuest()));
 
+        AppData.config.save();
+
         // normalize displayed values back from config
         totalTableField.setText(String.valueOf(AppData.config.getMaxTables()));
         maxGuestField.setText(String.valueOf(AppData.config.getMaxGuest()));
@@ -302,6 +304,8 @@ public class adminController {
         AppData.config.setCloseTime(close);
         AppData.config.setGapTimeMinutes(parseIntOr(gapTimeField, AppData.config.getGapTimeMinutes()));
         AppData.config.setMaxAdvanceDays(parseIntOr(maxAdvanceBooking, AppData.config.getMaxAdvanceDays()));
+
+        AppData.config.save();
 
         // คำนวณ time slot ใหม่ตาม config ที่เปลี่ยน
         AppData.bookingService.recalculate();

@@ -8,7 +8,7 @@ public class AppData {
     public static Customer loginUserData;
     public static String bookingId;
     public static Staff loginStaffData;
-    public static final RestaurantConfig config = new RestaurantConfig();
+    public static final RestaurantConfig config = RestaurantConfig.load();
     public static final ReservationService allBookingData = new ReservationService();
     public static final BookingService bookingService = new BookingService();
     public static final LoginService loginService = new LoginService();

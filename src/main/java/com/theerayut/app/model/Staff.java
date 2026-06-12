@@ -5,7 +5,7 @@ public class Staff extends Person {
     private final String password;
 
     public Staff(String username, String password, Roles role) {
-        super(username, role);
+        super(username, username, role);
         this.username = username;
         this.password = password;
     }

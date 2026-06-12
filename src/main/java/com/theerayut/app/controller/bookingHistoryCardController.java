@@ -70,11 +70,18 @@ public class bookingHistoryCardController {
             statusBox.setStyle("-fx-background-color: #e4e4e4");
             cancel.setVisible(false);
             statusBar.setStyle("-fx-background-color: #b9b4b4");
-            if (reservation.getCancelBy().getRole() == Person.Roles.Staff) {
+            if (reservation.getCancelByRole() == Person.Roles.Staff || reservation.getCancelByRole() == Person.Roles.Admin) {
                 statusTime.setText("Cancel By Staff");
-            } else if (reservation.getCancelBy().getRole() == Person.Roles.Customer) {
+            } else if (reservation.getCancelByRole() == Person.Roles.Customer) {
                 statusTime.setText("Cancel By You");
             }
+        } else if (reservation.getStatus() == ReservationStatus.EXPIRED) {
+            status.setText("Expired");
+            status.setStyle("-fx-text-fill: #354263;");
+            statusBox.setStyle("-fx-background-color: #bfcced");
+            cancel.setVisible(false);
+            statusBar.setStyle("-fx-background-color: #8b97b6");
+            statusTime.setText("Not Check In");
         }
     }
 

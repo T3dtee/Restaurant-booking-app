@@ -1,8 +1,12 @@
 package com.theerayut.app.model;
 
+import com.theerayut.app.util.JsonStorage;
+
 import java.time.LocalTime;
 
 public class RestaurantConfig {
+    private static final String FILE = "config.json";
+
     private int maxTables = 10;
     private int maxGuest = 6;
     private LocalTime openTime = LocalTime.of(10, 0);
@@ -27,4 +31,14 @@ public class RestaurantConfig {
 
     public int getMaxAdvanceDays() { return maxAdvanceDays; }
     public void setMaxAdvanceDays(int maxAdvanceDays) { this.maxAdvanceDays = maxAdvanceDays; }
+
+    // object เดียว ไม่ต้องใช้ TypeToken ใช้ .class ได้เลย
+    public static RestaurantConfig load() {
+        RestaurantConfig cfg = JsonStorage.load(FILE, RestaurantConfig.class);
+        return cfg != null ? cfg : new RestaurantConfig();
+    }
+
+    public void save() {
+        JsonStorage.save(this, FILE);
+    }
 }

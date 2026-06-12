@@ -1,6 +1,7 @@
 package com.theerayut.app.model;
 
 import com.theerayut.app.AppData;
+import com.theerayut.app.service.ReservationService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,11 +17,12 @@ public class Reservation {
     private final int guestCount;
     private final int tableNo;
     private ReservationStatus status;
-    private Person cancelBy;
+    private String cancelById;     // id ของผู้ยกเลิก (ไม่เก็บ object เพื่อให้ serialize ได้)
+    private Person.Roles cancelByRole; // role ของผู้ยกเลิก — ใช้แยก Staff/Customer
     private final LocalDateTime bookingTime;
     private LocalDateTime checkInTime;
 
-    private boolean doneBooking = false;
+    private transient boolean doneBooking = false;
     public boolean isDoneBooking() {
         return doneBooking;
     }
@@ -72,8 +74,11 @@ public class Reservation {
         return checkInTime;
     }
     public LocalDateTime getBookingTime() {return bookingTime;}
-    public Person getCancelBy() {
-        return cancelBy;
+    public String getCancelById() {
+        return cancelById;
+    }
+    public Person.Roles getCancelByRole() {
+        return cancelByRole;
     }
     public String getCustomerId() {
         return customerId;
@@ -85,19 +90,21 @@ public class Reservation {
       // method เปลี่ยนสถานะการจอง
     public void cancel(Person cancelBy) {
         this.status = ReservationStatus.CANCELLED;
-        this.cancelBy = cancelBy;
+        this.cancelById = cancelBy.getId();
+        this.cancelByRole = cancelBy.getRole();
+        AppData.allBookingData.updateJson();
     }
 
     public void checkIn() {
         this.status =ReservationStatus.CHECKED_IN;
         this.checkInTime = LocalDateTime.now();
+        AppData.allBookingData.updateJson();
     }
 
     public void expire() {
         this.status = ReservationStatus.EXPIRED;
     }
 
-    // ใช้เช็คหมดเวลา 1 ชั่วโมงครึ่ง
     public boolean isOverTime() {
         if (status == ReservationStatus.CHECKED_IN && checkInTime != null) {
             return checkInTime.plusMinutes(90).isBefore(LocalDateTime.now());

@@ -12,8 +12,9 @@ public class Person {
         Customer,
     }
 
-    protected Person(String name, Roles role) {
+    protected Person(String name, String id, Roles role) {
         this.name = name;
+        this.id = id;
         this.role = role;
     }
     protected Person(String name, String phone) {
@@ -29,7 +30,6 @@ public class Person {
         return id;
     }
 
-    // เกิด polymorphism
     public Roles getRole() {
         return role;
     }
