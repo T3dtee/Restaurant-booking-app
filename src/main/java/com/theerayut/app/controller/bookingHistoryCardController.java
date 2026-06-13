@@ -59,10 +59,10 @@ public class bookingHistoryCardController {
             statusTime.setText("Booking Time : " + reservation.getBookingTime().format(formatter));
         } else if (reservation.getStatus() == ReservationStatus.CHECKED_IN) {
             status.setText("Checked In");
-            status.setStyle("-fx-text-fill: #aa9a31;");
+            status.setStyle("-fx-text-fill: #958200;");
             statusBox.setStyle("-fx-background-color: #ece4c6");
             cancel.setVisible(false);
-            statusBar.setStyle("-fx-background-color: #dcdc00");
+            statusBar.setStyle("-fx-background-color: #e1e100");
             statusTime.setText("Check in Time : " + reservation.getCheckInTime().format(formatter));
         } else if (reservation.getStatus() == ReservationStatus.CANCELLED) {
             status.setText("Cancelled");
@@ -74,14 +74,15 @@ public class bookingHistoryCardController {
                 statusTime.setText("Cancel By Staff");
             } else if (reservation.getCancelByRole() == Person.Roles.Customer) {
                 statusTime.setText("Cancel By You");
-            }
+            } else statusTime.setText("Not Check In");
+
         } else if (reservation.getStatus() == ReservationStatus.EXPIRED) {
             status.setText("Expired");
-            status.setStyle("-fx-text-fill: #354263;");
-            statusBox.setStyle("-fx-background-color: #bfcced");
+            status.setStyle("-fx-text-fill: #4f5d80;");
+            statusBox.setStyle("-fx-background-color: #e2eafd");
             cancel.setVisible(false);
             statusBar.setStyle("-fx-background-color: #8b97b6");
-            statusTime.setText("Not Check In");
+            statusTime.setText("Completed / Past Booking");
         }
     }
 

@@ -94,6 +94,9 @@ public class Reservation {
         this.cancelByRole = cancelBy.getRole();
         AppData.allBookingData.updateJson();
     }
+    public void cancel() {
+        this.status = ReservationStatus.CANCELLED;
+    }
 
     public void checkIn() {
         this.status =ReservationStatus.CHECKED_IN;

@@ -11,3 +11,11 @@
 .box {
     -fx-background-radius: 8;
 }
+.number-box {
+    -fx-background-radius: 12;
+    -fx-background-color: #fbfbfb;
+}
+.number {
+    -fx-font-size: 10;
+    -fx-font-family: "Roboto Condensed SemiBold";
+}

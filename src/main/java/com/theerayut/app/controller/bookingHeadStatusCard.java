@@ -1,5 +1,6 @@
 package com.theerayut.app.controller;
 
+import com.theerayut.app.model.Reservation;
 import com.theerayut.app.model.ReservationStatus;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
@@ -14,14 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class bookingHeadStatusCard {
-    @FXML
-    private Label status;
-    @FXML
-    private VBox arrow;
-    @FXML
-    private HBox box;
-    @FXML
-    private Circle circle;
+    @FXML private Label status;
+    @FXML private VBox arrow;
+    @FXML private HBox box;
+    @FXML private Circle circle;
+    @FXML private Label number;
 
     private enum State{
         SHOW,
@@ -31,30 +29,41 @@ public class bookingHeadStatusCard {
     private final List<Runnable> hideCard = new ArrayList<>();
     private final List<Runnable> showCard = new ArrayList<>();
 
-    public void setData(ReservationStatus status){
+    public void setData(ReservationStatus status, List<Reservation> reservations) {
         this.status.setText(status.toString());
+        number.setText(String.valueOf(reservations.stream().filter(r -> r.getStatus() == status).count()));
         switch (status){
             case BOOKED -> {
                 box.setStyle("-fx-background-color: #eaf3de;");
                 circle.setStyle("-fx-fill: #3b6d11;");
                 this.status.setStyle("-fx-text-fill: #3b6d11");
+                number.setStyle("-fx-text-fill: #3b6d11");
             }
             case CHECKED_IN -> {
                 box.setStyle("-fx-background-color: #ece4c6;");
-                circle.setStyle("-fx-fill: #aa9a31;");
-                this.status.setStyle("-fx-text-fill: #aa9a31");
+                circle.setStyle("-fx-fill: #958200;");
+                this.status.setStyle("-fx-text-fill: #958200");
+                number.setStyle("-fx-text-fill: #958200");
             }
             case CANCELLED -> {
                 box.setStyle("-fx-background-color: #e4e4e4;");
                 circle.setStyle("-fx-fill: #5c5c5c;");
                 this.status.setStyle("-fx-text-fill: #5c5c5c");
+                number.setStyle("-fx-text-fill: #5c5c5c");
             }
             case EXPIRED -> {
-                box.setStyle("-fx-background-color: #abbbea;");
-                circle.setStyle("-fx-fill: #354263;");
-                this.status.setStyle("-fx-text-fill: #354263");
+                box.setStyle("-fx-background-color: #e2eafd;");
+                circle.setStyle("-fx-fill: #4f5d80;");
+                this.status.setStyle("-fx-text-fill: #4f5d80");
+                number.setStyle("-fx-text-fill: #4f5d80");
             }
         }
+    }
+
+    // ตั้งให้ section เริ่มที่สถานะหุบไว้ตั้งแต่แรก (ไม่เล่น animation)
+    public void collapseInitially(){
+        state = State.HIDE;
+        arrow.setRotate(-180);
     }
 
     public void addHideCard(Runnable r){

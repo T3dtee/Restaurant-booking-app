@@ -83,7 +83,7 @@ public class SceneManager {
 
         TranslateTransition moveOut = new TranslateTransition(Duration.millis(270), mainContainer.getChildren().getFirst());
         moveOut.setToX(-100);
-        moveOut.setInterpolator(Interpolator.SPLINE(0.3, 0.1, 0.7, 0.7));
+        moveOut.setInterpolator(Interpolator.EASE_IN);
 
         TranslateTransition moveIn = new TranslateTransition(Duration.millis(270), nextScene);
         moveIn.setToX(0);

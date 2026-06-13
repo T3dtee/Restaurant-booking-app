@@ -24,9 +24,9 @@
    <children>
       <AnchorPane fx:id="mainContent" prefHeight="200.0" prefWidth="200.0" styleClass="app-background">
          <children>
-            <ScrollPane hbarPolicy="NEVER" hvalue="0.5" prefHeight="800.0" prefWidth="360.0" vbarPolicy="NEVER" vvalue="1.0">
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="800.0" prefWidth="360.0" vbarPolicy="NEVER" vvalue="1.0">
                <content>
-                  <VBox prefWidth="360.0" spacing="15.0">
+                  <VBox spacing="15.0">
                      <children>
                         <BorderPane prefHeight="80.0" prefWidth="360.0">
                            <center>

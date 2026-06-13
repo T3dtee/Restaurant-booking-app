@@ -21,7 +21,7 @@ public class ReservationService {
         reservationMap = JsonStorage.load("reservations.json",new TypeToken <Map<String, Reservation>>(){}.getType());
         if (reservationMap == null) reservationMap = new HashMap<>();
         else {
-            updateExpiredReservations();
+            updateReservations();
         }
     }
 
@@ -63,18 +63,9 @@ public class ReservationService {
     }
 
     public List<Reservation> getReservationsByCustomer(Customer customer) {
-        updateExpiredReservations();
+        updateReservations();
         return reservationMap.values().stream()
                 .filter(r -> customer.getId().equals(r.getCustomerId()))
-                .sorted(Comparator.comparing((Reservation r) -> {
-                        if (r.getStatus() == ReservationStatus.BOOKED) return -1;
-                        else if (r.getStatus() == ReservationStatus.CHECKED_IN) return 0;
-                        else if (r.getStatus() == ReservationStatus.EXPIRED) return 1;
-                        else return 2;}) //ให้ Booked ขึ้นก่อน ตามด้วย Checked in
-                        .thenComparing(Reservation::getDate)
-                        .thenComparing(Reservation::getTime)
-                        .thenComparing(Reservation::getTableNo)
-                )
                 .toList();
     }
 
@@ -101,9 +92,13 @@ public class ReservationService {
         return false;
     }
 
-    public void updateExpiredReservations() {
+    public void updateReservations() {
         for (Reservation r : reservationMap.values().stream().toList()) {
             if (r.getStatus() == ReservationStatus.BOOKED
+                    && LocalDateTime.of(r.getDate(), r.getTime()).plusMinutes(RestaurantConfig.load().getGapTimeMinutes()).isBefore(LocalDateTime.now())) {
+                r.cancel();
+            }
+            else if (r.getStatus() == ReservationStatus.CHECKED_IN
                     && LocalDateTime.of(r.getDate(), r.getTime()).plusMinutes(RestaurantConfig.load().getGapTimeMinutes()).isBefore(LocalDateTime.now())) {
                 r.expire();
             }

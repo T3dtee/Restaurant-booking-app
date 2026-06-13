@@ -46,7 +46,7 @@ public class StaffService {
     public Roles login(String username, String password) {
         for (Staff staff : staffList) {
             if (staff.getUsername().equals(username) && staff.getPassword().equals(password)) {
-                //JsonStorage.save(staff, "lastStaffLogin.json");
+                JsonStorage.save(staff, "lastStaffLogin.json");
                 switch (staff.getRole()) {
                     case Admin -> {
                         return  Roles.Admin;

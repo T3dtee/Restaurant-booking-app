@@ -18,6 +18,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 
 public class bookingHistoryController {
@@ -48,7 +49,16 @@ public class bookingHistoryController {
     private Runnable cardMoveInAction;
 
     private void loadItems() throws IOException {
-        List<Reservation> customerReservations = AppData.allBookingData.getReservationsByCustomer(AppData.loginUserData);
+        List<Reservation> customerReservations = AppData.allBookingData.getReservationsByCustomer(AppData.loginUserData).stream()
+                .sorted(Comparator.comparing((Reservation r) -> {
+                            if (r.getStatus() == ReservationStatus.BOOKED) return -1;
+                            else if (r.getStatus() == ReservationStatus.CHECKED_IN) return 0;
+                            else if (r.getStatus() == ReservationStatus.CANCELLED) return 1;
+                            else return 2;})
+                        .thenComparing(Comparator.comparing(Reservation::getDate).reversed())
+                        .thenComparing(Comparator.comparing(Reservation::getTime).reversed())
+                        .thenComparing(Reservation::getTableNo)
+                ).toList();
         ReservationStatus lastStatus = null;
 
         boolean multipleStatuses = customerReservations.stream()
@@ -69,7 +79,10 @@ public class bookingHistoryController {
                 head.setCacheHint(CacheHint.SPEED);
 
                 statusController = loader.getController();
-                statusController.setData(data.getStatus());
+                statusController.setData(data.getStatus(), customerReservations);
+                if (data.getStatus() == ReservationStatus.EXPIRED) {
+                    statusController.collapseInitially();
+                }
                 lastStatus = data.getStatus();
 
                 itemBox.getChildren().add(head);
@@ -99,6 +112,12 @@ public class bookingHistoryController {
             if (statusController != null) {
                 statusController.addHideCard(controller::handleHide);
                 statusController.addShowCard(controller::showCard);
+            }
+
+            // EXPIRED เริ่มที่สถานะหุบไว้ (naturalHeight ถูกเก็บไว้แล้วด้านบน)
+            if (multipleStatuses && data.getStatus() == ReservationStatus.EXPIRED) {
+                regionItem.setPrefHeight(0);
+                regionItem.setOpacity(0);
             }
 
             if (data.getReservationId().equals(AppData.bookingId)) {

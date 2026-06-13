@@ -11,7 +11,7 @@
 
 <StackPane maxWidth="320.0" stylesheets="@../style/headStatus.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.theerayut.app.controller.bookingHeadStatusCard">
    <children>
-      <HBox fx:id="box" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClick" prefHeight="40.0" prefWidth="320.0" styleClass="box">
+      <HBox fx:id="box" alignment="CENTER_LEFT" fillHeight="false" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClick" prefHeight="40.0" prefWidth="320.0" styleClass="box">
          <StackPane.margin>
             <Insets bottom="10.0" />
          </StackPane.margin>
@@ -26,9 +26,17 @@
                   <Insets left="10.0" />
                </HBox.margin>
             </Label>
+            <VBox alignment="CENTER" prefHeight="15.0" prefWidth="25.0" styleClass="number-box">
+               <HBox.margin>
+                  <Insets left="50.0" />
+               </HBox.margin>
+               <children>
+                  <Label fx:id="number" styleClass="number" text="2" />
+               </children>
+            </VBox>
             <VBox fx:id="arrow" alignment="CENTER">
                <HBox.margin>
-                  <Insets left="100.0" />
+                  <Insets left="15.0" />
                </HBox.margin>
                <children>
                   <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">

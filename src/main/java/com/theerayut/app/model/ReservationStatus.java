@@ -4,7 +4,7 @@ package com.theerayut.app.model;
 public enum ReservationStatus {
     // จองแต่ยังไม่มา
     BOOKED,
-    // มาถึงโต๊ะและเริ่มใช้
+    // มาถึงโต๊ะ
     CHECKED_IN,
     // ยกเลิกการจอง(ลูกค้ามาช้าเกินเวลา/ไม่มา)
     CANCELLED,
