@@ -26,54 +26,24 @@ public class loginUserController {
     @FXML
     public void initialize() {
         telNumberField.setTextFormatter(new TextFormatter<>(change -> {
-            // 1. ถ้าเป็นการลบข้อความ (BackSpace / Delete) ให้ยอมให้ทำทันที ไม่ต้องคำนวณเพิ่ม
             if (change.isDeleted() && change.getText().isEmpty()) {
-                int start = change.getRangeStart();
-                String currentText = change.getControlText();
-
-                // เช็คว่าตำแหน่งที่กำลังจะโดนลบ อยู่ข้างหลังเครื่องหมายขีดพอดีหรือไม่ (ตำแหน่งที่ 4 และ 8)
-                if ((start == 4 || start == 8) && currentText.charAt(start - 1) == '-') {
-                    // ขยายขอบเขตการลบ (Range) ให้กินพื้นที่ไปลบตัวเลขก่อนหน้าขีดด้วย 1 ตัว
-                    change.setRange(start - 1, change.getRangeEnd());
-                    return change;
-                }
+                int s = change.getRangeStart();
+                if ((s == 4 || s == 8) && change.getControlText().charAt(s - 1) == '-')
+                    change.setRange(s - 1, change.getRangeEnd());
                 return change;
             }
 
-            String newText = change.getControlNewText();
+            String d = change.getControlNewText().replaceAll("-", "");
+            if (!d.matches("\\d*") || d.length() > 10) return null;
 
-            // 2. ดึงเอาเฉพาะตัวเลขออกมาเช็ค (คัดขีดออกไปก่อน) เพื่อตรวจสอบความยาว
-            String digitsOnly = newText.replaceAll("-", "");
+            String f = d.length() > 6 ? d.substring(0, 3) + "-" + d.substring(3, 6) + "-" + d.substring(6)
+                     : d.length() > 3 ? d.substring(0, 3) + "-" + d.substring(3)
+                     : d;
 
-            // 3. ตรวจสอบว่าหลังจากคัดขีดออกแล้ว ต้องเป็นตัวเลขล้วน และยาวไม่เกิน 10 ตัว
-            if (!digitsOnly.matches("\\d*") || digitsOnly.length() > 10) {
-                return null; // ปฏิเสธการพิมพ์
-            }
-
-            // 4. ขั้นตอนการแปลงร่าง (Formatting Logic) ในขณะพิมพ์
-            StringBuilder formatted = new StringBuilder();
-            int digitCount = digitsOnly.length();
-
-            // วางโครงสร้างตามแพทเทิร์น 000-000-0000
-            if (digitCount > 0) {
-                // ใส่ 3 ตัวแรก
-                formatted.append(digitsOnly.substring(0, Math.min(digitCount, 3)));
-            }
-            if (digitCount > 3) {
-                // เติมขีดแรก แล้วใส่ตัวที่ 4-6
-                formatted.append("-").append(digitsOnly.substring(3, Math.min(digitCount, 6)));
-            }
-            if (digitCount > 6) {
-                // เติมขีดที่สอง แล้วใส่ตัวที่ 7-10
-                formatted.append("-").append(digitsOnly.substring(6, digitCount));
-            }
-
-            // 5. อัปเดตข้อความใหม่ลงไปในช่องกรอก และตั้งตำแหน่งเคอร์เซอร์ (Caret) ไว้ท้ายสุด
-            change.setText(formatted.toString());
+            change.setText(f);
             change.setRange(0, change.getControlText().length());
-            change.setCaretPosition(formatted.length());
-            change.setAnchor(formatted.length());
-
+            change.setCaretPosition(f.length());
+            change.setAnchor(f.length());
             return change;
         }));
 

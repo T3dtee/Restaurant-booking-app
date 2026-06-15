@@ -44,6 +44,21 @@ public class staffDashBoardController {
     List<Reservation> sortedReservations;
     private Runnable pendingCancelAction;
 
+    public void initialize() {
+        if (AppData.loginStaffData.getRole() == Person.Roles.Admin) {
+            adminButton.setVisible(true);
+            AnimationUtils.buttonHover(adminButton,6,100);
+        }
+        try {
+            loadItems();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (!sortedReservations.isEmpty()) {
+            noOrderText.setVisible(false);
+        }
+    }
+
     private void loadItems() throws IOException {
          sortedReservations = AppData.allBookingData.getAllReservations().stream()
                 .filter(r -> r.getStatus() == ReservationStatus.BOOKED) // กรองเอาเฉพาะคิวที่ถูกจอง
@@ -73,20 +88,6 @@ public class staffDashBoardController {
             );
 
             itemBox.getChildren().add(item);
-        }
-    }
-
-    public void initialize() {
-        if (AppData.loginStaffData.getRole() == Person.Roles.Admin) {
-            adminButton.setVisible(true);
-        }
-        try {
-            loadItems();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (!sortedReservations.isEmpty()) {
-            noOrderText.setVisible(false);
         }
     }
 

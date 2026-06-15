@@ -12,6 +12,7 @@ public class SceneManager {
 
     private static Stage stage;
     private static StackPane mainContainer;
+    private static boolean isTransitioning = false;
 
     public enum TransitionType {
         FADE,
@@ -31,6 +32,7 @@ public class SceneManager {
         switchScene(fxml, TransitionType.FADE);
     }
     public static void switchScene(String fxml, TransitionType transition) {
+        if (isTransitioning) return;
         try {
             Parent nextRoot = FXMLLoader.load(
                     SceneManager.class.getResource("/com/example/app/ui/" + fxml)
@@ -40,6 +42,7 @@ public class SceneManager {
             if (mainContainer.getChildren().isEmpty()) {
                 mainContainer.getChildren().add(nextRoot);
             } else {
+                isTransitioning = true;
                 switch (transition) {
                     case FADE -> playFadeAnimation(nextRoot);
                     case SLIDE_IN -> playSlideInAnimation(nextRoot);
@@ -66,8 +69,9 @@ public class SceneManager {
 
         fadeIn.setOnFinished(e -> {
             if (mainContainer.getChildren().size() > 1) {
-                mainContainer.getChildren().removeFirst(); // ลบหน้าเก่าออกหลังจาก Fade เสร็จ
+                mainContainer.getChildren().removeFirst();
             }
+            isTransitioning = false;
         });
         fadeIn.play();
     }
@@ -93,6 +97,7 @@ public class SceneManager {
             if (mainContainer.getChildren().size() > 1) {
                 mainContainer.getChildren().removeFirst();
             }
+            isTransitioning = false;
         });
 
         Timeline timeline = new Timeline(
@@ -125,6 +130,7 @@ public class SceneManager {
             if (mainContainer.getChildren().size() > 1) {
                 mainContainer.getChildren().removeLast();
             }
+            isTransitioning = false;
         });
 
         moveOut.play();

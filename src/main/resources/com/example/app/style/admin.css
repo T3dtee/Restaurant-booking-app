@@ -70,6 +70,9 @@
     -fx-background-radius: 6;
     -fx-background-color: #e4e4e4;
 }
+.save-box:pressed{
+    -fx-background-color: #dadada;
+}
 .save-label{
     -fx-font-family: 'Roboto Condensed SemiBold';
 }
@@ -160,7 +163,7 @@
 }
 
 .btn-icon:hover {
-    -fx-background-color: #f5f5f4;
+    -fx-background-color: #ececec;
 }
 
 .btn-icon-danger:hover {
@@ -171,4 +174,31 @@
 .popUpBox{
     -fx-background-color: #fff;
     -fx-background-radius: 8;
+}
+
+.pop-up-title {
+    -fx-font-family: 'Roboto Condensed SemiBold';
+    -fx-font-size: 18;
+}
+.pop-up-text {
+    -fx-font-family: Roboto;
+    -fx-font-size: 12;
+}
+
+.confirm-btn {
+    -fx-text-fill: white;
+    -fx-background-color: #ff1c1c;
+    -fx-background-radius: 12;
+}
+.confirm-btn:pressed {
+    -fx-background-color: #d21c1c;
+}
+.close-btn {
+    -fx-border-color: black;
+    -fx-border-radius: 12;
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+}
+.close-btn:pressed {
+    -fx-background-color: #d8d8d8;
 }

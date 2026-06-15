@@ -92,6 +92,7 @@ public class AnimationUtils {
         );
 
         popUp.setVisible(true);
+        popUpBox.setVisible(true);
         t.play();
         overlayFade.play();
         t1.play();
@@ -114,6 +115,7 @@ public class AnimationUtils {
         f.setToValue(0);
         f.setOnFinished(e -> {
             popUp.setVisible(false);
+            popUpBox.setVisible(false);
             mainContent.setEffect(null);});
 
         ScaleTransition s2 = new ScaleTransition(Duration.millis(200), mainContent);
@@ -146,11 +148,11 @@ public class AnimationUtils {
         s2.play();
     }
 
-    public static void buttonHover(Button btn, int size, int time) {
+    public static void buttonHover(Node btn, int size, int time) {
         buttonHover(btn, size, time, () -> true);
     }
 
-    public static void buttonHover(Button btn, int size, int time, BooleanSupplier condition) {
+    public static void buttonHover(Node btn, int size, int time, BooleanSupplier condition) {
         btn.setOnMouseEntered(e -> {
             if (!condition.getAsBoolean()) return;
 

@@ -45,15 +45,17 @@ public class adminController {
     @FXML private AnchorPane mainContent;
     @FXML private AnchorPane popUpPane;
     @FXML private Pane blurOverlay;
-    @FXML private VBox popUpBox;
+    @FXML private VBox fieldPopUpBox;
     @FXML private TextField usernameField;
     @FXML private TextField passwordField;
     @FXML private ComboBox<StaffService.Roles> roleSelect;
     @FXML private VBox addStaff;
     @FXML private Label formTitle;
+    @FXML private VBox popUpBox;
 
     private final ObservableList<Staff> staffItems = FXCollections.observableArrayList();
     private Staff editingStaff; // null = โหมดเพิ่ม, ไม่ null = โหมดแก้ไข
+    private Staff pendingDeleteStaff;
 
     @FXML private void formCancelOnClick() {
         resetForm();
@@ -197,7 +199,7 @@ public class adminController {
                 });
                 deleteBtn.setOnAction(e -> {
                     Staff staff = getTableView().getItems().get(getIndex());
-                    handleDelete(staff);
+                    handleDelete(staff, deleteBtn);
                 });
             }
 
@@ -231,16 +233,30 @@ public class adminController {
 
         showPopUp(addStaff);
     }
-    private void handleDelete(Staff staff) {
-        AppData.staffService.removeStaff(staff);
-        staffItems.remove(staff);
+    private void handleDelete(Staff staff, Button sourceBtn) {
+        pendingDeleteStaff = staff;
+        AnimationUtils.popUpShow(mainContent, popUpPane, blurOverlay, popUpBox, sourceBtn);
+    }
+
+    @FXML private void popUpCloseOnClick() {
+        pendingDeleteStaff = null;
+        AnimationUtils.popUpHide(mainContent, popUpPane, blurOverlay, popUpBox);
+    }
+
+    @FXML private void popUpConfirmOnClick() {
+        if (pendingDeleteStaff != null) {
+            AppData.staffService.removeStaff(pendingDeleteStaff);
+            staffItems.remove(pendingDeleteStaff);
+            pendingDeleteStaff = null;
+        }
+        AnimationUtils.popUpHide(mainContent, popUpPane, blurOverlay, popUpBox);
     }
 
     private void showPopUp(VBox button) {
-        AnimationUtils.popUpShow(mainContent, popUpPane, blurOverlay, popUpBox, button);
+        AnimationUtils.popUpShow(mainContent, popUpPane, blurOverlay, fieldPopUpBox, button);
     }
     private void hidePopUp() {
-        AnimationUtils.popUpHide(mainContent, popUpPane, blurOverlay, popUpBox);
+        AnimationUtils.popUpHide(mainContent, popUpPane, blurOverlay, fieldPopUpBox);
     }
 
     private void setSaveActive(VBox box, boolean active) {
