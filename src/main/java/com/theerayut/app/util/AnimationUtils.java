@@ -221,7 +221,7 @@ public class AnimationUtils {
 
         Timeline collapse = new Timeline(
                 new KeyFrame(Duration.millis(250),
-                        new KeyValue(regionItem.prefHeightProperty(), height, Interpolator.SPLINE(0.3, 0.2, 0.6, 0.95))
+                        new KeyValue(regionItem.prefHeightProperty(), height, Interpolator.SPLINE(0.4, 0, 0.6, 1))
                 )
         );
 

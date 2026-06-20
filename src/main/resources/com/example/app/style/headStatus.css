@@ -10,6 +10,7 @@
 }
 .box {
     -fx-background-radius: 8;
+    -fx-cursor: hand;
 }
 .number-box {
     -fx-background-radius: 12;

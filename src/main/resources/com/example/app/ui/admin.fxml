@@ -286,7 +286,7 @@
                   </VBox>
                </content>
             </ScrollPane>
-            <VBox alignment="CENTER" layoutX="14.0" layoutY="27.0" onMouseClicked="#goToStaff" prefHeight="40.0" prefWidth="40.0" styleClass="back-btn">
+            <VBox fx:id="backBtn" alignment="CENTER" layoutX="14.0" layoutY="27.0" onMouseClicked="#goToStaff" prefHeight="40.0" prefWidth="40.0" styleClass="back-btn">
                <children>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>

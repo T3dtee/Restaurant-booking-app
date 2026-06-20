@@ -1,6 +1,7 @@
 package com.theerayut.app.util;
 
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,6 +14,19 @@ public class SceneManager {
     private static Stage stage;
     private static StackPane mainContainer;
     private static boolean isTransitioning = false;
+    private static Runnable afterTransitionCallback;
+
+    public static void setAfterTransitionCallback(Runnable cb) {
+        afterTransitionCallback = cb;
+    }
+
+    private static void fireAfterTransition() {
+        if (afterTransitionCallback != null) {
+            Runnable cb = afterTransitionCallback;
+            afterTransitionCallback = null;
+            cb.run();
+        }
+    }
 
     public enum TransitionType {
         FADE,
@@ -28,6 +42,37 @@ public class SceneManager {
         stage.setScene(scene);
     }
 
+    public static void switchSceneAsync(String fxml, TransitionType transition) {
+        if (isTransitioning) return;
+        isTransitioning = true;
+        Thread t = new Thread(() -> {
+            try {
+                Parent nextRoot = FXMLLoader.load(
+                        SceneManager.class.getResource("/com/example/app/ui/" + fxml)
+                );
+                Platform.runLater(() -> {
+                    if (mainContainer.getChildren().isEmpty()) {
+                        mainContainer.getChildren().add(nextRoot);
+                        isTransitioning = false;
+                        fireAfterTransition();
+                    } else {
+                        switch (transition) {
+                            case FADE -> playFadeAnimation(nextRoot);
+                            case SLIDE_IN -> playSlideInAnimation(nextRoot);
+                            case SLIDE_OUT -> playSlideOutAnimation(nextRoot);
+                        }
+                        fireAfterTransition();
+                    }
+                });
+            } catch (Exception e) {
+                Platform.runLater(() -> isTransitioning = false);
+                e.printStackTrace();
+            }
+        });
+        t.setDaemon(true);
+        t.start();
+    }
+
     public static void switchScene(String fxml) {
         switchScene(fxml, TransitionType.FADE);
     }
@@ -41,6 +86,7 @@ public class SceneManager {
             // ถ้าเป็นหน้าแรก (ไม่มีหน้าก่อนหน้า) ให้แสดงเลย
             if (mainContainer.getChildren().isEmpty()) {
                 mainContainer.getChildren().add(nextRoot);
+                Platform.runLater(SceneManager::fireAfterTransition);
             } else {
                 isTransitioning = true;
                 switch (transition) {
@@ -72,6 +118,7 @@ public class SceneManager {
                 mainContainer.getChildren().removeFirst();
             }
             isTransitioning = false;
+            fireAfterTransition();
         });
         fadeIn.play();
     }
@@ -98,6 +145,7 @@ public class SceneManager {
                 mainContainer.getChildren().removeFirst();
             }
             isTransitioning = false;
+            fireAfterTransition();
         });
 
         Timeline timeline = new Timeline(
@@ -131,6 +179,7 @@ public class SceneManager {
                 mainContainer.getChildren().removeLast();
             }
             isTransitioning = false;
+            fireAfterTransition();
         });
 
         moveOut.play();

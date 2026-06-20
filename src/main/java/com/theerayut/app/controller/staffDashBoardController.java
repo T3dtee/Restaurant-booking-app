@@ -26,25 +26,21 @@ public class staffDashBoardController {
     @FXML
     private void goToStaffLogin() { SceneManager.switchScene("login-staff.fxml");}
 
-    @FXML
-    private VBox itemBox;
-    @FXML
-    private Label noOrderText;
-    @FXML
-    private AnchorPane mainContent;
-    @FXML
-    private AnchorPane popUp;
-    @FXML
-    private VBox popUpBox;
-    @FXML
-    private Pane blurOverlay;
-    @FXML
-    private VBox adminButton;
+    @FXML private VBox itemBox;
+    @FXML private Label noOrderText;
+    @FXML private AnchorPane mainContent;
+    @FXML private AnchorPane popUp;
+    @FXML private VBox popUpBox;
+    @FXML private Pane blurOverlay;
+    @FXML private VBox adminButton;
+    @FXML private VBox backBtn;
 
     List<Reservation> sortedReservations;
     private Runnable pendingCancelAction;
 
     public void initialize() {
+        AnimationUtils.buttonHover(backBtn, 11, 100);
+
         if (AppData.loginStaffData.getRole() == Person.Roles.Admin) {
             adminButton.setVisible(true);
             AnimationUtils.buttonHover(adminButton,6,100);

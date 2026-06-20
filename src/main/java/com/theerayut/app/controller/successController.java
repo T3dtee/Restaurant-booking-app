@@ -152,6 +152,6 @@ public class successController {
     @FXML
     private void doneOnClicked() {
         reservation.setDoneBooking(true);
-        SceneManager.switchScene("bookingHistory.fxml");
+        SceneManager.switchSceneAsync("bookingHistory.fxml", SceneManager.TransitionType.FADE);
     }
 }

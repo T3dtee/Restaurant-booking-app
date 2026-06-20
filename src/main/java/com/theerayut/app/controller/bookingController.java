@@ -15,30 +15,19 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class bookingController {
-    @FXML
-    private ComboBox<LocalTime> timeChoice;
-    @FXML
-    private Label name;
-    @FXML
-    private Label tel;
-    @FXML
-    private VBox bookedBox;
-    @FXML
-    private Label booked;
-    @FXML
-    private DatePicker datePicker;
-    @FXML
-    private Button confirm;
-    @FXML
-    private Button history_btn;
-    @FXML
-    private AnchorPane mainContent;
-    @FXML
-    private AnchorPane popUp;
-    @FXML
-    private Pane blurOverlay;
-    @FXML
-    private VBox popUpBox;
+    @FXML private ComboBox<LocalTime> timeChoice;
+    @FXML private Label name;
+    @FXML private Label tel;
+    @FXML private VBox bookedBox;
+    @FXML private Label booked;
+    @FXML private DatePicker datePicker;
+    @FXML private Button confirm;
+    @FXML private Button history_btn;
+    @FXML private AnchorPane mainContent;
+    @FXML private AnchorPane popUp;
+    @FXML private Pane blurOverlay;
+    @FXML private VBox popUpBox;
+    @FXML private VBox backBtn;
 
     LocalTime time;
 
@@ -84,6 +73,8 @@ public class bookingController {
                 }
         );
         setTimeChoice();
+
+        AnimationUtils.buttonHover(backBtn, 11, 100);
         AnimationUtils.buttonHover(confirm, 5, 100, () -> AppData.bookingService.timeSlotAvailable(datePicker.getValue(), time));
     }
 
@@ -212,5 +203,5 @@ public class bookingController {
 
     private void goToSuccess() { SceneManager.switchScene("success.fxml");}
 
-    private void goToHistory() { SceneManager.switchScene("bookingHistory.fxml", SceneManager.TransitionType.SLIDE_IN);}
+    private void goToHistory() { SceneManager.switchSceneAsync("bookingHistory.fxml", SceneManager.TransitionType.SLIDE_IN);}
 }

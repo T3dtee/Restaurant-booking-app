@@ -47,7 +47,7 @@
             </ScrollPane>
             <Label fx:id="noOrderText" alignment="CENTER" prefHeight="17.0" prefWidth="210.0" styleClass="text-label" text="No reservations :)" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="400.0">
       </Label>
-            <VBox alignment="CENTER" layoutX="14.0" layoutY="27.0" onMouseClicked="#goToStaffLogin" prefHeight="40.0" prefWidth="40.0" styleClass="back-btn">
+            <VBox fx:id="backBtn" alignment="CENTER" layoutX="14.0" layoutY="27.0" onMouseClicked="#goToStaffLogin" prefHeight="40.0" prefWidth="40.0" styleClass="back-btn">
                <children>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>

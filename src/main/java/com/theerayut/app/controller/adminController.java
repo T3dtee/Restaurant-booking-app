@@ -52,6 +52,7 @@ public class adminController {
     @FXML private VBox addStaff;
     @FXML private Label formTitle;
     @FXML private VBox popUpBox;
+    @FXML private VBox backBtn;
 
     private final ObservableList<Staff> staffItems = FXCollections.observableArrayList();
     private Staff editingStaff; // null = โหมดเพิ่ม, ไม่ null = โหมดแก้ไข
@@ -126,6 +127,8 @@ public class adminController {
 
     @FXML
     public void initialize() {
+        AnimationUtils.buttonHover(backBtn, 11, 100);
+
         // --- stats ---
         List<Reservation> todayList = AppData.allBookingData.getReservationsByDate(LocalDate.now());
 

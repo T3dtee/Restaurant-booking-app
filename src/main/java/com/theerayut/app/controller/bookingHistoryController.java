@@ -5,13 +5,11 @@ import com.theerayut.app.model.Reservation;
 import com.theerayut.app.model.ReservationStatus;
 import com.theerayut.app.util.AnimationUtils;
 import com.theerayut.app.util.SceneManager;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.CacheHint;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
@@ -22,27 +20,20 @@ import java.util.Comparator;
 import java.util.List;
 
 public class bookingHistoryController {
-    @FXML
-    private VBox itemBox;
-    @FXML
-    private AnchorPane mainContent;
-    @FXML
-    private AnchorPane popUp;
-    @FXML
-    private VBox popUpBox;
-    @FXML
-    private Pane blurOverlay;
+    @FXML private VBox itemBox;
+    @FXML private AnchorPane mainContent;
+    @FXML private AnchorPane popUp;
+    @FXML private VBox popUpBox;
+    @FXML private Pane blurOverlay;
+    @FXML private VBox backBtnBox;
 
     @FXML
     private void goToBooking() {SceneManager.switchScene("booking.fxml", SceneManager.TransitionType.SLIDE_OUT);}
 
     public void initialize() {
-        try {
-            loadItems();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (cardMoveInAction != null) Platform.runLater(cardMoveInAction);
+        AnimationUtils.buttonHover(backBtnBox, 11, 100);
+        try { loadItems(); } catch (IOException e) { e.printStackTrace(); }
+        if (cardMoveInAction != null) SceneManager.setAfterTransitionCallback(cardMoveInAction);
     }
 
     private Runnable pendingCancelAction;
@@ -59,40 +50,37 @@ public class bookingHistoryController {
                         .thenComparing(Comparator.comparing(Reservation::getTime).reversed())
                         .thenComparing(Reservation::getTableNo)
                 ).toList();
-        ReservationStatus lastStatus = null;
 
         boolean multipleStatuses = customerReservations.stream()
                 .map(Reservation::getStatus)
                 .distinct()
-                .limit(2)  // ไม่ต้องนับทั้งหมด แค่เจอ 2 อันก็หยุด
+                .limit(2)
                 .count() > 1;
 
+        ReservationStatus lastStatus = null;
         bookingHeadStatusCard statusController = null;
-        for (Reservation data : customerReservations) {
 
+        for (Reservation data : customerReservations) {
             if (multipleStatuses && (lastStatus == null || lastStatus != data.getStatus())) {
                 FXMLLoader loader = new FXMLLoader(
                         getClass().getResource("/com/example/app/ui/headStatus.fxml")
                 );
-                Parent head =  loader.load();
+                Parent head = loader.load();
                 head.setCache(true);
                 head.setCacheHint(CacheHint.SPEED);
 
                 statusController = loader.getController();
                 statusController.setData(data.getStatus(), customerReservations);
-                if (data.getStatus() == ReservationStatus.EXPIRED) {
+                if (data.getStatus() == ReservationStatus.EXPIRED ||  data.getStatus() == ReservationStatus.CANCELLED) {
                     statusController.collapseInitially();
                 }
                 lastStatus = data.getStatus();
-
                 itemBox.getChildren().add(head);
             }
 
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/com/example/app/ui/bookingHistoryContainer.fxml"));
-
             Parent item = loader.load();
-
             item.setCache(true);
             item.setCacheHint(CacheHint.SPEED);
 
@@ -114,8 +102,7 @@ public class bookingHistoryController {
                 statusController.addShowCard(controller::showCard);
             }
 
-            // EXPIRED เริ่มที่สถานะหุบไว้ (naturalHeight ถูกเก็บไว้แล้วด้านบน)
-            if (multipleStatuses && data.getStatus() == ReservationStatus.EXPIRED) {
+            if (multipleStatuses && (data.getStatus() == ReservationStatus.EXPIRED) || data.getStatus() == ReservationStatus.CANCELLED) {
                 regionItem.setPrefHeight(0);
                 regionItem.setOpacity(0);
             }

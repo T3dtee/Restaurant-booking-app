@@ -3,7 +3,9 @@ package com.theerayut.app.controller;
 import com.theerayut.app.model.Reservation;
 import com.theerayut.app.model.ReservationStatus;
 import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
 import javafx.animation.RotateTransition;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -26,6 +28,7 @@ public class bookingHeadStatusCard {
         HIDE
     }
     private State state = State.SHOW;
+    private Boolean inAnimation = false;
     private final List<Runnable> hideCard = new ArrayList<>();
     private final List<Runnable> showCard = new ArrayList<>();
 
@@ -60,7 +63,6 @@ public class bookingHeadStatusCard {
         }
     }
 
-    // ตั้งให้ section เริ่มที่สถานะหุบไว้ตั้งแต่แรก (ไม่เล่น animation)
     public void collapseInitially(){
         state = State.HIDE;
         arrow.setRotate(-180);
@@ -75,28 +77,42 @@ public class bookingHeadStatusCard {
 
     @FXML
     private void onClick(){
-        switch (state){
-            case SHOW -> hide();
-            case HIDE -> show();
+        if (inAnimation == false){
+            inAnimation = true;
+            switch (state){
+                case SHOW -> hide();
+                case HIDE -> show();
+            }
         }
+
     }
 
     private void hide(){
-        RotateTransition rotateTransition = new RotateTransition(Duration.millis(200), arrow);
+        RotateTransition rotateTransition = new RotateTransition(Duration.millis(250), arrow);
         rotateTransition.setByAngle(0);
         rotateTransition.setToAngle(-180);
         rotateTransition.setInterpolator(Interpolator.SPLINE(0.5,0.1,0.5,1));
         rotateTransition.play();
         for (Runnable r : hideCard) {r.run();}
         state = State.HIDE;
+        Timeline t = new Timeline(
+                new KeyFrame(Duration.millis(400))
+        );
+        t.setOnFinished(_ -> inAnimation = false);
+        t.play();
     }
     private void show(){
-        RotateTransition rotateTransition = new RotateTransition(Duration.millis(200), arrow);
+        RotateTransition rotateTransition = new RotateTransition(Duration.millis(250), arrow);
         rotateTransition.setByAngle(-180);
         rotateTransition.setToAngle(0);
         rotateTransition.setInterpolator(Interpolator.SPLINE(0.5,0.1,0.5,1));
         rotateTransition.play();
         for (Runnable r : showCard) {r.run();}
         state = State.SHOW;
+        Timeline t = new Timeline(
+                new KeyFrame(Duration.millis(400))
+        );
+        t.setOnFinished(_ -> inAnimation = false);
+        t.play();
     }
 }
