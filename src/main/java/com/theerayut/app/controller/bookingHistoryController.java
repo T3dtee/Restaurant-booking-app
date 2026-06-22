@@ -102,7 +102,7 @@ public class bookingHistoryController {
                 statusController.addShowCard(controller::showCard);
             }
 
-            if (multipleStatuses && (data.getStatus() == ReservationStatus.EXPIRED) || data.getStatus() == ReservationStatus.CANCELLED) {
+            if (multipleStatuses && (data.getStatus() == ReservationStatus.EXPIRED || data.getStatus() == ReservationStatus.CANCELLED)) {
                 regionItem.setPrefHeight(0);
                 regionItem.setOpacity(0);
             }

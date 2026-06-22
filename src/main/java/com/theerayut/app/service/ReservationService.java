@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ReservationService {
 
@@ -44,18 +45,16 @@ public class ReservationService {
     }
 
     public int emptyTableNo(LocalDate date, LocalTime time) {
-        Optional<Reservation> reusable = reservationMap.values().stream()
-                .filter(res -> res.getDate().equals(date) && res.getTime().equals(time))
-                .filter(res -> res.getStatus() == ReservationStatus.CANCELLED || res.getStatus() == ReservationStatus.EXPIRED)
-                .findFirst();
+        Set<Integer> activeTables = reservationMap.values().stream()
+                .filter(r -> r.getDate().equals(date) && r.getTime().equals(time)
+                        && r.getStatus() != ReservationStatus.CANCELLED
+                        && r.getStatus() != ReservationStatus.EXPIRED)
+                .map(Reservation::getTableNo)
+                .collect(Collectors.toSet());
 
-        if (reusable.isPresent()) {
-            int tableNo = reusable.get().getTableNo();
-            reservationMap.remove(reusable.get());
-            return tableNo;
-        }
-
-        return countByDateTime(date, time) + 1;
+        int tableNo = 1;
+        while (activeTables.contains(tableNo)) tableNo++;
+        return tableNo;
     }
 
     public List<Reservation> getAllReservations() {
