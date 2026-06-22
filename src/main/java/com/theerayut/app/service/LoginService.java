@@ -41,7 +41,7 @@ public class LoginService {
         Customer c = new Customer(name, phone);
         c.setFirstTimeLogin(true);
         addCustomer(c);
-        JsonStorage.save(c, "lastLogin.json");
+        JsonStorage.save(c, "lastCustomerLogin.json");
         return c;
     }
 

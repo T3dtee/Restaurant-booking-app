@@ -58,6 +58,7 @@ public class ReservationService {
     }
 
     public List<Reservation> getAllReservations() {
+        updateReservations();
         return reservationMap.values().stream().toList();
     }
 
@@ -69,6 +70,7 @@ public class ReservationService {
     }
 
     public List<Reservation> getReservationsByDate(LocalDate date) {
+        updateReservations();
         return reservationMap.values().stream()
                 .filter(r -> r.getDate().equals(date))
                 .sorted(Comparator.comparing(Reservation::getTime)

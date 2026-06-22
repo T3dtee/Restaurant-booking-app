@@ -7,10 +7,10 @@ import com.theerayut.app.model.ReservationStatus;
 import com.theerayut.app.model.RestaurantConfig;
 import com.theerayut.app.model.Staff;
 import com.theerayut.app.service.StaffService;
-import javafx.collections.ObservableList;
 import com.theerayut.app.util.AnimationUtils;
 import com.theerayut.app.util.SceneManager;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -27,6 +27,9 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class adminController {
+
+    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
+
     @FXML private Label todayBook;
     @FXML private Label checkedIn;
     @FXML private Label todayCancel;
@@ -53,93 +56,34 @@ public class adminController {
     @FXML private Label formTitle;
     @FXML private VBox popUpBox;
     @FXML private VBox backBtn;
+    @FXML private Label deleteTitle;
+    @FXML private Label deleteText;
+    @FXML private Button deleteConfirmBtn;
 
     private final ObservableList<Staff> staffItems = FXCollections.observableArrayList();
-    private Staff editingStaff; // null = โหมดเพิ่ม, ไม่ null = โหมดแก้ไข
+    private Staff editingStaff;
     private Staff pendingDeleteStaff;
-
-    @FXML private void formCancelOnClick() {
-        resetForm();
-        hidePopUp();
-    }
-
-    @FXML private void formSaveOnClick() {
-        String username = usernameField.getText().trim();
-        String password = passwordField.getText().trim();
-        StaffService.Roles role = roleSelect.getValue();
-
-        // validation — กรอกครบทุกช่อง
-        boolean valid = true;
-        if (username.isEmpty()) { markInvalid(usernameField); valid = false; }
-        if (password.isEmpty()) { markInvalid(passwordField); valid = false; }
-        if (role == null) { roleSelect.setStyle("-fx-border-color: red;"); valid = false; }
-        if (!valid) return;
-
-        // กัน username ซ้ำ (ข้ามตัวที่กำลังแก้ไขอยู่)
-        boolean duplicate = AppData.staffService.getStaffList().stream()
-                .anyMatch(s -> s != editingStaff && s.getUsername().equalsIgnoreCase(username));
-        if (duplicate) {
-            markInvalid(usernameField);
-            return;
-        }
-
-        // StaffService.Roles -> Person.Roles (ชื่อ enum ตรงกัน: Admin/Staff)
-        Staff staff = new Staff(username, password, Person.Roles.valueOf(role.name()));
-
-        if (editingStaff != null) {
-            // โหมดแก้ไข — แทนที่ของเดิม คงตำแหน่งเดิมในตาราง
-            int idx = staffItems.indexOf(editingStaff);
-            AppData.staffService.removeStaff(editingStaff);
-            AppData.staffService.addStaff(staff);
-            if (idx >= 0) staffItems.set(idx, staff);
-        } else {
-            // โหมดเพิ่ม
-            AppData.staffService.addStaff(staff);
-            staffItems.add(staff);
-        }
-
-        resetForm();
-        hidePopUp();
-    }
-
-    private void markInvalid(TextField field) {
-        field.setStyle("-fx-border-color: red;");
-    }
-
-    private void resetForm() {
-        editingStaff = null;
-        usernameField.clear();
-        passwordField.clear();
-        roleSelect.getSelectionModel().clearSelection();
-        usernameField.setStyle("");
-        passwordField.setStyle("");
-        roleSelect.setStyle("");
-    }
-
-    @FXML private void addStaff() {
-        editingStaff = null;
-        resetForm();
-        formTitle.setText("Add Staff");
-        showPopUp(addStaff);
-    }
-
-    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
 
     @FXML
     public void initialize() {
         AnimationUtils.buttonHover(backBtn, 11, 100);
+        initStats();
+        initConfigFields();
+        initStaffTable();
+    }
 
-        // --- stats ---
-        List<Reservation> todayList = AppData.allBookingData.getReservationsByDate(LocalDate.now());
-
-        todayBook.setText(String.valueOf(todayList.stream()
+    private void initStats() {
+        List<Reservation> today = AppData.allBookingData.getReservationsByDate(LocalDate.now());
+        todayBook.setText(String.valueOf(today.stream()
                 .filter(r -> r.getStatus() == ReservationStatus.BOOKED).count()));
-        checkedIn.setText(String.valueOf(todayList.stream()
-                .filter(r -> r.getStatus() == ReservationStatus.CHECKED_IN).count()));
-        todayCancel.setText(String.valueOf(todayList.stream()
+        checkedIn.setText(String.valueOf(today.stream()
+                .filter(r -> r.getStatus() == ReservationStatus.CHECKED_IN
+                          || r.getStatus() == ReservationStatus.EXPIRED).count()));
+        todayCancel.setText(String.valueOf(today.stream()
                 .filter(r -> r.getStatus() == ReservationStatus.CANCELLED).count()));
+    }
 
-        // --- load config into fields ---
+    private void initConfigFields() {
         RestaurantConfig cfg = AppData.config;
         totalTableField.setText(String.valueOf(cfg.getMaxTables()));
         maxGuestField.setText(String.valueOf(cfg.getMaxGuest()));
@@ -148,127 +92,93 @@ public class adminController {
         openTimeField.setText(cfg.getOpenTime().format(TIME_FORMAT));
         closeTimeField.setText(cfg.getCloseTime().format(TIME_FORMAT));
 
-        // --- number only ---
         applyNumberOnly(totalTableField);
         applyNumberOnly(maxGuestField);
         applyNumberOnly(gapTimeField);
         applyNumberOnly(maxAdvanceBooking);
-
-        // --- time format (HH:mm) ---
         applyTimeFormat(openTimeField);
         applyTimeFormat(closeTimeField);
 
-        // --- dirty tracking: save dims until a field in its section changes ---
         setSaveActive(table_save, false);
         setSaveActive(time_save, false);
 
         totalTableField.textProperty().addListener((o, ov, nv) -> refreshTableSave());
         maxGuestField.textProperty().addListener((o, ov, nv) -> refreshTableSave());
-
         maxAdvanceBooking.textProperty().addListener((o, ov, nv) -> refreshTimeSave());
         gapTimeField.textProperty().addListener((o, ov, nv) -> refreshTimeSave());
         openTimeField.textProperty().addListener((o, ov, nv) -> refreshTimeSave());
         closeTimeField.textProperty().addListener((o, ov, nv) -> refreshTimeSave());
 
-        // --- คลิกนอก TextField แล้วเลิกโฟกัส ---
         totalTableField.sceneProperty().addListener((obs, oldScene, scene) -> {
             if (scene != null) {
                 scene.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
-                    if (!(e.getTarget() instanceof TextField)) {
-                        scene.getRoot().requestFocus();
-                    }
+                    if (!(e.getTarget() instanceof TextField)) scene.getRoot().requestFocus();
                 });
             }
         });
-
-        usernameCol.setCellValueFactory(
-                new PropertyValueFactory<>("username")
-        );
-        roleCol.setCellValueFactory(
-                new PropertyValueFactory<>("role")
-        );
-
-        actionCol.setCellFactory(col -> new TableCell<>() {
-            private final Button editBtn = new Button("Edit");
-            private final Button deleteBtn = new Button("Del");
-            private final HBox box = new HBox(6, editBtn, deleteBtn);
-
-            {
-                editBtn.getStyleClass().add("btn-icon");
-                deleteBtn.getStyleClass().addAll("btn-icon", "btn-icon-danger");
-                editBtn.setOnAction(e -> {
-                    Staff staff = getTableView().getItems().get(getIndex());
-                    handleEdit(staff);
-                });
-                deleteBtn.setOnAction(e -> {
-                    Staff staff = getTableView().getItems().get(getIndex());
-                    handleDelete(staff, deleteBtn);
-                });
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                setGraphic(empty ? null : box);
-            }
-        });
-
-        // --- role ComboBox ---
-        roleSelect.setItems(FXCollections.observableArrayList(StaffService.Roles.values()));
-
-        // --- โหลด staff จาก StaffService ลงตาราง (ใช้ list เดียวร่วมกัน) ---
-        staffItems.setAll(AppData.staffService.getStaffList());
-        staffTable.setItems(staffItems);
     }
 
-    private void handleEdit(Staff staff) {
-        editingStaff = staff;
-        formTitle.setText("Edit Staff");
+    @FXML
+    private void saveTable() {
+        if (!tableDirty()) return;
 
-        // เติมค่าเดิมลงฟอร์ม
-        usernameField.setText(staff.getUsername());
-        passwordField.setText(staff.getPassword());
-        roleSelect.setValue(StaffService.Roles.valueOf(staff.getRole().name()));
+        int tables = parseIntOr(totalTableField, 0);
+        int guest  = parseIntOr(maxGuestField, 0);
 
-        usernameField.setStyle("");
-        passwordField.setStyle("");
-        roleSelect.setStyle("");
+        boolean valid = true;
+        if (tables <= 0) { markInvalid(totalTableField);
+            valid = false; }
+        else totalTableField.setStyle("");
+        if (guest  <= 0) { markInvalid(maxGuestField);
+            valid = false; }
+        else maxGuestField.setStyle("");
+        if (!valid) return;
 
-        showPopUp(addStaff);
+        AppData.config.setMaxTables(tables);
+        AppData.config.setMaxGuest(guest);
+        AppData.config.save();
+
+        totalTableField.setText(String.valueOf(AppData.config.getMaxTables()));
+        maxGuestField.setText(String.valueOf(AppData.config.getMaxGuest()));
+        setSaveActive(table_save, false);
     }
-    private void handleDelete(Staff staff, Button sourceBtn) {
-        pendingDeleteStaff = staff;
-        AnimationUtils.popUpShow(mainContent, popUpPane, blurOverlay, popUpBox, sourceBtn);
-    }
 
-    @FXML private void popUpCloseOnClick() {
-        pendingDeleteStaff = null;
-        AnimationUtils.popUpHide(mainContent, popUpPane, blurOverlay, popUpBox);
-    }
+    @FXML
+    private void saveTime() {
+        if (!timeDirty()) return;
 
-    @FXML private void popUpConfirmOnClick() {
-        if (pendingDeleteStaff != null) {
-            AppData.staffService.removeStaff(pendingDeleteStaff);
-            staffItems.remove(pendingDeleteStaff);
-            pendingDeleteStaff = null;
+        LocalTime open, close;
+        try {
+            open  = LocalTime.parse(openTimeField.getText(),  TIME_FORMAT);
+            close = LocalTime.parse(closeTimeField.getText(), TIME_FORMAT);
+        } catch (DateTimeParseException e) {
+            return;
         }
-        AnimationUtils.popUpHide(mainContent, popUpPane, blurOverlay, popUpBox);
-    }
 
-    private void showPopUp(VBox button) {
-        AnimationUtils.popUpShow(mainContent, popUpPane, blurOverlay, fieldPopUpBox, button);
-    }
-    private void hidePopUp() {
-        AnimationUtils.popUpHide(mainContent, popUpPane, blurOverlay, fieldPopUpBox);
-    }
+        int gap = parseIntOr(gapTimeField, 0);
 
-    private void setSaveActive(VBox box, boolean active) {
-        box.setOpacity(active ? 1.0 : 0.4);
-        box.setMouseTransparent(!active);
-    }
+        boolean valid = true;
+        if (gap <= 0) { markInvalid(gapTimeField);
+            valid = false; }
+        else gapTimeField.setStyle("");
+        if (!close.isAfter(open)) { markInvalid(closeTimeField);
+            valid = false; }
+        else closeTimeField.setStyle("");
+        if (!valid) return;
 
-    private void refreshTableSave() { setSaveActive(table_save, tableDirty()); }
-    private void refreshTimeSave() { setSaveActive(time_save, timeDirty()); }
+        AppData.config.setOpenTime(open);
+        AppData.config.setCloseTime(close);
+        AppData.config.setGapTimeMinutes(gap);
+        AppData.config.setMaxAdvanceDays(parseIntOr(maxAdvanceBooking, AppData.config.getMaxAdvanceDays()));
+        AppData.config.save();
+        AppData.bookingService.recalculate();
+
+        gapTimeField.setText(String.valueOf(AppData.config.getGapTimeMinutes()));
+        maxAdvanceBooking.setText(String.valueOf(AppData.config.getMaxAdvanceDays()));
+        openTimeField.setText(open.format(TIME_FORMAT));
+        closeTimeField.setText(close.format(TIME_FORMAT));
+        setSaveActive(time_save, false);
+    }
 
     private boolean tableDirty() {
         return !totalTableField.getText().equals(String.valueOf(AppData.config.getMaxTables()))
@@ -282,95 +192,182 @@ public class adminController {
                 || !closeTimeField.getText().equals(AppData.config.getCloseTime().format(TIME_FORMAT));
     }
 
-    private int parseIntOr(TextField field, int fallback) {
-        try {
-            return Integer.parseInt(field.getText().trim());
-        } catch (NumberFormatException e) {
-            return fallback;
-        }
+    private void setSaveActive(VBox box, boolean active) {
+        box.setOpacity(active ? 1.0 : 0.4);
+        box.setMouseTransparent(!active);
     }
 
-    @FXML
-    private void saveTable() {
-        if (!tableDirty()) return;
-
-        AppData.config.setMaxTables(parseIntOr(totalTableField, AppData.config.getMaxTables()));
-        AppData.config.setMaxGuest(parseIntOr(maxGuestField, AppData.config.getMaxGuest()));
-
-        AppData.config.save();
-
-        // normalize displayed values back from config
-        totalTableField.setText(String.valueOf(AppData.config.getMaxTables()));
-        maxGuestField.setText(String.valueOf(AppData.config.getMaxGuest()));
-
-        setSaveActive(table_save, false);
-    }
-
-    @FXML
-    private void saveTime() {
-        if (!timeDirty()) return;
-
-        LocalTime open, close;
-        try {
-            open = LocalTime.parse(openTimeField.getText(), TIME_FORMAT);
-            close = LocalTime.parse(closeTimeField.getText(), TIME_FORMAT);
-        } catch (DateTimeParseException e) {
-            // เวลาไม่ถูก format — ไม่บันทึก ปล่อยให้ปุ่มยังเข้มไว้
-            return;
-        }
-
-        AppData.config.setOpenTime(open);
-        AppData.config.setCloseTime(close);
-        AppData.config.setGapTimeMinutes(parseIntOr(gapTimeField, AppData.config.getGapTimeMinutes()));
-        AppData.config.setMaxAdvanceDays(parseIntOr(maxAdvanceBooking, AppData.config.getMaxAdvanceDays()));
-
-        AppData.config.save();
-
-        // คำนวณ time slot ใหม่ตาม config ที่เปลี่ยน
-        AppData.bookingService.recalculate();
-
-        // normalize displayed values back from config
-        gapTimeField.setText(String.valueOf(AppData.config.getGapTimeMinutes()));
-        maxAdvanceBooking.setText(String.valueOf(AppData.config.getMaxAdvanceDays()));
-        openTimeField.setText(open.format(TIME_FORMAT));
-        closeTimeField.setText(close.format(TIME_FORMAT));
-
-        setSaveActive(time_save, false);
-    }
+    private void refreshTableSave() { setSaveActive(table_save, tableDirty()); }
+    private void refreshTimeSave()  { setSaveActive(time_save,  timeDirty()); }
 
     private void applyNumberOnly(TextField field) {
         field.textProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal.matches("\\d*")) field.setText(newVal.replaceAll("\\D", ""));
+            else field.setStyle("");
         });
     }
 
     private void applyTimeFormat(TextField field) {
         field.textProperty().addListener((obs, oldVal, newVal) -> {
-            // อนุญาตเฉพาะตัวเลขและ ':'
+            field.setStyle("");
             String filtered = newVal.replaceAll("[^0-9:]", "");
-            if (!filtered.equals(newVal)) {
-                field.setText(filtered);
-                return;
-            }
-            // auto-insert ':' หลังพิมพ์ 2 ตัว
-            if (newVal.length() == 2 && oldVal.length() == 1 && !newVal.contains(":")) {
-                field.setText(newVal + ":");
-            }
-            // จำกัดความยาว HH:mm = 5
+            if (!filtered.equals(newVal)) { field.setText(filtered); return; }
+            if (newVal.length() == 2 && oldVal.length() == 1 && !newVal.contains(":")) field.setText(newVal + ":");
             if (newVal.length() > 5) field.setText(oldVal);
         });
-
         field.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
             if (!isFocused) {
                 try {
-                    LocalTime parsed = LocalTime.parse(field.getText(), TIME_FORMAT);
-                    field.setText(parsed.format(TIME_FORMAT));
+                    field.setText(LocalTime.parse(field.getText(), TIME_FORMAT).format(TIME_FORMAT));
                     field.setStyle("");
                 } catch (DateTimeParseException e) {
                     field.setStyle("-fx-border-color: red;");
                 }
             }
         });
+    }
+
+    private void initStaffTable() {
+        usernameCol.setCellValueFactory(new PropertyValueFactory<>("username"));
+        roleCol.setCellValueFactory(new PropertyValueFactory<>("role"));
+
+        actionCol.setCellFactory(col -> new TableCell<>() {
+            private final Button editBtn   = new Button("Edit");
+            private final Button deleteBtn = new Button("Del");
+            private final HBox   box       = new HBox(6, editBtn, deleteBtn);
+
+            {
+                editBtn.getStyleClass().add("btn-icon");
+                deleteBtn.getStyleClass().addAll("btn-icon", "btn-icon-danger");
+                editBtn.setOnAction(e   -> handleEdit(getTableView().getItems().get(getIndex())));
+                deleteBtn.setOnAction(e -> handleDelete(getTableView().getItems().get(getIndex()), deleteBtn));
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : box);
+            }
+        });
+
+        roleSelect.setItems(FXCollections.observableArrayList(StaffService.Roles.values()));
+        staffItems.setAll(AppData.staffService.getStaffList());
+        staffTable.setItems(staffItems);
+    }
+
+    @FXML
+    private void addStaff() {
+        resetForm();
+        formTitle.setText("Add Staff");
+        showPopUp(addStaff);
+    }
+
+    private void handleEdit(Staff staff) {
+        editingStaff = staff;
+        formTitle.setText("Edit Staff");
+        usernameField.setText(staff.getUsername());
+        passwordField.setText(staff.getPassword());
+        roleSelect.setValue(StaffService.Roles.valueOf(staff.getRole().name()));
+        usernameField.setStyle("");
+        passwordField.setStyle("");
+        roleSelect.setStyle("");
+        showPopUp(addStaff);
+    }
+
+    private void handleDelete(Staff staff, Button sourceBtn) {
+        boolean isSelf = staff.getUsername().equals(AppData.loginStaffData.getUsername());
+        if (isSelf) {
+            deleteTitle.setText("Cannot delete your own account");
+            deleteText.setText("You cannot remove the account you are currently logged in with.");
+            deleteConfirmBtn.setVisible(false);
+        } else {
+            deleteTitle.setText("Delete staff account?");
+            deleteText.setText("Are you sure you want to delete this staff user?");
+            deleteConfirmBtn.setVisible(true);
+            pendingDeleteStaff = staff;
+        }
+        AnimationUtils.popUpShow(mainContent, popUpPane, blurOverlay, popUpBox, sourceBtn);
+    }
+
+    @FXML
+    private void formSaveOnClick() {
+        String username = usernameField.getText().trim();
+        String password = passwordField.getText().trim();
+        StaffService.Roles role = roleSelect.getValue();
+
+        boolean valid = true;
+        if (username.isEmpty()) { markInvalid(usernameField); valid = false; }
+        if (password.isEmpty()) { markInvalid(passwordField); valid = false; }
+        if (role == null)       { roleSelect.setStyle("-fx-border-color: red;"); valid = false; }
+        if (!valid) return;
+
+        boolean duplicate = AppData.staffService.getStaffList().stream()
+                .anyMatch(s -> s != editingStaff && s.getUsername().equalsIgnoreCase(username));
+        if (duplicate) { markInvalid(usernameField); return; }
+
+        Staff staff = new Staff(username, password, Person.Roles.valueOf(role.name()));
+
+        if (editingStaff != null) {
+            boolean editingSelf = editingStaff.getUsername().equals(AppData.loginStaffData.getUsername());
+            int idx = staffItems.indexOf(editingStaff);
+            AppData.staffService.removeStaff(editingStaff);
+            AppData.staffService.addStaff(staff);
+            if (idx >= 0) staffItems.set(idx, staff);
+            if (editingSelf) AppData.loginStaffData = staff;
+        } else {
+            AppData.staffService.addStaff(staff);
+            staffItems.add(staff);
+        }
+
+        resetForm();
+        hidePopUp();
+    }
+
+    @FXML
+    private void formCancelOnClick() {
+        resetForm();
+        hidePopUp();
+    }
+
+    @FXML
+    private void popUpCloseOnClick() {
+        pendingDeleteStaff = null;
+        AnimationUtils.popUpHide(mainContent, popUpPane, blurOverlay, popUpBox);
+    }
+
+    @FXML
+    private void popUpConfirmOnClick() {
+        if (pendingDeleteStaff != null) {
+            AppData.staffService.removeStaff(pendingDeleteStaff);
+            staffItems.remove(pendingDeleteStaff);
+            pendingDeleteStaff = null;
+        }
+        AnimationUtils.popUpHide(mainContent, popUpPane, blurOverlay, popUpBox);
+    }
+
+    private void resetForm() {
+        editingStaff = null;
+        usernameField.clear();
+        passwordField.clear();
+        roleSelect.getSelectionModel().clearSelection();
+        usernameField.setStyle("");
+        passwordField.setStyle("");
+        roleSelect.setStyle("");
+    }
+
+    private void markInvalid(TextField field) { field.setStyle("-fx-border-color: red;"); }
+
+    private int parseIntOr(TextField field, int fallback) {
+        try { return Integer.parseInt(field.getText().trim()); }
+        catch (NumberFormatException e) { return fallback; }
+    }
+
+    private void showPopUp(VBox content) {
+        AnimationUtils.popUpShow(mainContent, popUpPane, blurOverlay, fieldPopUpBox, content);
+    }
+
+    private void hidePopUp() {
+        AnimationUtils.popUpHide(mainContent, popUpPane, blurOverlay, fieldPopUpBox);
     }
 
     @FXML

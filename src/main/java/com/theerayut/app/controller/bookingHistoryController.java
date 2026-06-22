@@ -51,17 +51,11 @@ public class bookingHistoryController {
                         .thenComparing(Reservation::getTableNo)
                 ).toList();
 
-        boolean multipleStatuses = customerReservations.stream()
-                .map(Reservation::getStatus)
-                .distinct()
-                .limit(2)
-                .count() > 1;
-
         ReservationStatus lastStatus = null;
         bookingHeadStatusCard statusController = null;
 
         for (Reservation data : customerReservations) {
-            if (multipleStatuses && (lastStatus == null || lastStatus != data.getStatus())) {
+            if (lastStatus == null || lastStatus != data.getStatus()) {
                 FXMLLoader loader = new FXMLLoader(
                         getClass().getResource("/com/example/app/ui/headStatus.fxml")
                 );
@@ -102,7 +96,7 @@ public class bookingHistoryController {
                 statusController.addShowCard(controller::showCard);
             }
 
-            if (multipleStatuses && (data.getStatus() == ReservationStatus.EXPIRED || data.getStatus() == ReservationStatus.CANCELLED)) {
+            if (data.getStatus() == ReservationStatus.EXPIRED || data.getStatus() == ReservationStatus.CANCELLED) {
                 regionItem.setPrefHeight(0);
                 regionItem.setOpacity(0);
             }
