@@ -37,3 +37,7 @@ build/
 
 ### App data (JSON storage) ###
 data/
+
+### Claude Code ###
+CLAUDE.md
+.claude/
