@@ -220,8 +220,8 @@ public class AnimationUtils {
         regionItem.setOpacity(100);
 
         Timeline collapse = new Timeline(
-                new KeyFrame(Duration.millis(250),
-                        new KeyValue(regionItem.prefHeightProperty(), height, Interpolator.SPLINE(0.4, 0, 0.6, 1))
+                new KeyFrame(Duration.millis(300),
+                        new KeyValue(regionItem.prefHeightProperty(), height, Interpolator.SPLINE(0.4, 0, 0.7, 1))
                 )
         );
 
@@ -240,7 +240,7 @@ public class AnimationUtils {
         s1.setOnFinished(e -> s2.play());
 
         Timeline timeline = new Timeline(
-                new KeyFrame(Duration.millis(100), event -> collapse.play()),
+                new KeyFrame(Duration.millis(50), event -> collapse.play()),
                 new KeyFrame(Duration.millis(150), event -> trans.play()),
                 new KeyFrame(Duration.millis(350), event -> s1.play())
         );

@@ -132,13 +132,13 @@ public class SceneManager {
         mainContainer.getChildren().add(nextScene);
         nextScene.setTranslateX(360);
 
-        TranslateTransition moveOut = new TranslateTransition(Duration.millis(270), mainContainer.getChildren().getFirst());
-        moveOut.setToX(-100);
-        moveOut.setInterpolator(Interpolator.EASE_IN);
+        TranslateTransition moveOut = new TranslateTransition(Duration.millis(430), mainContainer.getChildren().getFirst());
+        moveOut.setToX(-130);
+        moveOut.setInterpolator(Interpolator.SPLINE(0.4, 0.9, 0.2, 1));
 
-        TranslateTransition moveIn = new TranslateTransition(Duration.millis(270), nextScene);
+        TranslateTransition moveIn = new TranslateTransition(Duration.millis(430), nextScene);
         moveIn.setToX(0);
-        moveIn.setInterpolator(Interpolator.SPLINE(0.3, 0.3, 0.6, 0.95));
+        moveIn.setInterpolator(Interpolator.SPLINE(0.25, 0.9, 0.15, 1));
 
         moveIn.setOnFinished(event -> {
             if (mainContainer.getChildren().size() > 1) {
@@ -150,9 +150,9 @@ public class SceneManager {
 
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.ZERO, event ->  {
-                    moveOut.play();
                 }),
-                new KeyFrame(Duration.millis(50), event -> {
+                new KeyFrame(Duration.millis(30), event -> {
+                    moveOut.play();
                     moveIn.play();
                 }));
         timeline.play();
@@ -164,15 +164,15 @@ public class SceneManager {
         }
 
         mainContainer.getChildren().addFirst(nextScene);
-        nextScene.setTranslateX(-80);
+        nextScene.setTranslateX(-130);
 
-        TranslateTransition moveOut = new TranslateTransition(Duration.millis(300), mainContainer.getChildren().getLast());
+        TranslateTransition moveOut = new TranslateTransition(Duration.millis(260), mainContainer.getChildren().getLast());
         moveOut.setToX(360);
-        moveOut.setInterpolator(Interpolator.SPLINE(0.4, 0.05, 0.7, 0.7));
+        moveOut.setInterpolator(Interpolator.SPLINE(0.3, 0.4, 0.6, 1));
 
-        TranslateTransition moveIn = new TranslateTransition(Duration.millis(300), nextScene);
+        TranslateTransition moveIn = new TranslateTransition(Duration.millis(400), nextScene);
         moveIn.setToX(0);
-        moveIn.setInterpolator(Interpolator.SPLINE(0.3, 0.3, 0.6, 0.95));
+        moveIn.setInterpolator(Interpolator.SPLINE(0.35, 0.9, 0.2, 1));
 
         moveIn.setOnFinished(event -> {
             if (mainContainer.getChildren().size() > 1) {
@@ -182,7 +182,13 @@ public class SceneManager {
             fireAfterTransition();
         });
 
-        moveOut.play();
-        moveIn.play();
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.millis(20), event ->  {
+                    moveOut.play();
+                    moveIn.play();
+                })
+        );
+        timeline.play();
+
     }
 }
