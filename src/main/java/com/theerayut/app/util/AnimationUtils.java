@@ -7,10 +7,14 @@ import javafx.scene.control.Button;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.util.function.BooleanSupplier;
@@ -148,6 +152,68 @@ public class AnimationUtils {
         s2.play();
     }
 
+    public static void sideBarShow(AnchorPane mainContent, AnchorPane popUp, Pane blurPane,VBox sideBar) {
+        sideBar.setTranslateX(-sideBar.getPrefWidth());
+//        GaussianBlur blur = new GaussianBlur(0);
+//        mainContent.setEffect(blur);
+
+//        Timeline timelineBlur = new Timeline(
+//                new KeyFrame(Duration.seconds(0.2),
+//                        new KeyValue(blur.radiusProperty(), 15, Interpolator.EASE_OUT)
+//                )
+//        );
+
+        FadeTransition overlayFade = new FadeTransition(Duration.seconds(0.27), blurPane);
+        overlayFade.setFromValue(0.1);
+        overlayFade.setToValue(0.9);
+        overlayFade.setInterpolator(Interpolator.EASE_OUT);
+
+        TranslateTransition sideBarTranslate = new TranslateTransition(Duration.millis(230), sideBar);
+        sideBarTranslate.setFromX(-sideBar.getPrefWidth());
+        sideBarTranslate.setToX(0);
+        sideBarTranslate.setInterpolator(Interpolator.SPLINE(.35,.9,.2,1));
+
+        Timeline t = new Timeline(
+                new KeyFrame(Duration.millis(60),event -> {sideBarTranslate.play();})
+        );
+
+        popUp.setVisible(true);
+        sideBar.setVisible(true);
+        overlayFade.play();
+        //timelineBlur.play();
+        t.play();
+    }
+
+    public static void sideBarHide(AnchorPane mainContent, AnchorPane popUp, Pane blurPane,VBox sideBar) {
+        //GaussianBlur blur = new GaussianBlur(15);
+        //mainContent.setEffect(blur);
+
+        FadeTransition overlayFade = new FadeTransition(Duration.seconds(0.16), blurPane);
+        overlayFade.setFromValue(0.9);
+        overlayFade.setToValue(0.1);
+
+        TranslateTransition sideBarTranslate = new TranslateTransition(Duration.millis(160), sideBar);
+        sideBarTranslate.setFromX(0);
+        sideBarTranslate.setToX(-sideBar.getPrefWidth());
+        sideBarTranslate.setInterpolator(Interpolator.EASE_IN);
+
+//        Timeline timelineBlur = new Timeline(
+//                new KeyFrame(Duration.seconds(0.18),
+//                        new KeyValue(blur.radiusProperty(), 0, Interpolator.EASE_OUT)
+//                )
+//        );
+
+        sideBarTranslate.setOnFinished(event -> {
+            popUp.setVisible(false);
+            sideBar.setVisible(false);
+            mainContent.setEffect(null);
+        });
+
+        //timelineBlur.play();
+        overlayFade.play();
+        sideBarTranslate.play();
+    }
+
     public static void buttonHover(Node btn, int size, int time) {
         buttonHover(btn, size, time, () -> true);
     }
@@ -246,6 +312,21 @@ public class AnimationUtils {
         );
 
         timeline.play();
+    }
+
+    public static Image recolor(Image source, Color color) {
+        int width  = (int) source.getWidth();
+        int height = (int) source.getHeight();
+        WritableImage result = new WritableImage(width, height);
+        PixelReader reader = source.getPixelReader();
+        PixelWriter writer = result.getPixelWriter();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Color pixel = reader.getColor(x, y);
+                writer.setColor(x, y, new Color(color.getRed(), color.getGreen(), color.getBlue(), pixel.getOpacity()));
+            }
+        }
+        return result;
     }
 
     public static void backToHomeBtn(VBox backBtn, ImageView icon) {

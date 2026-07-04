@@ -226,11 +226,11 @@
                   </VBox>
                </children>
             </VBox>
-            <VBox fx:id="backBtn" alignment="CENTER" layoutX="14.0" layoutY="27.0" onMouseClicked="#goToUserLogin" prefHeight="40.0" prefWidth="40.0" styleClass="back-btn">
+            <VBox fx:id="menuBtn" alignment="CENTER" layoutX="14.0" layoutY="27.0" onMouseClicked="#menuOnClick" prefHeight="40.0" prefWidth="40.0" styleClass="back-btn">
                <children>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../style/img/triangle.png" />
+                        <Image url="@../style/img/menu-bar.png" />
                      </image>
                   </ImageView>
                </children>
@@ -240,7 +240,7 @@
       <AnchorPane fx:id="popUp" pickOnBounds="false" prefHeight="800.0" prefWidth="360.0" visible="false">
          <children>
             <Pane fx:id="blurOverlay" prefHeight="200.0" prefWidth="200.0" styleClass="blurPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            <VBox fx:id="popUpBox" prefHeight="200.0" prefWidth="100.0" styleClass="pop-up-box" AnchorPane.bottomAnchor="340.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="340.0">
+            <VBox fx:id="popUpBox" prefHeight="200.0" prefWidth="100.0" styleClass="pop-up-box" visible="false" AnchorPane.bottomAnchor="340.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="340.0">
                <children>
                   <Label prefWidth="190.0" styleClass="pop-up-title" text="You have already reserved.">
                      <VBox.margin>
@@ -265,6 +265,82 @@
                <padding>
                   <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </padding>
+            </VBox>
+            <VBox fx:id="sideBar" prefHeight="800.0" prefWidth="220.0" styleClass="side-bar" visible="false">
+               <padding>
+                  <Insets bottom="10.0" left="18.0" right="18.0" top="10.0" />
+               </padding>
+               <children>
+                  <HBox alignment="CENTER_LEFT" fillHeight="false">
+                     <children>
+                        <Label prefWidth="70.0" styleClass="best-meal-sb" text="BM">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin></Label>
+                        <VBox alignment="CENTER" onMouseClicked="#hideSideBarOnClick" prefHeight="40.0" prefWidth="40.0" styleClass="back-btn">
+                           <children>
+                              <ImageView fx:id="sbCloseIcon" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../style/img/triangle.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="70.0" />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <Label styleClass="side-bar-label" text="MENU">
+                     <VBox.margin>
+                        <Insets left="5.0" right="10.0" top="15.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#homeOnClick" styleClass="side-bar-btn" text="Home">
+                     <graphic>
+                        <ImageView fx:id="sbHomeIcon" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../style/img/home2.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <VBox.margin>
+                        <Insets top="6.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#historySideOnClick" styleClass="side-bar-btn" text="History">
+                     <graphic>
+                        <ImageView fx:id="sbHistoryIcon" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../style/img/clock.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <VBox.margin>
+                        <Insets top="4.0" />
+                     </VBox.margin>
+                  </Button>
+                  <VBox prefHeight="1.0" prefWidth="100.0" styleClass="side-bar-line">
+                     <VBox.margin>
+                        <Insets top="540.0" />
+                     </VBox.margin>
+                  </VBox>
+                  <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#logOutOnClick" styleClass="side-bar-btn-danger" text="Log out">
+                     <graphic>
+                        <ImageView fx:id="sbLogoutIcon" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../style/img/log-out.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <VBox.margin>
+                        <Insets top="8.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
             </VBox>
          </children>
       </AnchorPane>

@@ -31,7 +31,8 @@ public class SceneManager {
     public enum TransitionType {
         FADE,
         SLIDE_IN,
-        SLIDE_OUT
+        SLIDE_OUT,
+        SLIDE_LEFT
     }
 
     public static void setStage(Stage s) {
@@ -60,6 +61,7 @@ public class SceneManager {
                             case FADE -> playFadeAnimation(nextRoot);
                             case SLIDE_IN -> playSlideInAnimation(nextRoot);
                             case SLIDE_OUT -> playSlideOutAnimation(nextRoot);
+                            case SLIDE_LEFT -> playSlideToLeftAnimation(nextRoot);
                         }
                         fireAfterTransition();
                     }
@@ -157,6 +159,45 @@ public class SceneManager {
                 }));
         timeline.play();
     }
+
+    private static void playSlideToLeftAnimation(Parent nextScene) {
+        if (mainContainer.getChildren().isEmpty()) {
+            mainContainer.getChildren().add(nextScene);
+            return;
+        }
+
+        mainContainer.getChildren().add(nextScene);
+        nextScene.setTranslateX(360);
+
+        ScaleTransition scaleDown = new ScaleTransition(Duration.millis(450), mainContainer.getChildren().getFirst());
+        scaleDown.setFromX(1);
+        scaleDown.setFromY(1);
+        scaleDown.setToX(0.95);
+        scaleDown.setToY(0.95);
+        scaleDown.setInterpolator(Interpolator.EASE_OUT);
+
+        TranslateTransition moveIn = new TranslateTransition(Duration.millis(450), nextScene);
+        moveIn.setToX(0);
+        moveIn.setInterpolator(Interpolator.SPLINE(0.25, 0.9, 0.15, 1));
+
+        moveIn.setOnFinished(event -> {
+            if (mainContainer.getChildren().size() > 1) {
+                mainContainer.getChildren().removeFirst();
+            }
+            isTransitioning = false;
+            fireAfterTransition();
+        });
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, event ->  {
+                    scaleDown.play();
+                }),
+                new KeyFrame(Duration.millis(30), event -> {
+                    moveIn.play();
+                }));
+        timeline.play();
+    }
+
     private static void playSlideOutAnimation(Parent nextScene) {
         if (mainContainer.getChildren().isEmpty()) {
             mainContainer.getChildren().add(nextScene);

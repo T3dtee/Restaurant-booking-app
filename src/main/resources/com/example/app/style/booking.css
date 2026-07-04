@@ -266,3 +266,50 @@
 .blurPane{
     -fx-background-color: rgba(0, 0, 0, 0.3);
 }
+.side-bar{
+    -fx-background-color: #fff;
+    -fx-background-radius: 0 24 24 0;
+}
+.best-meal-sb{
+    -fx-font-family: 'Pacifico';
+    -fx-text-fill: linear-gradient(to right,#33611B,#9CE633);
+    -fx-font-size: 28;
+}
+.side-bar-btn{
+    -fx-background-color: #fafafa;
+    -fx-background-radius: 12;
+    -fx-text-fill: #6f756e;
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 14;
+    -fx-graphic-text-gap: 15;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 8 10 8;
+    -fx-cursor: hand;
+}
+.side-bar-btn:hover{
+    -fx-background-color: linear-gradient(to right,rgba(156,230,51,.9),rgba(65,137,28,.9));
+    -fx-text-fill: #fff;
+}
+.side-bar-btn-danger{
+    -fx-background-color: rgba(201,54,54,.06);
+    -fx-background-radius: 12;
+    -fx-text-fill: #C93636;
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 14;
+    -fx-graphic-text-gap: 15;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 10 10 10;
+    -fx-cursor: hand;
+}
+.side-bar-btn-danger:hover{
+    -fx-background-color: #ff1000;
+    -fx-text-fill: white;
+}
+.side-bar-label {
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-text-fill: #b3b8b0;
+    -fx-font-size: 12;
+}
+.side-bar-line {
+    -fx-background-color: #eef0ec;
+}

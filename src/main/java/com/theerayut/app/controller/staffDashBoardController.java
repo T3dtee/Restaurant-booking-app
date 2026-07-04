@@ -11,10 +11,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -23,28 +25,35 @@ import java.util.stream.Collectors;
 
 public class staffDashBoardController {
 
-    @FXML
-    private void goToStaffLogin() { SceneManager.switchScene("login-staff.fxml");}
-
     @FXML private VBox itemBox;
     @FXML private Label noOrderText;
     @FXML private AnchorPane mainContent;
     @FXML private AnchorPane popUp;
     @FXML private VBox popUpBox;
     @FXML private Pane blurOverlay;
-    @FXML private VBox adminButton;
-    @FXML private VBox backBtn;
+    @FXML private VBox menuBtn;
+    @FXML private VBox sideBar;
+    @FXML private Button sbAdminBtn;
+    @FXML private ImageView sbCloseIcon;
+    @FXML private ImageView sbDashIcon;
+    @FXML private ImageView sbAdminIcon;
+    @FXML private ImageView sbLogoutIcon;
 
     List<Reservation> sortedReservations;
     private Runnable pendingCancelAction;
 
     public void initialize() {
-        AnimationUtils.buttonHover(backBtn, 11, 100);
+        AnimationUtils.buttonHover(menuBtn, 11, 100);
 
-        if (AppData.loginStaffData.getRole() == Person.Roles.Admin) {
-            adminButton.setVisible(true);
-            AnimationUtils.buttonHover(adminButton,6,100);
-        }
+        boolean isAdmin = AppData.loginStaffData.getRole() == Person.Roles.Admin;
+        if (!isAdmin) sbAdminBtn.setDisable(true);
+
+        Color gray = Color.web("#424242");
+        sbCloseIcon.setImage(AnimationUtils.recolor(sbCloseIcon.getImage(), gray));
+        sbDashIcon.setImage(AnimationUtils.recolor(sbDashIcon.getImage(), gray));
+        sbAdminIcon.setImage(AnimationUtils.recolor(sbAdminIcon.getImage(), gray));
+        sbLogoutIcon.setImage(AnimationUtils.recolor(sbLogoutIcon.getImage(), gray));
+
         try {
             loadItems();
         } catch (IOException e) {
@@ -56,11 +65,11 @@ public class staffDashBoardController {
     }
 
     private void loadItems() throws IOException {
-         sortedReservations = AppData.allBookingData.getAllReservations().stream()
-                .filter(r -> r.getStatus() == ReservationStatus.BOOKED) // กรองเอาเฉพาะคิวที่ถูกจอง
+        sortedReservations = AppData.allBookingData.getAllReservations().stream()
+                .filter(r -> r.getStatus() == ReservationStatus.BOOKED)
                 .sorted(Comparator.comparing(Reservation::getDate)
                         .thenComparing(Reservation::getTime)
-                        .thenComparing(Reservation::getTableNo)) // เรียงวันที่ ตามด้วยเวลา แล้วเลขโต๊ะ
+                        .thenComparing(Reservation::getTableNo))
                 .collect(Collectors.toList());
 
         for (Reservation data : sortedReservations) {
@@ -87,11 +96,18 @@ public class staffDashBoardController {
         }
     }
 
+    @FXML private void menuOnClick() { AnimationUtils.sideBarShow(mainContent, popUp, blurOverlay, sideBar); }
+    @FXML private void hideSideBarOnClick() { AnimationUtils.sideBarHide(mainContent, popUp, blurOverlay, sideBar); }
+    @FXML private void dashboardOnClick() { AnimationUtils.sideBarHide(mainContent, popUp, blurOverlay, sideBar); }
+    @FXML private void adminSideOnClick() { SceneManager.switchScene("admin.fxml", SceneManager.TransitionType.SLIDE_IN); }
+    @FXML private void logoutOnClick() { SceneManager.switchScene("login-staff.fxml"); }
+
     @FXML
     private void closeOnClick() {
         hidePopUp();
         pendingCancelAction = null;
     }
+
     @FXML
     private void confirmOnClick() {
         hidePopUp();
@@ -109,14 +125,9 @@ public class staffDashBoardController {
         AnimationUtils.popUpHide(mainContent, popUp, blurOverlay, popUpBox);
     }
 
-    private void update(){
-       if (AppData.allBookingData.getAllReservations().stream().noneMatch(r -> r.getStatus() == ReservationStatus.BOOKED)){
-           noOrderText.setVisible(true);
-       }
-    }
-
-    @FXML
-    private void goToAdmin() {
-        SceneManager.switchScene("admin.fxml", SceneManager.TransitionType.SLIDE_IN);
+    private void update() {
+        if (AppData.allBookingData.getAllReservations().stream().noneMatch(r -> r.getStatus() == ReservationStatus.BOOKED)) {
+            noOrderText.setVisible(true);
+        }
     }
 }

@@ -6,9 +6,11 @@ import com.theerayut.app.util.SceneManager;
 import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.time.LocalDate;
@@ -27,7 +29,12 @@ public class bookingController {
     @FXML private AnchorPane popUp;
     @FXML private Pane blurOverlay;
     @FXML private VBox popUpBox;
-    @FXML private VBox backBtn;
+    @FXML private VBox menuBtn;
+    @FXML private VBox sideBar;
+    @FXML private ImageView sbCloseIcon;
+    @FXML private ImageView sbHomeIcon;
+    @FXML private ImageView sbHistoryIcon;
+    @FXML private ImageView sbLogoutIcon;
 
     LocalTime time;
 
@@ -74,13 +81,41 @@ public class bookingController {
         );
         setTimeChoice();
 
-        AnimationUtils.buttonHover(backBtn, 11, 100);
+        AnimationUtils.buttonHover(menuBtn, 11, 100);
         AnimationUtils.buttonHover(confirm, 5, 100, () -> AppData.bookingService.timeSlotAvailable(datePicker.getValue(), time));
+
+        Color gray = Color.web("#424242");
+        sbCloseIcon.setImage(AnimationUtils.recolor(sbCloseIcon.getImage(), Color.web("#41891C")));
+        sbHomeIcon.setImage(AnimationUtils.recolor(sbHomeIcon.getImage(), gray));
+        sbHistoryIcon.setImage(AnimationUtils.recolor(sbHistoryIcon.getImage(), gray));
+        sbLogoutIcon.setImage(AnimationUtils.recolor(sbLogoutIcon.getImage(), gray));
+    }
+
+    @FXML
+    private void menuOnClick() {
+        AnimationUtils.sideBarShow(mainContent, popUp, blurOverlay, sideBar);
+    }
+    @FXML
+    private void hideSideBarOnClick() {
+        AnimationUtils.sideBarHide(mainContent, popUp, blurOverlay, sideBar);
+    }
+    @FXML
+    private void homeOnClick() {
+        AnimationUtils.sideBarHide(mainContent, popUp, blurOverlay, sideBar);
+    }
+    @FXML
+    private void historySideOnClick() {
+        //AnimationUtils.sideBarHide(mainContent, popUp, blurOverlay, sideBar);
+        goToHistory(SceneManager.TransitionType.SLIDE_LEFT);
+    }
+    @FXML
+    private void logOutOnClick() {
+        goToUserLogin();
     }
 
     @FXML
     private void historyOnClick() {
-        goToHistory();
+        goToHistory(SceneManager.TransitionType.SLIDE_IN);
     }
 
     @FXML
@@ -128,7 +163,7 @@ public class bookingController {
     @FXML
     private void popUpBHClick() {
         hidePopUp();
-        goToHistory();
+        goToHistory(SceneManager.TransitionType.SLIDE_IN);
     }
 
     private void setBookedText() {
@@ -198,10 +233,10 @@ public class bookingController {
         });
     }
 
-    @FXML
-    private void goToUserLogin() { SceneManager.switchScene("login-user.fxml", SceneManager.TransitionType.SLIDE_OUT);}
+    private void goToUserLogin() { SceneManager.switchScene("login-user.fxml", SceneManager.TransitionType.FADE);}
 
     private void goToSuccess() { SceneManager.switchScene("success.fxml");}
 
-    private void goToHistory() { SceneManager.switchSceneAsync("bookingHistory.fxml", SceneManager.TransitionType.SLIDE_IN);}
+    private void goToHistory(SceneManager.TransitionType type) {
+        SceneManager.switchSceneAsync("bookingHistory.fxml", type);}
 }
