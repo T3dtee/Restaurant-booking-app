@@ -17,10 +17,21 @@
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
 }
+.page-bg {
+    -fx-background-color: #f7f8f5;
+}
 .head-title {
     -fx-font-family: Pacifico;
-    -fx-text-fill: #41891C;
+    -fx-text-fill: #2E7D32;
     -fx-font-size: 32;
+}
+.menu-btn-2b {
+    -fx-cursor: hand;
+    -fx-background-radius: 20;
+    -fx-background-color: rgba(240, 240, 240, 0.5);
+}
+.menu-btn-2b:hover {
+    -fx-background-color: rgba(230, 230, 230, 0.9);
 }
 .back-btn {
     -fx-cursor: hand;
@@ -29,6 +40,68 @@
 }
 .back-btn:hover {
     -fx-background-color: rgba(230, 230, 230, 0.9);
+}
+.info-card {
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+    -fx-border-color: #ececec;
+    -fx-border-radius: 18;
+    -fx-border-width: 1;
+    -fx-padding: 14 16 14 16;
+}
+.avatar-circle {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #41891C, #9CE633);
+    -fx-background-radius: 22;
+}
+.avatar-label {
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 17;
+    -fx-text-fill: white;
+}
+.card-name {
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 15;
+    -fx-text-fill: #1f2317;
+}
+.card-tel {
+    -fx-font-family: Roboto;
+    -fx-font-size: 12;
+    -fx-text-fill: #9aa093;
+}
+.section-label {
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-text-fill: #b3b8ad;
+    -fx-font-size: 11;
+}
+.light-card {
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+    -fx-border-color: #ececec;
+    -fx-border-radius: 18;
+    -fx-border-width: 1;
+    -fx-padding: 14 16 14 16;
+}
+.light-card-no-padding {
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+    -fx-border-color: #ececec;
+    -fx-border-radius: 18;
+    -fx-border-width: 1;
+}
+.card-field-label {
+    -fx-font-family: Roboto;
+    -fx-font-size: 13;
+    -fx-text-fill: #9aa093;
+}
+.note-text {
+    -fx-font-family: Roboto;
+    -fx-font-size: 11;
+    -fx-text-fill: #b0b5aa;
+}
+.guest-count {
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 16;
+    -fx-text-fill: #1f2317;
 }
 .info-box{
     -fx-background-radius: 16;
@@ -59,64 +132,60 @@
     -fx-background-color: #e6e6e6;
 }
 
-/* กล่องหลัก */
 .modern-datepicker {
     -fx-font-family: Roboto;
-    -fx-background-color: white;
-    -fx-font-size: 14;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-font-size: 13;
+}
+.modern-datepicker .text-field {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 3 0 3 0;
+    -fx-alignment: CENTER_RIGHT;
+    -fx-text-fill: #2d3b27;
 }
 .error-date-picker {
     -fx-border-color: red;
 }
-
-/* ปุ่มปฏิทิน */
 .modern-datepicker .arrow-button {
     -fx-background-color: transparent;
-    -fx-background-radius: 12;
+    -fx-padding: 0 4 0 6;
 }
-
 .modern-datepicker .arrow-button:hover {
-    -fx-background-color: #f2f2f2;
+    -fx-background-color: #eef0ec;
+    -fx-background-radius: 8;
 }
-
-/* popup calendar */
 .date-picker-popup {
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
     -fx-background-color: white;
     -fx-border-color: #eaeaea;
 }
-
-/* header (เดือน/ปี) */
 .date-picker-popup .header-pane {
     -fx-background-color: transparent;
 }
-
-/* วัน */
 .date-picker-popup .day-cell {
-    -fx-background-radius: 12;
-    -fx-border-radius: 12;
-    -fx-text-fill: #222;
+    -fx-background-radius: 8;
+    -fx-border-radius: 0;
+    -fx-text-fill: #2d3b27;
 }
-
-/* hover วัน */
 .date-picker-popup .day-cell:hover {
-    -fx-background-color: #41891C;
+    -fx-background-color: #edf5e9;
+    -fx-text-fill: #2E7D32;
 }
-
-/* วันที่เลือก */
 .date-picker-popup .day-cell:selected {
-    -fx-background-color: linear-gradient(#7bdc5b, #4caf50);
+    -fx-background-color: #2E7D32;
     -fx-text-fill: white;
-    -fx-background-radius: 14;
+    -fx-background-radius: 8;
     -fx-font-weight: bold;
 }
-
-/* วันปัจจุบัน */
 .date-picker-popup .today {
-    -fx-border-width: 0.5;
-    -fx-border-color: #4caf50;
-    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-border-color: #2E7D32;
+    -fx-border-radius: 8;
 }
 
 .date-box{
@@ -127,33 +196,40 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0.3, 0, 4)
 }
 
-.combo-box{
-    -fx-font-family: Roboto;
-    -fx-background-radius: 18;
-    -fx-background-color: #1C9B1C;
-    -fx-border-radius: 18;
-    -fx-border-width: 2;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0.3, 0, 6);
+.combo-box-soft {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 18;
     -fx-cursor: hand;
 }
-.combo-box:hover{
-    -fx-background-color: #21b321;
+.combo-box-soft .list-cell {
+    -fx-text-fill: #2E7D32;
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 18;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-min-height: 32;
+    -fx-max-height: 32;
+    -fx-padding: 4 0 4 0;
 }
-.combo-box .list-cell {
-    -fx-font-size: 15;
-    -fx-text-fill: #eaeaea;
-}
-.combo-box .list-view .list-cell {
+.combo-box-soft .list-view .list-cell {
     -fx-font-size: 14;
-    -fx-text-fill: #008e00;
+    -fx-text-fill: #2E7D32;
     -fx-cursor: hand;
+    -fx-padding: 4 4 4 4;
 }
-.combo-box-base .list-cell:hover {
-    -fx-background-color: #d5d5d5;
+.combo-box-soft .list-view .list-cell:hover {
+    -fx-text-fill: #fff;
+    -fx-background-color: #2E7D32;
 }
-.combo-box-base .list-view .list-cell:selected {
-    -fx-text-fill: white;
-    -fx-background-color: #1C9B1C;
+.combo-box-soft .arrow-button {
+    -fx-background-color: transparent;
+}
+.combo-box-soft .arrow {
+    -fx-background-color: #2E7D32;
 }
 
 .no-booked-box{
@@ -166,9 +242,9 @@
 }
 
 .booked {
-    -fx-font-family: Roboto;
-    -fx-font-size: 14;
-    -fx-text-fill: #878787;
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 20;
+    -fx-text-fill: #c2c7bd;
 }
 .booked-full {
     -fx-text-fill: #ec3535;
@@ -201,31 +277,26 @@
     -fx-translate-y: 1;
 }
 .confirm-btn{
-    -fx-background-radius: 64;
-    -fx-background-color: #1C9B1C;
+    -fx-background-radius: 16;
+    -fx-background-color: #2E7D32;
     -fx-text-fill: #FFFFFF;
     -fx-font-family: 'Roboto Condensed SemiBold';
-    -fx-font-size: 18;
+    -fx-font-size: 17;
     -fx-cursor: hand;
 }
 .confirm-btn:hover{
-    -fx-background-color: #21b321;
+    -fx-background-color: #356316;
 }
 .confirm-btn:pressed{
-    -fx-background-color: #136a13;
+    -fx-background-color: #1a4a0e;
     -fx-translate-y: 1;
 }
 .table-full-btn{
-    -fx-background-radius: 64;
-    -fx-background-color: #8f8f8f;
-    -fx-text-fill: #b8b8b8;
+    -fx-background-radius: 16;
+    -fx-background-color: #e8eae5;
+    -fx-text-fill: #c2c7bd;
     -fx-font-family: 'Roboto Condensed SemiBold';
-    -fx-font-size: 18;
-}
-.confirm-btn-box{
-    -fx-border-radius: 64;
-    -fx-border-width: 2;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0.3, 0, 4)
+    -fx-font-size: 17;
 }
 
 .pop-up-box{

@@ -11,178 +11,97 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <StackPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="360.0" stylesheets="@../style/booking.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.theerayut.app.controller.bookingController">
    <children>
       <AnchorPane fx:id="mainContent" prefHeight="200.0" prefWidth="200.0">
          <children>
-            <VBox prefHeight="800.0" prefWidth="360.0" styleClass="app-background">
+            <VBox prefHeight="800.0" prefWidth="360.0" styleClass="page-bg">
+               <padding>
+                  <Insets bottom="24.0" left="22.0" right="22.0" top="16.0" />
+               </padding>
                <children>
-                  <BorderPane prefHeight="80.0" prefWidth="360.0">
-                     <center>
-                        <Label alignment="CENTER" styleClass="head-title" text="Dining Plans" BorderPane.alignment="CENTER">
-                           <BorderPane.margin>
-                              <Insets top="10.0" />
-                           </BorderPane.margin>
-                        </Label>
-                     </center>
+                  <!-- Header -->
+                  <HBox alignment="CENTER" prefHeight="52.0">
+                     <Label alignment="CENTER" styleClass="head-title" text="Dining Plans" HBox.hgrow="ALWAYS" />
+                  </HBox>
+                  <!-- Profile card -->
+                  <HBox alignment="CENTER_LEFT" spacing="13.0" styleClass="info-card">
+                     <StackPane>
+                        <VBox alignment="CENTER" prefHeight="44.0" prefWidth="44.0" styleClass="avatar-circle" />
+                        <Label fx:id="avatarInitial" alignment="CENTER" prefHeight="44.0" prefWidth="44.0" styleClass="avatar-label" text="?" />
+                     </StackPane>
+                     <VBox alignment="CENTER_LEFT" spacing="3.0">
+                        <Label fx:id="name" styleClass="card-name" text="Name" />
+                        <Label fx:id="tel" styleClass="card-tel" text="Tel." />
+                     </VBox>
+                     <Region HBox.hgrow="ALWAYS" />
+                     <Button fx:id="history_btn" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#historyOnClick" prefHeight="38.0" prefWidth="38.0" styleClass="history-btn">
+                        <graphic>
+                           <ImageView fitHeight="22.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 0.6;">
+                              <image>
+                                 <Image url="@../style/img/clock.png" />
+                              </image>
+                           </ImageView>
+                        </graphic>
+                     </Button>
                      <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </BorderPane>
-                  <HBox prefHeight="80.0" prefWidth="300.0" spacing="5.0" styleClass="info-box">
-                     <children>
-                        <ImageView fitHeight="30.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../style/img/pers-icon.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="15.0" top="25.0" />
-                           </HBox.margin>
-                        </ImageView>
-                        <VBox prefHeight="80.0" prefWidth="165.0">
-                           <children>
-                              <Label fx:id="name" prefHeight="18.0" prefWidth="170.0" styleClass="name" text="Name">
-                                 <VBox.margin>
-                                    <Insets top="23.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <Label fx:id="tel" prefHeight="18.0" prefWidth="170.0" styleClass="tel" text="Tel." />
-                           </children>
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </VBox>
-                        <Button fx:id="history_btn" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#historyOnClick" prefHeight="40.0" prefWidth="40.0" styleClass="history-btn">
-                           <graphic>
-                              <ImageView fitHeight="26.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 0.6;">
-                                 <image>
-                                    <Image url="@../style/img/history.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <HBox.margin>
-                              <Insets left="5.0" top="21.0" />
-                           </HBox.margin>
-                        </Button>
-                     </children>
-                     <VBox.margin>
-                        <Insets left="30.0" right="30.0" top="30.0" />
+                        <Insets top="22.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox prefHeight="30.0" prefWidth="320.0" spacing="5.0">
-                     <children>
-                        <ImageView fitHeight="15.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../style/img/date.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </ImageView>
-                        <Label styleClass="text-label" text="Date &amp;Time" />
-                     </children>
+                  <!-- DATE & TIME label -->
+                  <Label styleClass="section-label" text="DATE &amp; TIME">
                      <VBox.margin>
-                        <Insets left="40.0" right="40.0" top="30.0" />
+                        <Insets left="4.0" top="22.0" />
+                     </VBox.margin>
+                  </Label>
+                  <!-- Date card -->
+                  <HBox alignment="CENTER_LEFT" styleClass="light-card-no-padding">
+                     <Label styleClass="card-field-label" text="Date" />
+                     <DatePicker id="datePicker" fx:id="datePicker" focusTraversable="false" prefHeight="34.0" prefWidth="220.0" styleClass="modern-datepicker" HBox.hgrow="ALWAYS">
+                        <HBox.margin>
+                           <Insets left="35.0" />
+                        </HBox.margin></DatePicker>
+                     <VBox.margin>
+                        <Insets top="12.0" />
                      </VBox.margin>
                      <padding>
-                        <Insets top="5.0" />
+                        <Insets bottom="6.0" left="16.0" right="16.0" top="6.0" />
                      </padding>
                   </HBox>
-                  <VBox prefHeight="50.0" prefWidth="300.0" styleClass="date-box">
-                     <children>
-                        <HBox prefHeight="50.0" prefWidth="300.0">
-                           <children>
-                              <Label alignment="CENTER" prefHeight="26.0" prefWidth="60.0" styleClass="text-label" text="Date" />
-                              <DatePicker id="datePicker" fx:id="datePicker" focusTraversable="false" prefHeight="25.0" prefWidth="210.0" styleClass="modern-datepicker" />
-                           </children>
-                           <padding>
-                              <Insets top="10.0" />
-                           </padding>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </HBox>
-                     </children>
+                  <!-- Time + Tables grid -->
+                  <HBox spacing="12.0">
+                     <VBox maxWidth="152.0" minWidth="152.0" spacing="6.0" styleClass="light-card" HBox.hgrow="ALWAYS">
+                        <Label styleClass="card-field-label" text="Time" />
+                        <ComboBox fx:id="timeChoice" maxHeight="32.0" maxWidth="Infinity" minHeight="32.0" minWidth="0.0" prefHeight="32.0" styleClass="combo-box-soft" visibleRowCount="7" />
+                     </VBox>
+                     <VBox fx:id="bookedBox" alignment="CENTER_LEFT" maxWidth="152.0" minWidth="152.0" spacing="6.0" styleClass="light-card" HBox.hgrow="ALWAYS">
+                        <Label styleClass="card-field-label" text="Booked / All" />
+                        <Label fx:id="booked" prefHeight="32.0" styleClass="booked" text="0 / 5" />
+                     </VBox>
                      <VBox.margin>
-                        <Insets left="30.0" right="30.0" top="10.0" />
-                     </VBox.margin>
-                  </VBox>
-                  <BorderPane prefHeight="100.0" prefWidth="360.0">
-                     <right>
-                        <VBox prefHeight="100.0" prefWidth="150.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <Label prefHeight="18.0" prefWidth="150.0" styleClass="text-label" text="Booked / All tables">
-                                 <VBox.margin>
-                                    <Insets left="10.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <VBox fx:id="bookedBox" prefHeight="40.0" prefWidth="150.0" styleClass="no-booked-box">
-                                 <VBox.margin>
-                                    <Insets right="30.0" top="10.0" />
-                                 </VBox.margin>
-                                 <children>
-                                    <Label fx:id="booked" alignment="CENTER" prefHeight="40.0" prefWidth="120.0" styleClass="booked" text="0/10" />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </VBox>
-                     </right>
-                     <left>
-                        <VBox prefHeight="100.0" prefWidth="150.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <Label alignment="CENTER" prefHeight="18.0" prefWidth="150.0" styleClass="text-label" text="Time">
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                              </Label>
-                              <ComboBox fx:id="timeChoice" prefHeight="40.0" prefWidth="120.0" styleClass="combo-box" visibleRowCount="7">
-                                 <VBox.margin>
-                                    <Insets left="30.0" top="10.0" />
-                                 </VBox.margin>
-                                 <padding>
-                                    <Insets left="20.0" />
-                                 </padding>
-                              </ComboBox>
-                           </children>
-                        </VBox>
-                     </left>
-                     <VBox.margin>
-                        <Insets top="20.0" />
-                     </VBox.margin>
-                     <bottom>
-                        <Label text="Note: Each table is limited to 1 hour and 30 minutes." BorderPane.alignment="CENTER">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </Label>
-                     </bottom>
-                  </BorderPane>
-                  <HBox prefHeight="30.0" prefWidth="320.0" spacing="5.0">
-                     <children>
-                        <ImageView fitHeight="15.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../style/img/Vector-2.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </ImageView>
-                        <Label styleClass="text-label" text="Guest" />
-                     </children>
-                     <padding>
-                        <Insets top="5.0" />
-                     </padding>
-                     <VBox.margin>
-                        <Insets left="40.0" right="40.0" top="30.0" />
+                        <Insets top="12.0" />
                      </VBox.margin>
                   </HBox>
-                  <BorderPane prefHeight="80.0" prefWidth="300.0" styleClass="guest-box">
+                  <!-- Note -->
+                  <Label styleClass="note-text" text="Each table is limited to 1 hr 30 min.">
                      <VBox.margin>
-                        <Insets left="30.0" right="30.0" top="10.0" />
+                        <Insets left="4.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <!-- GUESTS label -->
+                  <Label styleClass="section-label" text="GUESTS">
+                     <VBox.margin>
+                        <Insets left="4.0" top="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <!-- Guest card -->
+                  <BorderPane styleClass="light-card">
+                     <VBox.margin>
+                        <Insets top="12.0" />
                      </VBox.margin>
                      <left>
                         <ImageView fitHeight="40.0" fitWidth="40.0" onMouseClicked="#onClickReduce" pickOnBounds="true" preserveRatio="true" styleClass="reduce-guest-btn" BorderPane.alignment="CENTER">
@@ -190,43 +109,31 @@
                               <Image url="@../style/img/btn_m.png" />
                            </image>
                            <BorderPane.margin>
-                              <Insets left="20.0" />
+                              <Insets left="8.0" />
                            </BorderPane.margin>
                         </ImageView>
                      </left>
                      <right>
                         <ImageView fitHeight="40.0" fitWidth="40.0" onMouseClicked="#onClickPlus" pickOnBounds="true" preserveRatio="true" styleClass="add-guest-btn" BorderPane.alignment="CENTER">
-                           <BorderPane.margin>
-                              <Insets right="20.0" />
-                           </BorderPane.margin>
                            <image>
                               <Image url="@../style/img/btn_plus.png" />
                            </image>
+                           <BorderPane.margin>
+                              <Insets right="8.0" />
+                           </BorderPane.margin>
                         </ImageView>
                      </right>
                      <center>
-                        <Label fx:id="guestNo" styleClass="text-label" text="1 Guest" BorderPane.alignment="CENTER">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
+                        <Label fx:id="guestNo" alignment="CENTER" styleClass="guest-count" text="1 Guest" BorderPane.alignment="CENTER" />
                      </center>
                   </BorderPane>
-                  <VBox alignment="CENTER" prefHeight="50.0" prefWidth="240.0" styleClass="confirm-btn-box">
-                     <children>
-                        <Button fx:id="confirm" mnemonicParsing="false" onMouseClicked="#confirmSubmit" prefHeight="50.0" prefWidth="240.0" text="Booking">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </Button>
-                     </children>
-                     <VBox.margin>
-                        <Insets left="60.0" right="60.0" top="30.0" />
-                     </VBox.margin>
-                  </VBox>
+                  <!-- Spacer -->
+                  <Region VBox.vgrow="ALWAYS" />
+                  <!-- Book button -->
+                  <Button fx:id="confirm" maxWidth="Infinity" mnemonicParsing="false" onMouseClicked="#confirmSubmit" prefHeight="52.0" text="Book a table" />
                </children>
             </VBox>
-            <VBox fx:id="menuBtn" alignment="CENTER" layoutX="14.0" layoutY="27.0" onMouseClicked="#menuOnClick" prefHeight="40.0" prefWidth="40.0" styleClass="back-btn">
+            <VBox fx:id="menuBtn" alignment="CENTER" layoutX="14.0" layoutY="28.0" onMouseClicked="#menuOnClick" prefHeight="40.0" prefWidth="40.0" styleClass="menu-btn-2b">
                <children>
                   <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -276,7 +183,8 @@
                         <Label prefWidth="70.0" styleClass="best-meal-sb" text="BM">
                            <HBox.margin>
                               <Insets />
-                           </HBox.margin></Label>
+                           </HBox.margin>
+                        </Label>
                         <VBox alignment="CENTER" onMouseClicked="#hideSideBarOnClick" prefHeight="40.0" prefWidth="40.0" styleClass="back-btn">
                            <children>
                               <ImageView fx:id="sbCloseIcon" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">

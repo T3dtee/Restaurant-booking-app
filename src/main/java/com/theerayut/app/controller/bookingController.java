@@ -35,11 +35,15 @@ public class bookingController {
     @FXML private ImageView sbHomeIcon;
     @FXML private ImageView sbHistoryIcon;
     @FXML private ImageView sbLogoutIcon;
+    @FXML private Label avatarInitial;
 
     LocalTime time;
 
     @FXML
     public void initialize() {
+        String n = AppData.loginUserData.getName();
+        avatarInitial.setText(n.isEmpty() ? "?" : String.valueOf(n.charAt(0)).toUpperCase());
+
         if (AppData.allBookingData.getReservationsByCustomer(AppData.loginUserData).isEmpty()) {
             history_btn.setDisable(true);
         }
@@ -167,7 +171,7 @@ public class bookingController {
     }
 
     private void setBookedText() {
-        booked.setText(AppData.allBookingData.countByDateTime(datePicker.getValue(),time) + "/" + AppData.config.getMaxTables());
+        booked.setText(AppData.allBookingData.countByDateTime(datePicker.getValue(),time) + " / " + AppData.config.getMaxTables());
         confirm.getStyleClass().removeAll("confirm-btn", "table-full-btn");
         booked.getStyleClass().removeAll("booked-full");
         if (!AppData.bookingService.timeSlotAvailable(datePicker.getValue(),time)) {
