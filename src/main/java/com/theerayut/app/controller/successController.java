@@ -23,8 +23,6 @@ import java.time.format.DateTimeFormatter;
 
 public class successController {
     @FXML
-    private Label successTitle;
-    @FXML
     private Label name;
     @FXML
     private Label date;
@@ -59,16 +57,16 @@ public class successController {
         table.setText("T" + reservation.getTableNo());
 
         AnimationUtils.buttonHover(doneBtn, 4, 110);
-        AnimationUtils.backToHomeBtn(backBtnBox, icon);
+        AnimationUtils.buttonHover(backBtnBox, 12, 110);
         playSuccessEffect();
     }
 
     private void playSuccessEffect() {
         ScaleTransition bounce = new ScaleTransition(Duration.millis(360), container);
-        bounce.setFromX(0.1);
-        bounce.setFromY(0.1);
-        bounce.setToX(1.6);
-        bounce.setToY(1.6);
+        bounce.setFromX(0.3);
+        bounce.setFromY(0.3);
+        bounce.setToX(2);
+        bounce.setToY(2);
         bounce.setInterpolator(Interpolator.EASE_OUT);
 
         bounce.setOnFinished(e -> {
@@ -89,10 +87,6 @@ public class successController {
         bounce.play();
         playConfetti();
 
-        FadeTransition fadeInTitle = new FadeTransition(Duration.millis(300), successTitle);
-        fadeInTitle.setFromValue(0);
-        fadeInTitle.setToValue(1);
-
         FadeTransition fadeBtn = new FadeTransition(Duration.millis(500), doneBtn);
         fadeBtn.setFromValue(0);
         fadeBtn.setToValue(1);
@@ -101,9 +95,7 @@ public class successController {
         Timeline t =  new Timeline(
                 new KeyFrame(Duration.ZERO, e -> {
                     doneBtn.setVisible(false);
-                    successTitle.setOpacity(0);
                     doneBtn.setOpacity(0);}),
-                new KeyFrame(Duration.millis(500), event -> fadeInTitle.play()),
                 new KeyFrame(Duration.millis(2500), event -> {
 
                     doneBtn.setVisible(true);
@@ -142,6 +134,8 @@ public class successController {
             rotate.setInterpolator(Interpolator.LINEAR);
 
             fall.setOnFinished(e -> confettiPane.getChildren().remove(piece));
+
+            confettiPane.setVisible(true);
             fall.play();
             rotate.play();
         }

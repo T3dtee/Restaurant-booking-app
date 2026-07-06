@@ -7,55 +7,85 @@
 }
 
 .app-background {
-    -fx-background-image: url("img/bg-img.png");
-    -fx-background-size: cover;
-    -fx-background-position: center;
-    -fx-background-repeat: no-repeat;
+    -fx-background-color: #f7f8f5;
 }
 .back-btn {
     -fx-cursor: hand;
-    -fx-background-radius: 20;
-    -fx-background-color: rgba(240, 240, 240, 0.5);
+    -fx-background-radius: 25;
+    -fx-border-radius: 25;
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #ececec;
+    -fx-border-width: 1;
 }
 .back-btn:hover {
-    -fx-background-color: rgba(230, 230, 230, 0.9);
-}
-.success {
-    -fx-font-family: "Roboto Condensed SemiBold";
-    -fx-font-size: 30;
-    -fx-text-fill: #136a13;
+    -fx-background-color: #f2f4ef;
 }
 
-#container {
-    -fx-background-radius: 100;
+/* soft cards (matches 2b) */
+.soft-card {
     -fx-background-color: #FFFFFF;
-}
-.head-detail {
-    -fx-font-family: Roboto;
-    -fx-font-size: 14;
-    -fx-text-fill: #b1a9a9;
-}
-.detail {
-    -fx-font-family: Roboto;
-    -fx-font-size: 15;
-    -fx-text-fill: #5F5757;
-}
-.button {
     -fx-background-radius: 20;
-    -fx-background-color: #1C9B1C;
+    -fx-border-radius: 20;
+    -fx-border-color: #ececec;
+    -fx-border-width: 1;
+}
+
+/* success badge */
+.badge-ring {
+    -fx-background-radius: 100;
+    -fx-background-color: #eef7e2;
+}
+.badge-core {
+    -fx-background-radius: 100;
+    -fx-background-color: #2E7D32;
+}
+
+.confirm-title {
     -fx-font-family: "Roboto Condensed SemiBold";
-    -fx-font-size: 20;
+    -fx-font-size: 22;
+    -fx-text-fill: #1f2317;
+}
+.confirm-sub {
+    -fx-font-family: Roboto;
+    -fx-font-size: 13.5;
+    -fx-text-fill: #9aa093;
+}
+
+/* detail rows */
+.row-label {
+    -fx-font-family: Roboto;
+    -fx-font-size: 13.5;
+    -fx-text-fill: #9aa093;
+}
+.row-value {
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 14.5;
+    -fx-text-fill: #1f2317;
+}
+.row-divider {
+    -fx-background-color: #f1f2ee;
+}
+.table-chip {
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 13;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #2E7D32;
+    -fx-background-radius: 8;
+    -fx-padding: 3 12 3 12;
+}
+
+.button {
+    -fx-background-radius: 16;
+    -fx-background-color: #2E7D32;
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 17;
     -fx-text-fill : white;
     -fx-cursor: hand;
 }
 .button:hover{
-    -fx-background-color: #28b828;
+    -fx-background-color: #35913b;
 }
 .button:pressed{
-    -fx-background-color: #0e680e;
+    -fx-background-color: #256428;
     -fx-translate-y: 2;
-}
-.btn-box{
-    -fx-border-radius: 20;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0.3, 0, 4)
 }

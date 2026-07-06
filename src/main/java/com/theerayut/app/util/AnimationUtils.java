@@ -15,13 +15,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.util.function.BooleanSupplier;
 
 public class AnimationUtils {
-    private static final Image BACK_IMAGE = new Image(AnimationUtils.class.getResourceAsStream("/com/example/app/style/img/triangle.png"));
-    private static final Image HOME_IMAGE = new Image(AnimationUtils.class.getResourceAsStream("/com/example/app/style/img/home.png"));
 
     public static void popUpShow(AnchorPane mainContent, AnchorPane popUp, Pane blurPane, Node popUpBox, Node button) {
         Bounds buttonBounds = button.localToScene(button.getBoundsInLocal());
@@ -262,9 +261,18 @@ public class AnimationUtils {
     }
 
     public static void cardHide(Region regionItem) {
-        FadeTransition ft = new FadeTransition(Duration.millis(300), regionItem);
-        ft.setFromValue(100);
-        ft.setToValue(0);
+        // Keep the inner content at its real size so the collapse doesn't squash it.
+        if (!regionItem.getChildrenUnmodifiable().isEmpty()
+                && regionItem.getChildrenUnmodifiable().get(0) instanceof Region inner) {
+            inner.setMinHeight(inner.getHeight());
+            inner.setPrefHeight(inner.getHeight());
+        }
+
+        // Clip to the card's shrinking bounds — the content is hidden as it rolls up, not resized.
+        Rectangle clip = new Rectangle(regionItem.getWidth(), regionItem.getHeight());
+        clip.widthProperty().bind(regionItem.widthProperty());
+        clip.heightProperty().bind(regionItem.heightProperty());
+        regionItem.setClip(clip);
 
         Timeline collapse = new Timeline(
                 new KeyFrame(Duration.millis(350),
@@ -273,7 +281,6 @@ public class AnimationUtils {
         );
 
         Timeline timeline = new Timeline(
-                new KeyFrame(Duration.ZERO, event -> ft.play()),
                 new KeyFrame(Duration.millis(50), event -> collapse.play())
         );
 
@@ -329,45 +336,4 @@ public class AnimationUtils {
         return result;
     }
 
-    public static void backToHomeBtn(VBox backBtn, ImageView icon) {
-        backBtn.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(100), icon);
-            st.setToX(0);
-            st.setToY(0);
-            st.setInterpolator(Interpolator.EASE_IN);
-
-            ScaleTransition st2 = new ScaleTransition(Duration.millis(100), icon);
-            st2.setToX(1);
-            st2.setToY(1);
-            st2.setInterpolator(Interpolator.EASE_OUT);
-
-            st.setOnFinished(event -> {
-                icon.setImage(HOME_IMAGE);
-                st2.play();
-            });
-            st.stop();
-            st2.stop();
-            st.play();
-        });
-
-        backBtn.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(100), icon);
-            st.setToX(0);
-            st.setToY(0);
-            st.setInterpolator(Interpolator.EASE_IN);
-
-            ScaleTransition st2 = new ScaleTransition(Duration.millis(100), icon);
-            st2.setToX(1);
-            st2.setToY(1);
-            st2.setInterpolator(Interpolator.EASE_OUT);
-
-            st.setOnFinished(event -> {
-                icon.setImage(BACK_IMAGE);
-                st2.play();
-            });
-            st.stop();
-            st2.stop();
-            st.play();
-        });
-    }
 }

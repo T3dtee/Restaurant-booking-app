@@ -36,6 +36,7 @@ public class bookingController {
     @FXML private ImageView sbHistoryIcon;
     @FXML private ImageView sbLogoutIcon;
     @FXML private Label avatarInitial;
+    @FXML private ImageView historyBtn;
 
     LocalTime time;
 
@@ -85,10 +86,11 @@ public class bookingController {
         );
         setTimeChoice();
 
-        AnimationUtils.buttonHover(menuBtn, 11, 100);
+        AnimationUtils.buttonHover(menuBtn, 12, 110);
         AnimationUtils.buttonHover(confirm, 5, 100, () -> AppData.bookingService.timeSlotAvailable(datePicker.getValue(), time));
 
         Color gray = Color.web("#424242");
+        historyBtn.setImage(AnimationUtils.recolor(historyBtn.getImage(), gray));
         sbCloseIcon.setImage(AnimationUtils.recolor(sbCloseIcon.getImage(), Color.web("#41891C")));
         sbHomeIcon.setImage(AnimationUtils.recolor(sbHomeIcon.getImage(), gray));
         sbHistoryIcon.setImage(AnimationUtils.recolor(sbHistoryIcon.getImage(), gray));

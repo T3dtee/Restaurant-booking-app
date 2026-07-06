@@ -21,7 +21,7 @@
          <children>
             <VBox prefHeight="800.0" prefWidth="360.0" styleClass="page-bg">
                <padding>
-                  <Insets bottom="24.0" left="22.0" right="22.0" top="16.0" />
+                  <Insets bottom="24.0" left="22.0" right="22.0" top="18.0" />
                </padding>
                <children>
                   <!-- Header -->
@@ -41,7 +41,7 @@
                      <Region HBox.hgrow="ALWAYS" />
                      <Button fx:id="history_btn" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#historyOnClick" prefHeight="38.0" prefWidth="38.0" styleClass="history-btn">
                         <graphic>
-                           <ImageView fitHeight="22.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 0.6;">
+                           <ImageView fx:id="historyBtn" fitHeight="22.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 0.6;">
                               <image>
                                  <Image url="@../style/img/clock.png" />
                               </image>
@@ -133,7 +133,7 @@
                   <Button fx:id="confirm" maxWidth="Infinity" mnemonicParsing="false" onMouseClicked="#confirmSubmit" prefHeight="52.0" text="Book a table" />
                </children>
             </VBox>
-            <VBox fx:id="menuBtn" alignment="CENTER" layoutX="14.0" layoutY="28.0" onMouseClicked="#menuOnClick" prefHeight="40.0" prefWidth="40.0" styleClass="menu-btn-2b">
+            <VBox fx:id="menuBtn" alignment="CENTER" layoutX="18.0" layoutY="24.0" onMouseClicked="#menuOnClick" prefHeight="45.0" prefWidth="45.0" styleClass="menu-btn-2b">
                <children>
                   <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                      <image>

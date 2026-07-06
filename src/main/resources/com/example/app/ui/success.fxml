@@ -6,102 +6,107 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
 
 <StackPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="360.0" styleClass="app-background" stylesheets="@../style/success.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.theerayut.app.controller.successController">
    <children>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+      <AnchorPane prefHeight="800.0" prefWidth="360.0">
          <children>
-            <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="380.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30; -fx-border-radius: 30; -fx-border-width: 2; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0.3, 0, 8);" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="120.0">
+            <VBox alignment="TOP_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <padding>
+                  <Insets bottom="22.0" left="22.0" right="22.0" top="85.0" />
+               </padding>
                <children>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0">
-                     <bottom>
-                        <Label fx:id="successTitle" alignment="CENTER" prefHeight="43.0" prefWidth="271.0" styleClass="success" text="SUCCESS!" BorderPane.alignment="CENTER">
-                           <BorderPane.margin>
-                              <Insets top="5.0" />
-                           </BorderPane.margin>
-                        </Label>
-                     </bottom>
-                     <center>
-                        <StackPane fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="140.0" prefWidth="136.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <ImageView fitHeight="140.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../style/img/check.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                           <BorderPane.margin>
-                              <Insets top="40.0" />
-                           </BorderPane.margin>
-                        </StackPane>
-                     </center>
-                  </BorderPane>
-                  <VBox fx:id="detailBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="3.0">
+                  <!-- hero card -->
+                  <VBox alignment="TOP_CENTER" styleClass="soft-card">
+                     <padding>
+                        <Insets bottom="24.0" left="20.0" right="20.0" top="24.0" />
+                     </padding>
                      <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="19.0" prefWidth="200.0">
+                        <StackPane fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="90.0" prefWidth="90.0" styleClass="badge-ring">
                            <children>
-                              <Label prefHeight="17.0" prefWidth="50.0" styleClass="head-detail" text="Name:" />
-                              <Label fx:id="name" prefHeight="17.0" prefWidth="180.0" styleClass="detail" text="name" />
+                              <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="65.0" prefWidth="65.0" styleClass="badge-core">
+                                 <children>
+                                    <SVGPath content="M4 12 L9 17 L20 6" fill="TRANSPARENT" scaleX="1.2" scaleY="1.2" stroke="WHITE" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="3.0" />
+                                 </children>
+                              </StackPane>
                            </children>
+                        </StackPane>
+                        <Label styleClass="confirm-title" text="Booking confirmed">
                            <VBox.margin>
-                              <Insets />
+                              <Insets top="14.0" />
                            </VBox.margin>
+                        </Label>
+                        <Label alignment="CENTER" styleClass="confirm-sub" text="Your table is reserved. See you soon!" wrapText="true">
+                           <VBox.margin>
+                              <Insets top="6.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <!-- details card -->
+                  <VBox fx:id="detailBox" spacing="13.0" styleClass="soft-card">
+                     <padding>
+                        <Insets bottom="18.0" left="20.0" right="20.0" top="18.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets top="12.0" />
+                     </VBox.margin>
+                     <children>
+                        <HBox alignment="CENTER_LEFT">
+                           <children>
+                              <Label styleClass="row-label" text="Name" />
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Label fx:id="name" styleClass="row-value" text="name" />
+                           </children>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" prefHeight="19.0" prefWidth="200.0">
+                        <Region prefHeight="1.0" styleClass="row-divider" />
+                        <HBox alignment="CENTER_LEFT">
                            <children>
-                              <Label prefHeight="17.0" prefWidth="50.0" styleClass="head-detail" text="Date:  " />
-                              <Label fx:id="date" prefHeight="17.0" prefWidth="180.0" styleClass="detail" text="00/00/00" />
+                              <Label styleClass="row-label" text="Date" />
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Label fx:id="date" styleClass="row-value" text="00/00/00" />
                            </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" prefHeight="19.0" prefWidth="200.0">
+                        <Region prefHeight="1.0" styleClass="row-divider" />
+                        <HBox alignment="CENTER_LEFT">
                            <children>
-                              <Label prefHeight="17.0" prefWidth="50.0" styleClass="head-detail" text="Time: " />
-                              <Label fx:id="time" prefHeight="17.0" prefWidth="180.0" styleClass="detail" text="00:00" />
+                              <Label styleClass="row-label" text="Time" />
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Label fx:id="time" styleClass="row-value" text="00:00" />
                            </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" prefHeight="19.0" prefWidth="200.0">
+                        <Region prefHeight="1.0" styleClass="row-divider" />
+                        <HBox alignment="CENTER_LEFT">
                            <children>
-                              <Label prefHeight="17.0" prefWidth="50.0" styleClass="head-detail" text="Guest:" />
-                              <Label fx:id="guestNo" prefHeight="17.0" prefWidth="180.0" styleClass="detail" text="0" />
+                              <Label styleClass="row-label" text="Guests" />
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Label fx:id="guestNo" styleClass="row-value" text="0" />
                            </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" prefHeight="19.0" prefWidth="200.0">
+                        <Region prefHeight="1.0" styleClass="row-divider" />
+                        <HBox alignment="CENTER_LEFT">
                            <children>
-                              <Label prefHeight="17.0" prefWidth="50.0" styleClass="head-detail" text="Table:" />
-                              <Label fx:id="table" prefHeight="17.0" prefWidth="180.0" styleClass="detail" text="T0" />
+                              <Label styleClass="row-label" text="Table" />
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Label fx:id="table" styleClass="table-chip" text="T0" />
                            </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
                         </HBox>
                      </children>
-                     <padding>
-                        <Insets left="40.0" top="10.0" />
-                     </padding>
                   </VBox>
+                  <Region VBox.vgrow="ALWAYS" />
+                  <!-- done button -->
+                  <Button fx:id="doneBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#doneOnClicked" prefHeight="52.0" text="Done" />
                </children>
             </VBox>
-            <VBox prefHeight="45.0" prefWidth="100.0" styleClass="btn-box" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="530.0">
+            <!-- back button (floating, like menuBtn on booking) -->
+            <VBox fx:id="backBtnBox" alignment="CENTER" layoutX="18.0" layoutY="25.0" onMouseClicked="#goToBooking" prefHeight="45.0" prefWidth="45.0" styleClass="back-btn">
                <children>
-                  <Button fx:id="doneBtn" mnemonicParsing="false" onMouseClicked="#doneOnClicked" prefHeight="45.0" prefWidth="360.0" text="Done" />
-               </children>
-            </VBox>
-            <VBox fx:id="backBtnBox" alignment="CENTER" layoutX="14.0" layoutY="27.0" onMouseClicked="#goToBooking" prefHeight="40.0" prefWidth="40.0" styleClass="back-btn">
-               <children>
-                  <ImageView fx:id="icon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="icon" fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../style/img/triangle.png" />
                      </image>
@@ -110,6 +115,6 @@
             </VBox>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="confettiPane" mouseTransparent="true" prefHeight="800.0" prefWidth="360.0" />
+      <AnchorPane fx:id="confettiPane" mouseTransparent="true" prefHeight="800.0" prefWidth="360.0" visible="false" />
    </children>
 </StackPane>

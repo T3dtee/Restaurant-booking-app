@@ -23,23 +23,29 @@
 .head-title {
     -fx-font-family: Pacifico;
     -fx-text-fill: #2E7D32;
-    -fx-font-size: 32;
+    -fx-font-size: 30;
 }
 .menu-btn-2b {
     -fx-cursor: hand;
-    -fx-background-radius: 20;
-    -fx-background-color: rgba(240, 240, 240, 0.5);
+    -fx-background-radius: 25;
+    -fx-background-color: #fff;
+    -fx-border-color: #ececec;
+    -fx-border-width: 1;
+    -fx-border-radius: 25;
 }
 .menu-btn-2b:hover {
-    -fx-background-color: rgba(230, 230, 230, 0.9);
+    -fx-background-color: #f2f4ef;
 }
 .back-btn {
     -fx-cursor: hand;
     -fx-background-radius: 20;
-    -fx-background-color: rgba(240, 240, 240, 0.5);
+    -fx-background-color: #fff;
+    -fx-border-color: #ececec;
+    -fx-border-width: 1;
+    -fx-border-radius: 20;
 }
 .back-btn:hover {
-    -fx-background-color: rgba(230, 230, 230, 0.9);
+    -fx-background-color: #f2f4ef;
 }
 .info-card {
     -fx-background-color: white;
@@ -70,7 +76,7 @@
 }
 .section-label {
     -fx-font-family: "Roboto Condensed SemiBold";
-    -fx-text-fill: #b3b8ad;
+    -fx-text-fill: #B3B8AD;
     -fx-font-size: 11;
 }
 .light-card {
@@ -91,7 +97,7 @@
 .card-field-label {
     -fx-font-family: Roboto;
     -fx-font-size: 13;
-    -fx-text-fill: #9aa093;
+    -fx-text-fill: #7A8072;
 }
 .note-text {
     -fx-font-family: Roboto;
@@ -138,27 +144,28 @@
     -fx-background-insets: 0;
     -fx-border-color: transparent;
     -fx-border-width: 0;
-    -fx-font-size: 13;
+    -fx-font-size: 15;
 }
 .modern-datepicker .text-field {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-border-color: transparent;
     -fx-border-width: 0;
-    -fx-padding: 3 0 3 0;
+    -fx-padding: 3 15 3 0;
     -fx-alignment: CENTER_RIGHT;
     -fx-text-fill: #2d3b27;
+    -fx-font-family: "Roboto Condensed SemiBold";
 }
 .error-date-picker {
     -fx-border-color: red;
 }
 .modern-datepicker .arrow-button {
     -fx-background-color: transparent;
-    -fx-padding: 0 4 0 6;
+    -fx-padding: 0 10 0 8;
 }
 .modern-datepicker .arrow-button:hover {
     -fx-background-color: #eef0ec;
-    -fx-background-radius: 8;
+    -fx-background-radius: 10;
 }
 .date-picker-popup {
     -fx-background-color: white;
@@ -244,7 +251,7 @@
 .booked {
     -fx-font-family: "Roboto Condensed SemiBold";
     -fx-font-size: 20;
-    -fx-text-fill: #c2c7bd;
+    -fx-text-fill: #7A8072;
 }
 .booked-full {
     -fx-text-fill: #ec3535;
@@ -285,7 +292,7 @@
     -fx-cursor: hand;
 }
 .confirm-btn:hover{
-    -fx-background-color: #356316;
+    -fx-background-color: #2a9730;
 }
 .confirm-btn:pressed{
     -fx-background-color: #1a4a0e;

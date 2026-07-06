@@ -25,10 +25,10 @@
                            <children>
                               <Label styleClass="title-label" text="Booking History">
                                  <font>
-                                    <Font size="32.0" />
+                                    <Font size="30.0" />
                                  </font>
                                  <VBox.margin>
-                                    <Insets top="10.0" />
+                                    <Insets top="11.0" />
                                  </VBox.margin>
                               </Label>
                            </children>
@@ -42,15 +42,16 @@
                   </VBox>
                </content>
             </ScrollPane>
-            <VBox fx:id="backBtnBox" alignment="CENTER" layoutX="14.0" layoutY="27.0" onMouseClicked="#goToBooking" prefHeight="40.0" prefWidth="40.0" styleClass="back-btn">
+            <VBox fx:id="backBtnBox" alignment="CENTER" layoutX="18.0" layoutY="24.0" onMouseClicked="#goToBooking" prefHeight="45.0" prefWidth="45.0" styleClass="back-btn">
                <children>
-                  <ImageView fx:id="icon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="icon" fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../style/img/triangle.png" />
                      </image>
                   </ImageView>
                </children>
             </VBox>
+            <Label fx:id="noBookingText" alignment="CENTER" styleClass="no-booking-text" text="no booking history in records" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="360.0" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="popUp" pickOnBounds="false" prefHeight="800.0" prefWidth="360.0" visible="false">

@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.CacheHint;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
@@ -26,6 +27,7 @@ public class bookingHistoryController {
     @FXML private VBox popUpBox;
     @FXML private Pane blurOverlay;
     @FXML private VBox backBtnBox;
+    @FXML private Label noBookingText;
 
     @FXML
     private void goToBooking() {SceneManager.switchScene("booking.fxml", SceneManager.TransitionType.SLIDE_OUT);}
@@ -53,6 +55,10 @@ public class bookingHistoryController {
 
         ReservationStatus lastStatus = null;
         bookingHeadStatusCard statusController = null;
+
+        if (!customerReservations.isEmpty()) {
+            noBookingText.setVisible(false);
+        }
 
         for (Reservation data : customerReservations) {
             if (lastStatus == null || lastStatus != data.getStatus()) {

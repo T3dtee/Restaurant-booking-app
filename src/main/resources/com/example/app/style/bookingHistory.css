@@ -20,23 +20,23 @@
     -fx-background-color: transparent;
 }
 .app-background {
-    -fx-background-image: url('img/bg-img.png');
-    -fx-background-size: cover;
-    -fx-background-position: center;
-    -fx-background-repeat: no-repeat;
+    -fx-background-color: #f7f8f5;
 }
 .title-label {
     -fx-font-family: Pacifico;
-    -fx-text-fill: #41891C;
-    -fx-font-size: 32;
+    -fx-text-fill: #2E7D32;
+    -fx-font-size: 30;
 }
 .back-btn {
     -fx-cursor: hand;
-    -fx-background-radius: 20;
-    -fx-background-color: rgba(240, 240, 240, 0.5);
+    -fx-background-radius: 25;
+    -fx-border-radius: 25;
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #ececec;
+    -fx-border-width: 1;
 }
 .back-btn:hover {
-    -fx-background-color: rgba(230, 230, 230, 0.9);
+    -fx-background-color: #f2f4ef;
 }
 
 /*pop_up*/
@@ -72,4 +72,9 @@
 }
 .blurPane{
     -fx-background-color: rgba(0, 0, 0, 0.3);
+}
+.no-booking-text{
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 18;
+    -fx-text-fill: #7A8072;
 }
