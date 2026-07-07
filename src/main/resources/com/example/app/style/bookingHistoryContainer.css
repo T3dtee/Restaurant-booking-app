@@ -2,61 +2,62 @@
     font-family: 'Roboto';
     src: url('font/Roboto-Regular.ttf');
 }
+@font-face {
+    font-family: 'Roboto-SemiBold';
+    src: url('font/Roboto_Condensed-SemiBold.ttf');
+}
 
 .box {
-    -fx-background-radius: 10;
+    -fx-background-radius: 18;
     -fx-background-color: white;
-    -fx-border-radius: 10;
+    -fx-border-radius: 18;
     -fx-border-width: 1;
     -fx-border-color: #ececec;
 }
-.status-bar {
-    -fx-background-color: green;
-    -fx-background-radius: 10 0 0 10;
-}
 .id {
-    -fx-font-family: Roboto;
-    -fx-text-fill: #aeaeae;
-    -fx-font-size: 16;
+    -fx-font-family: 'Roboto Condensed SemiBold';
+    -fx-text-fill: #1f2317;
+    -fx-font-size: 15;
 }
 .status {
-    -fx-font-family: Roboto;
+    -fx-font-family: 'Roboto Condensed SemiBold';
     -fx-font-size: 12;
     -fx-text-fill: #547c51;
 }
 .status-box {
     -fx-background-color: #eaf3de;
-    -fx-background-radius: 12;
+    -fx-background-radius: 20;
 }
-.top-box {
-    -fx-border-color: #d5d5d5;
-    -fx-border-width: 0 0 1 0;
-}
-.head-label {
-    -fx-font-family: Roboto;
-    -fx-font-size: 14;
-    -fx-text-fill: #aeaeae;
-}
-.info-label {
-    -fx-font-family: Roboto;
-    -fx-font-size: 14;
-
-}
-.booked-time {
-    -fx-font-size: 10;
-    -fx-text-fill: #aeaeae;
-}
-.cancel-btn {
-    -fx-background-radius: 10;
+.cell-label {
     -fx-font-family: Roboto;
     -fx-font-size: 12;
-    -fx-border-color: #d5d5d5;
-    -fx-border-radius: 10;
+    -fx-text-fill: #9aa093;
+}
+.cell-value {
+    -fx-font-family: 'Roboto Condensed SemiBold';
+    -fx-font-size: 14.5;
+    -fx-text-fill: #1f2317;
+}
+.row-divider {
+    -fx-background-color: #f1f2ee;
+}
+.booked-time {
+    -fx-font-size: 11;
+    -fx-text-fill: #b0b5aa;
+}
+.cancel-btn {
+    -fx-background-radius: 11;
+    -fx-font-family: 'Roboto Condensed SemiBold';
+    -fx-font-size: 12.5;
+    -fx-border-color: #e2b8b8;
+    -fx-border-radius: 11;
+    -fx-border-width: 1.5;
     -fx-background-color: #ffffff;
+    -fx-text-fill: #c93636;
     -fx-cursor: hand;
 }
 .cancel-btn:hover {
-    -fx-border-color: #ff2828;
-    -fx-background-color: #ff2828;
+    -fx-border-color: #c93636;
+    -fx-background-color: #c93636;
     -fx-text-fill: white;
 }

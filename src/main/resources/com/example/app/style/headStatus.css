@@ -9,7 +9,7 @@
     -fx-text-fill: #636363;
 }
 .box {
-    -fx-background-radius: 8;
+    -fx-background-radius: 15;
     -fx-cursor: hand;
 }
 .number-box {
@@ -17,6 +17,33 @@
     -fx-background-color: #fbfbfb;
 }
 .number {
-    -fx-font-size: 10;
+    -fx-font-size: 12;
     -fx-font-family: "Roboto Condensed SemiBold";
 }
+
+/* collapsed: plain white card with a hairline border and a grey number chip */
+.collapsed-box {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ececec;
+    -fx-border-width: 1;
+    -fx-border-radius: 15;
+}
+.collapsed-number-box {
+    -fx-background-color: #e4e4e4;
+}
+
+/* expanded: status colours */
+.booked-box { -fx-background-color: #eaf3de; }
+.checked-in-box { -fx-background-color: #ece4c6; }
+.cancelled-box { -fx-background-color: #e4e4e4; }
+.expired-box { -fx-background-color: #e2eafd; }
+
+.booked-dot { -fx-fill: #3b6d11; }
+.checked-in-dot { -fx-fill: #958200; }
+.cancelled-dot { -fx-fill: #5c5c5c; }
+.expired-dot { -fx-fill: #4f5d80; }
+
+.booked-text { -fx-text-fill: #3b6d11; }
+.checked-in-text { -fx-text-fill: #958200; }
+.cancelled-text { -fx-text-fill: #5c5c5c; }
+.expired-text { -fx-text-fill: #4f5d80; }

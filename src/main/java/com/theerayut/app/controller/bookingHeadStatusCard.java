@@ -22,6 +22,10 @@ public class bookingHeadStatusCard {
     @FXML private HBox box;
     @FXML private Circle circle;
     @FXML private Label number;
+    @FXML private VBox numberBox;
+
+    // status style prefix, e.g. "booked" -> .booked-box / .booked-dot / .booked-text
+    private String styleKey = "";
 
     private enum State{
         SHOW,
@@ -35,37 +39,36 @@ public class bookingHeadStatusCard {
     public void setData(ReservationStatus status, List<Reservation> reservations) {
         this.status.setText(status.toString());
         number.setText(String.valueOf(reservations.stream().filter(r -> r.getStatus() == status).count()));
-        switch (status){
-            case BOOKED -> {
-                box.setStyle("-fx-background-color: #eaf3de;");
-                circle.setStyle("-fx-fill: #3b6d11;");
-                this.status.setStyle("-fx-text-fill: #3b6d11");
-                number.setStyle("-fx-text-fill: #3b6d11");
-            }
-            case CHECKED_IN -> {
-                box.setStyle("-fx-background-color: #ece4c6;");
-                circle.setStyle("-fx-fill: #958200;");
-                this.status.setStyle("-fx-text-fill: #958200");
-                number.setStyle("-fx-text-fill: #958200");
-            }
-            case CANCELLED -> {
-                box.setStyle("-fx-background-color: #e4e4e4;");
-                circle.setStyle("-fx-fill: #5c5c5c;");
-                this.status.setStyle("-fx-text-fill: #5c5c5c");
-                number.setStyle("-fx-text-fill: #5c5c5c");
-            }
-            case EXPIRED -> {
-                box.setStyle("-fx-background-color: #e2eafd;");
-                circle.setStyle("-fx-fill: #4f5d80;");
-                this.status.setStyle("-fx-text-fill: #4f5d80");
-                number.setStyle("-fx-text-fill: #4f5d80");
-            }
+        styleKey = switch (status){
+            case BOOKED -> "booked";
+            case CHECKED_IN -> "checked-in";
+            case CANCELLED -> "cancelled";
+            case EXPIRED -> "expired";
+        };
+        // dot + text colours stay constant regardless of collapse state
+        circle.getStyleClass().add(styleKey + "-dot");
+        this.status.getStyleClass().add(styleKey + "-text");
+        number.getStyleClass().add(styleKey + "-text");
+        applyStateStyle();
+    }
+
+    // Collapsed: plain white card with a hairline border and a grey number chip.
+    // Expanded: the status colour set by setData.
+    private void applyStateStyle(){
+        box.getStyleClass().removeAll(styleKey + "-box", "collapsed-box");
+        numberBox.getStyleClass().remove("collapsed-number-box");
+        if (state == State.SHOW){
+            box.getStyleClass().add(styleKey + "-box");
+        } else {
+            box.getStyleClass().add("collapsed-box");
+            numberBox.getStyleClass().add("collapsed-number-box");
         }
     }
 
     public void collapseInitially(){
         state = State.HIDE;
         arrow.setRotate(-180);
+        applyStateStyle();
     }
 
     public void addHideCard(Runnable r){
@@ -95,6 +98,7 @@ public class bookingHeadStatusCard {
         rotateTransition.play();
         for (Runnable r : hideCard) {r.run();}
         state = State.HIDE;
+        applyStateStyle();
         Timeline t = new Timeline(
                 new KeyFrame(Duration.millis(400))
         );
@@ -109,6 +113,7 @@ public class bookingHeadStatusCard {
         rotateTransition.play();
         for (Runnable r : showCard) {r.run();}
         state = State.SHOW;
+        applyStateStyle();
         Timeline t = new Timeline(
                 new KeyFrame(Duration.millis(400))
         );

@@ -7,14 +7,11 @@ import com.theerayut.app.model.ReservationStatus;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.time.format.DateTimeFormatter;
 
 public class bookingHistoryCardController {
-    @FXML
-    private Pane statusBar;
     @FXML
     private Label status;
     @FXML
@@ -55,21 +52,18 @@ public class bookingHistoryCardController {
             status.setText("Booked");
             status.setStyle("-fx-text-fill: #3b6d11;");
             statusBox.setStyle("-fx-background-color: #eaf3de");
-            statusBar.setStyle("-fx-background-color: #41891C");
             statusTime.setText("Booking Time : " + reservation.getBookingTime().format(formatter));
         } else if (reservation.getStatus() == ReservationStatus.CHECKED_IN) {
             status.setText("Checked In");
             status.setStyle("-fx-text-fill: #958200;");
             statusBox.setStyle("-fx-background-color: #ece4c6");
             cancel.setVisible(false);
-            statusBar.setStyle("-fx-background-color: #e1e100");
             statusTime.setText("Check in Time : " + reservation.getCheckInTime().format(formatter));
         } else if (reservation.getStatus() == ReservationStatus.CANCELLED) {
             status.setText("Cancelled");
             status.setStyle("-fx-text-fill: #5c5c5c;");
             statusBox.setStyle("-fx-background-color: #e4e4e4");
             cancel.setVisible(false);
-            statusBar.setStyle("-fx-background-color: #b9b4b4");
             if (reservation.getCancelByRole() == Person.Roles.Staff || reservation.getCancelByRole() == Person.Roles.Admin) {
                 statusTime.setText("Cancel By Staff");
             } else if (reservation.getCancelByRole() == Person.Roles.Customer) {
@@ -81,7 +75,6 @@ public class bookingHistoryCardController {
             status.setStyle("-fx-text-fill: #4f5d80;");
             statusBox.setStyle("-fx-background-color: #e2eafd");
             cancel.setVisible(false);
-            statusBar.setStyle("-fx-background-color: #8b97b6");
             statusTime.setText("Completed / Past Booking");
         }
     }
