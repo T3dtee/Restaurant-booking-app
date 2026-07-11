@@ -18,7 +18,9 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 public class bookingHistoryController {
     @FXML private VBox itemBox;
@@ -55,10 +57,13 @@ public class bookingHistoryController {
 
         ReservationStatus lastStatus = null;
         bookingHeadStatusCard statusController = null;
+        int groupIndex = 0;
 
         if (!customerReservations.isEmpty()) {
             noBookingText.setVisible(false);
         }
+
+        Set<ReservationStatus> expandedStatuses = resolveExpandedStatuses(customerReservations);
 
         for (Reservation data : customerReservations) {
             if (lastStatus == null || lastStatus != data.getStatus()) {
@@ -71,10 +76,11 @@ public class bookingHistoryController {
 
                 statusController = loader.getController();
                 statusController.setData(data.getStatus(), customerReservations);
-                if (data.getStatus() == ReservationStatus.EXPIRED ||  data.getStatus() == ReservationStatus.CANCELLED) {
+                if (!expandedStatuses.contains(data.getStatus())) {
                     statusController.collapseInitially();
                 }
                 lastStatus = data.getStatus();
+                groupIndex = 0;
                 itemBox.getChildren().add(head);
             }
 
@@ -94,15 +100,17 @@ public class bookingHistoryController {
             Region regionItem = (Region) item;
             final double naturalHeight = regionItem.getPrefHeight();
 
+            final int cardIndex = groupIndex;
+
             controller.setOnHide(() -> AnimationUtils.cardHide(regionItem));
-            controller.setOnAdd(() -> AnimationUtils.cardMoveIn(regionItem, naturalHeight));
+            controller.setOnAdd(() -> AnimationUtils.cardMoveInAt(regionItem, naturalHeight, cardIndex));
 
             if (statusController != null) {
                 statusController.addHideCard(controller::handleHide);
                 statusController.addShowCard(controller::showCard);
             }
 
-            if (data.getStatus() == ReservationStatus.EXPIRED || data.getStatus() == ReservationStatus.CANCELLED) {
+            if (!expandedStatuses.contains(data.getStatus())) {
                 regionItem.setPrefHeight(0);
                 regionItem.setOpacity(0);
             }
@@ -112,7 +120,26 @@ public class bookingHistoryController {
             }
 
             itemBox.getChildren().add(item);
+            groupIndex++;
         }
+    }
+
+    // Decide which status groups start expanded. BOOKED and CHECKED_IN open by
+    // default; if neither is present, fall back down the priority chain
+    // (CANCELLED, then EXPIRED) so at least one group is always open.
+    private Set<ReservationStatus> resolveExpandedStatuses(List<Reservation> reservations) {
+        Set<ReservationStatus> present = EnumSet.noneOf(ReservationStatus.class);
+        for (Reservation r : reservations) present.add(r.getStatus());
+
+        Set<ReservationStatus> expanded = EnumSet.noneOf(ReservationStatus.class);
+        if (present.contains(ReservationStatus.BOOKED)) expanded.add(ReservationStatus.BOOKED);
+        if (present.contains(ReservationStatus.CHECKED_IN)) expanded.add(ReservationStatus.CHECKED_IN);
+
+        if (expanded.isEmpty()) {
+            if (present.contains(ReservationStatus.CANCELLED)) expanded.add(ReservationStatus.CANCELLED);
+            else if (present.contains(ReservationStatus.EXPIRED)) expanded.add(ReservationStatus.EXPIRED);
+        }
+        return expanded;
     }
 
     @FXML

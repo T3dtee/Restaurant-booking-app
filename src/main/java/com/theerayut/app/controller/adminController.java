@@ -59,6 +59,7 @@ public class adminController {
     @FXML private Label deleteTitle;
     @FXML private Label deleteText;
     @FXML private Button deleteConfirmBtn;
+    @FXML private Button closePopUpBtn;
 
     private final ObservableList<Staff> staffItems = FXCollections.observableArrayList();
     private Staff editingStaff;
@@ -276,9 +277,11 @@ public class adminController {
 
     private void handleDelete(Staff staff, Button sourceBtn) {
         boolean isSelf = staff.getUsername().equals(AppData.loginStaffData.getUsername());
+        closePopUpBtn.setTranslateX(0);
         if (isSelf) {
             deleteTitle.setText("Cannot delete your own account");
             deleteText.setText("You cannot remove the account you are currently logged in with.");
+            closePopUpBtn.setTranslateX(80);
             deleteConfirmBtn.setVisible(false);
         } else {
             deleteTitle.setText("Delete staff account?");

@@ -65,6 +65,10 @@ public class bookingController {
         });
         datePicker.valueProperty().addListener((obs, oldDate, newDate) -> {
             if (newDate != null) {
+                if (newDate.isBefore(AppData.bookingService.getCanBookingDate()) ||  newDate.isAfter(AppData.bookingService.getMaxBookingDate())) {
+                    datePicker.setValue(oldDate);
+                    return;
+                }
                 setBookedText();
                 setTimeChoice();
             }

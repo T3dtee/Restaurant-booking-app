@@ -3,10 +3,8 @@ package com.theerayut.app.util;
 import javafx.animation.*;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
@@ -263,7 +261,7 @@ public class AnimationUtils {
     public static void cardHide(Region regionItem) {
         // Keep the inner content at its real size so the collapse doesn't squash it.
         if (!regionItem.getChildrenUnmodifiable().isEmpty()
-                && regionItem.getChildrenUnmodifiable().get(0) instanceof Region inner) {
+                && regionItem.getChildrenUnmodifiable().getFirst() instanceof Region inner) {
             inner.setMinHeight(inner.getHeight());
             inner.setPrefHeight(inner.getHeight());
         }
@@ -274,50 +272,63 @@ public class AnimationUtils {
         clip.heightProperty().bind(regionItem.heightProperty());
         regionItem.setClip(clip);
 
+        FadeTransition ft = new FadeTransition(Duration.millis(250), regionItem);
+        ft.setFromValue(1);
+        ft.setToValue(0);
+        ft.setInterpolator(Interpolator.SPLINE(0.5, 0.8, 0.5, 1));
+
         Timeline collapse = new Timeline(
-                new KeyFrame(Duration.millis(350),
+                new KeyFrame(Duration.millis(400),
                         new KeyValue(regionItem.prefHeightProperty(), 0, Interpolator.SPLINE(0.5, 0.8, 0.5, 1))
                 )
         );
 
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.millis(50), event -> collapse.play())
+                ,new KeyFrame(Duration.millis(200), event -> ft.play())
         );
 
         timeline.play();
     }
 
-    public static void cardMoveIn(Region regionItem, double height) {
-        regionItem.setTranslateX(-440);
-        regionItem.setPrefHeight(0);
-        regionItem.setOpacity(100);
+    // Cascade tuning: each card starts STAGGER_STEP later than the one above it,
+    // capped at STAGGER_MAX so a long list doesn't leave the last cards waiting.
+    private static final double STAGGER_STEP = 45;
+    private static final int STAGGER_MAX = 6;
 
-        Timeline collapse = new Timeline(
-                new KeyFrame(Duration.millis(300),
-                        new KeyValue(regionItem.prefHeightProperty(), height, Interpolator.SPLINE(0.4, 0, 0.7, 1))
+    public static void cardMoveIn(Region regionItem, double height) {
+        cardMoveInAt(regionItem, height, 0);
+    }
+
+    /** index = the card's position within its group (0, 1, 2, ...); drives the cascade. */
+    public static void cardMoveInAt(Region regionItem, double height, int index) {
+        // Collapse and hide immediately — before the stagger delay — so a queued
+        // card takes up no space and stays invisible until its turn comes.
+        regionItem.setPrefHeight(0);
+        regionItem.setTranslateX(-180);
+        regionItem.setOpacity(0);
+
+        // One synchronized ease-in-out so the card eases in gently instead of
+        // snapping, holds momentum through the travel, then settles softly.
+        Interpolator ease = Interpolator.SPLINE(0.5, 0, 0.25, 1);
+        Duration dur = Duration.millis(430);
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(regionItem.prefHeightProperty(), 0),
+                        new KeyValue(regionItem.translateXProperty(), -180),
+                        new KeyValue(regionItem.opacityProperty(), 0)
+                ),
+                new KeyFrame(Duration.millis(280),
+                        new KeyValue(regionItem.opacityProperty(), 1, Interpolator.EASE_OUT)
+                ),
+                new KeyFrame(dur,
+                        new KeyValue(regionItem.prefHeightProperty(), height, ease),
+                        new KeyValue(regionItem.translateXProperty(), 0, ease)
                 )
         );
 
-        TranslateTransition trans = new TranslateTransition(Duration.millis(300), regionItem);
-        trans.setToX(0);
-        trans.setInterpolator(Interpolator.SPLINE(0.4, 1, 0.6, 1));
-
-        ScaleTransition s1 = new ScaleTransition(Duration.millis(120), regionItem);
-        s1.setToX(0.94); s1.setToY(1.04);
-        s1.setInterpolator(Interpolator.SPLINE(0.4, 0, 0.6, 1));
-
-        ScaleTransition s2 = new ScaleTransition(Duration.millis(100), regionItem);
-        s2.setToX(1.0); s2.setToY(1.0);
-        s2.setInterpolator(Interpolator.SPLINE(0.4, 0, 0.6, 1));
-
-        s1.setOnFinished(e -> s2.play());
-
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.millis(50), event -> collapse.play()),
-                new KeyFrame(Duration.millis(150), event -> trans.play()),
-                new KeyFrame(Duration.millis(350), event -> s1.play())
-        );
-
+        timeline.setDelay(Duration.millis(Math.min(index, STAGGER_MAX) * STAGGER_STEP));
         timeline.play();
     }
 

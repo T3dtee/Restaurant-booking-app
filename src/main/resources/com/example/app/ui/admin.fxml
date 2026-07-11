@@ -396,7 +396,7 @@
                   </Label>
                   <HBox alignment="BOTTOM_RIGHT" prefHeight="30.0" prefWidth="200.0">
                      <children>
-                        <Button mnemonicParsing="false" onMouseClicked="#popUpCloseOnClick" prefHeight="28.0" prefWidth="65.0" style="-fx-font-size: 13;" styleClass="close-btn" text="Close">
+                        <Button fx:id="closePopUpBtn" mnemonicParsing="false" onMouseClicked="#popUpCloseOnClick" prefHeight="28.0" prefWidth="65.0" style="-fx-font-size: 13;" styleClass="close-btn" text="Close">
                            <HBox.margin>
                               <Insets right="10.0" />
                            </HBox.margin>
