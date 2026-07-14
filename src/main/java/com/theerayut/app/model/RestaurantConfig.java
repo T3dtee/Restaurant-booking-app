@@ -2,7 +2,10 @@ package com.theerayut.app.model;
 
 import com.theerayut.app.util.JsonStorage;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.EnumSet;
+import java.util.Set;
 
 public class RestaurantConfig {
     private static final String FILE = "config.json";
@@ -13,6 +16,7 @@ public class RestaurantConfig {
     private LocalTime closeTime = LocalTime.of(20, 30);
     private int gapTimeMinutes = 90;
     private int maxAdvanceDays = 3;
+    private Set<DayOfWeek> closedDays = EnumSet.noneOf(DayOfWeek.class);
 
     public int getMaxTables() { return maxTables; }
     public void setMaxTables(int maxTables) { this.maxTables = maxTables; }
@@ -32,7 +36,20 @@ public class RestaurantConfig {
     public int getMaxAdvanceDays() { return maxAdvanceDays; }
     public void setMaxAdvanceDays(int maxAdvanceDays) { this.maxAdvanceDays = maxAdvanceDays; }
 
-    // object เดียว ไม่ต้องใช้ TypeToken ใช้ .class ได้เลย
+    public Set<DayOfWeek> getClosedDays() {
+        if (closedDays == null) closedDays = EnumSet.noneOf(DayOfWeek.class);
+        return closedDays;
+    }
+    public void setClosedDays(Set<DayOfWeek> closedDays) {
+        this.closedDays = (closedDays == null || closedDays.isEmpty())
+                ? EnumSet.noneOf(DayOfWeek.class)
+                : EnumSet.copyOf(closedDays);
+    }
+
+    public boolean isClosedOn(DayOfWeek day) {
+        return getClosedDays().contains(day);
+    }
+
     public static RestaurantConfig load() {
         RestaurantConfig cfg = JsonStorage.load(FILE, RestaurantConfig.class);
         return cfg != null ? cfg : new RestaurantConfig();
