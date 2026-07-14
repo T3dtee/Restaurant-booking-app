@@ -76,6 +76,25 @@
 .save-label{
     -fx-font-family: 'Roboto Condensed SemiBold';
 }
+.day-chip {
+    -fx-background-radius: 17;
+    -fx-background-color: #F3F3F3;
+    -fx-text-fill: #7a7a7a;
+    -fx-font-family: 'Roboto';
+    -fx-font-size: 12;
+    -fx-padding: 0;
+}
+.day-chip:hover {
+    -fx-background-color: #e7e7e7;
+}
+.day-chip:selected {
+    -fx-background-color: #FCE4E4;
+    -fx-text-fill: #A32D2D;
+    -fx-font-family: 'Roboto Condensed SemiBold';
+}
+.day-chip:selected:hover {
+    -fx-background-color: #F7D2D2;
+}
 .scroll-pane {
     -fx-background-color: transparent;
 }

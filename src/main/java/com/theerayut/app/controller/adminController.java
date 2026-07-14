@@ -9,6 +9,7 @@ import com.theerayut.app.model.Staff;
 import com.theerayut.app.service.StaffService;
 import com.theerayut.app.util.AnimationUtils;
 import com.theerayut.app.util.SceneManager;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,11 +21,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class adminController {
 
@@ -41,6 +47,9 @@ public class adminController {
     @FXML private TextField maxAdvanceBooking;
     @FXML private VBox table_save;
     @FXML private VBox time_save;
+    @FXML private VBox closedDays_save;
+    @FXML private HBox closedDaysBox;
+    @FXML private ScrollPane configScroll;
     @FXML private TableView<Staff> staffTable;
     @FXML private TableColumn<Staff, String> usernameCol;
     @FXML private TableColumn<Staff, String> roleCol;
@@ -62,6 +71,7 @@ public class adminController {
     @FXML private Button closePopUpBtn;
 
     private final ObservableList<Staff> staffItems = FXCollections.observableArrayList();
+    private final Map<DayOfWeek, ToggleButton> dayChips = new EnumMap<>(DayOfWeek.class);
     private Staff editingStaff;
     private Staff pendingDeleteStaff;
 
@@ -70,7 +80,14 @@ public class adminController {
         AnimationUtils.buttonHover(backBtn, 11, 100);
         initStats();
         initConfigFields();
+        initClosedDays();
         initStaffTable();
+
+        // กัน ScrollPane เลื่อนตาม node ที่ถูก JavaFX โยน focus ให้ตอน root เก่าหลุดจาก scene
+        Platform.runLater(() -> {
+            mainContent.requestFocus();
+            configScroll.setVvalue(0);
+        });
     }
 
     private void initStats() {
@@ -200,6 +217,49 @@ public class adminController {
 
     private void refreshTableSave() { setSaveActive(table_save, tableDirty()); }
     private void refreshTimeSave()  { setSaveActive(time_save,  timeDirty()); }
+    private void refreshClosedDaysSave() {
+        closedDaysBox.setStyle("");
+        setSaveActive(closedDays_save, closedDaysDirty());
+    }
+
+    // ปุ่มเรียงตามลำดับ MONDAY..SUNDAY ใน FXML — index + 1 คือค่า DayOfWeek
+    private void initClosedDays() {
+        Set<DayOfWeek> closed = AppData.config.getClosedDays();
+        List<javafx.scene.Node> chips = closedDaysBox.getChildren();
+        for (int i = 0; i < chips.size(); i++) {
+            DayOfWeek day = DayOfWeek.of(i + 1);
+            ToggleButton chip = (ToggleButton) chips.get(i);
+            dayChips.put(day, chip);
+            chip.setSelected(closed.contains(day));
+            chip.selectedProperty().addListener((o, ov, nv) -> refreshClosedDaysSave());
+        }
+        setSaveActive(closedDays_save, false);
+    }
+
+    private Set<DayOfWeek> selectedClosedDays() {
+        Set<DayOfWeek> days = EnumSet.noneOf(DayOfWeek.class);
+        dayChips.forEach((day, chip) -> { if (chip.isSelected()) days.add(day); });
+        return days;
+    }
+
+    private boolean closedDaysDirty() {
+        return !selectedClosedDays().equals(AppData.config.getClosedDays());
+    }
+
+    @FXML
+    private void saveClosedDays() {
+        if (!closedDaysDirty()) return;
+
+        Set<DayOfWeek> days = selectedClosedDays();
+        if (days.size() == DayOfWeek.values().length) {
+            closedDaysBox.setStyle("-fx-border-color: red; -fx-border-radius: 6;");
+            return;
+        }
+
+        AppData.config.setClosedDays(days);
+        AppData.config.save();
+        setSaveActive(closedDays_save, false);
+    }
 
     private void applyNumberOnly(TextField field) {
         field.textProperty().addListener((obs, oldVal, newVal) -> {
@@ -240,6 +300,8 @@ public class adminController {
             {
                 editBtn.getStyleClass().add("btn-icon");
                 deleteBtn.getStyleClass().addAll("btn-icon", "btn-icon-danger");
+                editBtn.setFocusTraversable(false);
+                deleteBtn.setFocusTraversable(false);
                 editBtn.setOnAction(e   -> handleEdit(getTableView().getItems().get(getIndex())));
                 deleteBtn.setOnAction(e -> handleDelete(getTableView().getItems().get(getIndex()), deleteBtn));
             }

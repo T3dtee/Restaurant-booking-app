@@ -1,6 +1,7 @@
 package com.theerayut.app.controller;
 
 import com.theerayut.app.AppData;
+import com.theerayut.app.service.BookingService;
 import com.theerayut.app.util.AnimationUtils;
 import com.theerayut.app.util.SceneManager;
 import javafx.animation.*;
@@ -49,7 +50,7 @@ public class bookingController {
             history_btn.setDisable(true);
         }
 
-        datePicker.setValue(AppData.bookingService.getCanBookingDate());
+        datePicker.setValue(AppData.bookingService.getFirstBookableDate());
         datePicker.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
@@ -57,15 +58,22 @@ public class bookingController {
 
                 if (empty) return;
 
-                if (date.isBefore(AppData.bookingService.getCanBookingDate()) || date.isAfter(AppData.bookingService.getMaxBookingDate())) {
-                    setDisable(true);  // กดไม่ได้
-                    setStyle("-fx-background-color: #f0f0f0;");
+                switch (AppData.bookingService.statusOf(date)) {
+                    case CLOSED_DAY -> {
+                        setDisable(true);  // ร้านหยุดประจำสัปดาห์
+                        setStyle("-fx-background-color: #FCE4E4; -fx-text-fill: #A32D2D;");
+                    }
+                    case PAST, TOO_FAR -> {
+                        setDisable(true);  // กดไม่ได้
+                        setStyle("-fx-background-color: #f0f0f0;");
+                    }
+                    case OPEN -> { }
                 }
             }
         });
         datePicker.valueProperty().addListener((obs, oldDate, newDate) -> {
             if (newDate != null) {
-                if (newDate.isBefore(AppData.bookingService.getCanBookingDate()) ||  newDate.isAfter(AppData.bookingService.getMaxBookingDate())) {
+                if (AppData.bookingService.statusOf(newDate) != BookingService.DateStatus.OPEN) {
                     datePicker.setValue(oldDate);
                     return;
                 }
@@ -78,8 +86,11 @@ public class bookingController {
         tel.setText(AppData.loginUserData.getPhone());
 
         timeChoice.getItems().addAll(AppData.bookingService.getTimeSlotList());  //ใส่ตัวเลือกช่วงเวลา
-        timeChoice.setValue(AppData.bookingService.canBookingTime(AppData.bookingService.getCanBookingDate(), LocalTime.now()));
-        time = AppData.bookingService.canBookingTime(AppData.bookingService.getCanBookingDate(), LocalTime.now());
+        LocalDate firstDate = AppData.bookingService.getFirstBookableDate();
+        // ถ้าวันนั้นเต็มหมด ไม่มีช่องให้เลือก — ตั้งเป็นช่องแรกไว้ก่อน ปุ่ม confirm จะถูก disable เองอยู่แล้ว
+        time = AppData.bookingService.firstAvailableSlot(firstDate)
+                .orElse(AppData.bookingService.getTimeSlotList()[0]);
+        timeChoice.setValue(time);
         setBookedText();
         timeChoice.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldVal, newVal) -> {
