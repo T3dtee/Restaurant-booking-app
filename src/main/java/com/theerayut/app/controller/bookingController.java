@@ -5,9 +5,11 @@ import com.theerayut.app.service.BookingService;
 import com.theerayut.app.util.AnimationUtils;
 import com.theerayut.app.util.SceneManager;
 import javafx.animation.*;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -52,6 +54,15 @@ public class bookingController {
 
         datePicker.setValue(AppData.bookingService.getFirstBookableDate());
         datePicker.setDayCellFactory(picker -> new DateCell() {
+            {   // แก้บัคของ javaFX datePicker จ้าาา
+                // ComboBoxPopupControl ดัก MOUSE_CLICKED ที่ popup แล้วถือว่า event ที่ไม่ถูก consume
+                // คือการคลิกนอกพื้นที่ใช้งาน จึงเรียก onAutoHide ซึ่งไปสลับ latch showPopupOnMouseRelease
+                // แต่ DatePickerContent ไม่ consume คลิกที่ day cell ผลคือหลังเลือกวันแล้ว
+                // ต้องกดปุ่มเปิดปฏิทิน 2 ครั้ง (ครั้งแรกถูกใช้ไปกับการ reset latch)
+                // handler ตัวนี้อยู่ node เดียวกับของ DatePickerContent จึงยังเลือกวันได้ตามปกติ
+                addEventHandler(MouseEvent.MOUSE_CLICKED, Event::consume);
+            }
+
             @Override
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
