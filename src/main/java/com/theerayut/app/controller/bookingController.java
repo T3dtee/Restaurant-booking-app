@@ -69,16 +69,18 @@ public class bookingController {
 
                 if (empty) return;
 
+                getStyleClass().removeAll("open-day", "closed-day", "unavailable-day");
+
                 switch (AppData.bookingService.statusOf(date)) {
                     case CLOSED_DAY -> {
                         setDisable(true);  // ร้านหยุดประจำสัปดาห์
-                        setStyle("-fx-background-color: #FCE4E4; -fx-text-fill: #A32D2D;");
+                        getStyleClass().add("closed-day");
                     }
                     case PAST, TOO_FAR -> {
                         setDisable(true);  // กดไม่ได้
-                        setStyle("-fx-background-color: #f0f0f0;");
+                        getStyleClass().add("unavailable-day");
                     }
-                    case OPEN -> { }
+                    case OPEN -> getStyleClass().add("open-day");
                 }
             }
         });

@@ -171,28 +171,86 @@
     -fx-background-color: white;
     -fx-border-color: #eaeaea;
 }
-.date-picker-popup .header-pane {
-    -fx-background-color: transparent;
+/* เส้นตารางของ modena คือสีพื้นของ calendar-grid ที่โผล่ผ่านช่องว่างระหว่าง cell
+   ถ้าไม่ทับเป็นสีขาว ช่องว่างที่เว้นไว้จะกลายเป็นสีฟ้าเทาแทนที่จะเป็นพื้นขาว */
+.date-picker-popup > .calendar-grid {
+    -fx-background-color: white;
 }
-.date-picker-popup .day-cell {
+
+/* --- day cell ---
+   ลำดับของกฎด้านล่างมีความหมาย: ตัวที่ specificity เท่ากันจะให้ตัวท้ายไฟล์ชนะ
+   ไม่ต้องเขียนกฎ :focused เลย เพราะ CascadingStyle เทียบ origin ก่อน specificity
+   กฎ author ทุกตัวจึงทับ modena ได้หมดอยู่แล้ว แม้ selector ของ modena จะเจาะจงกว่า
+   ส่วน closed-day/unavailable-day ถูก setDisable(true) ไว้ จึงไม่มีทางเข้า :hover/:focused */
+.date-picker-popup > * > .day-cell {
+    -fx-min-width: 40;
+    -fx-pref-width: 40;
+    -fx-min-height: 36;
+    -fx-pref-height: 36;
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-background-insets: 3;   /* หดพื้นหลังเข้ามา = ระยะห่างระหว่างช่อง (modena ตั้งไว้ 1) */
     -fx-background-radius: 8;
-    -fx-border-radius: 0;
+    -fx-border-width: 0;        /* ขนาดต้องคงที่ทุกเดือน border กินพื้นที่ layout จึงห้ามใช้ */
+    -fx-alignment: CENTER;
     -fx-text-fill: #2d3b27;
 }
-.date-picker-popup .day-cell:hover {
-    -fx-background-color: #edf5e9;
+/* สามคลาสนี้ bookingController ใส่ให้ตามสถานะของวัน (ดู BookingService.DateStatus)
+   ทุก cell ได้คลาสใดคลาสหนึ่งเสมอ สีตัวเลขจึงถูกกำหนดครบที่นี่ */
+.date-picker-popup > * > .open-day {
+    -fx-background-color: #e2efdd;
+    -fx-text-fill: #2E7D32;
+    -fx-cursor: hand;
+}
+.date-picker-popup > * > .closed-day {
+    -fx-background-color: #fff0f0;
+    -fx-text-fill: #A32D2D;
+}
+/* เลยเวลา/ไกลเกินระยะจอง — พื้นเทาให้ยังเห็นเป็นชิป แต่ตัวเลขจางกว่าวันที่จองได้ */
+.date-picker-popup > * > .unavailable-day {
+    -fx-background-color: #fbfbfb;
+    -fx-text-fill: #454545;
+}
+/* เข้มกว่า open-day เพื่อให้ hover ยังแยกออกจากพื้นปกติของวันที่จองได้ */
+.date-picker-popup > * > .day-cell:hover {
+    -fx-background-color: #cae1bb;
     -fx-text-fill: #2E7D32;
 }
-.date-picker-popup .day-cell:selected {
+/* วันที่เลือกอยู่ DatePickerContent ใส่มาเป็น style class "selected" ไม่ใช่ pseudo-class
+   .day-cell:selected จึงไม่เคย match — ต้องเขียนเป็น .selected เท่านั้น */
+.date-picker-popup > * > .selected,
+.date-picker-popup > * > .selected:hover {
     -fx-background-color: #2E7D32;
     -fx-text-fill: white;
-    -fx-background-radius: 8;
     -fx-font-weight: bold;
 }
-.date-picker-popup .today {
-    -fx-border-width: 1;
-    -fx-border-color: #2E7D32;
-    -fx-border-radius: 8;
+/* วงแหวน today วาดด้วย background 2 ชั้น (เขียวทับด้วยพื้นที่หดเข้ามาอีก 1px) แทน border
+   today ที่ไม่ติดคลาสอื่นคือวันที่จองได้เสมอ ชั้นในจึงใช้สีเดียวกับ open-day */
+.date-picker-popup > * > .today {
+    -fx-background-color: #2E7D32, #edf5e9;
+    -fx-background-insets: 3, 4;
+    -fx-background-radius: 8, 7;
+}
+.date-picker-popup > * > .today:hover {
+    -fx-background-color: #2E7D32, #d3e7c6;
+}
+/* today ที่ถูกเลือกอยู่ต้องทึบ ไม่มีวงแหวน — 2 คลาสจึงชนะ :hover ตัวอื่นที่มีคลาสเดียว */
+.date-picker-popup > * > .today.selected {
+    -fx-background-color: #2E7D32;
+    -fx-background-insets: 3;
+    -fx-text-fill: white;
+}
+/* วันนี้ที่ร้านหยุด/จองไม่ได้ ยังต้องเห็นวงแหวน — 2 คลาสจึงชนะทั้ง .today และ .closed-day ที่มีคลาสเดียว */
+.date-picker-popup > * > .today.closed-day {
+    -fx-background-color: #2E7D32, #FCE4E4;
+    -fx-background-insets: 3, 4;
+    -fx-background-radius: 8, 7;
+    -fx-text-fill: #A32D2D;
+}
+.date-picker-popup > * > .today.unavailable-day {
+    -fx-background-color: #2E7D32, #f0f0f0;
+    -fx-background-insets: 3, 4;
+    -fx-background-radius: 8, 7;
 }
 
 .date-box{
