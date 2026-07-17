@@ -87,7 +87,7 @@
                      </VBox.margin>
                   </HBox>
                   <!-- Note -->
-                  <Label styleClass="note-text" text="Each table is limited to 1 hr 30 min.">
+                  <Label fx:id="timeLimitedText" styleClass="note-text" text="Each table is limited to 1 hr 30 min.">
                      <VBox.margin>
                         <Insets left="4.0" top="10.0" />
                      </VBox.margin>

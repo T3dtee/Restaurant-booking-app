@@ -40,6 +40,7 @@ public class bookingController {
     @FXML private ImageView sbLogoutIcon;
     @FXML private Label avatarInitial;
     @FXML private ImageView historyBtn;
+    @FXML private Label timeLimitedText;
 
     LocalTime time;
 
@@ -114,6 +115,10 @@ public class bookingController {
         );
         setTimeChoice();
 
+        timeLimitedText.setText(String.format("Each table is limited to %d hr %d min.",
+                AppData.config.getGapTimeMinutes() / 60,
+                AppData.config.getGapTimeMinutes() - AppData.config.getGapTimeMinutes() / 60 * 60));
+
         AnimationUtils.buttonHover(menuBtn, 12, 110);
         AnimationUtils.buttonHover(confirm, 5, 100, () -> AppData.bookingService.timeSlotAvailable(datePicker.getValue(), time));
 
@@ -139,7 +144,6 @@ public class bookingController {
     }
     @FXML
     private void historySideOnClick() {
-        //AnimationUtils.sideBarHide(mainContent, popUp, blurOverlay, sideBar);
         goToHistory(SceneManager.TransitionType.SLIDE_LEFT);
     }
     @FXML
