@@ -39,6 +39,7 @@ public class SceneManager {
         stage = s;
         // สร้าง Container หลักรอไว้ครั้งแรกครั้งเดียว
         mainContainer = new StackPane();
+        mainContainer.setStyle("-fx-background-color: #ffffff");
         Scene scene = new Scene(mainContainer, 360, 800);
         stage.setScene(scene);
     }

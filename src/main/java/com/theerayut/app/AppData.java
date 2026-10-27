@@ -7,6 +7,7 @@ import com.theerayut.app.service.*;
 public class AppData {
     public static Customer loginUserData;
     public static String bookingId;
+    public static String bookingHistoryReturnPage = "home.fxml";
     public static Staff loginStaffData;
     public static final RestaurantConfig config = RestaurantConfig.load();
     public static final ReservationService allBookingData = new ReservationService();

@@ -104,7 +104,7 @@
                </children>
             </VBox>
             <!-- back button (floating, like menuBtn on booking) -->
-            <VBox fx:id="backBtnBox" alignment="CENTER" layoutX="18.0" layoutY="25.0" onMouseClicked="#goToBooking" prefHeight="45.0" prefWidth="45.0" styleClass="back-btn">
+            <VBox fx:id="backBtnBox" alignment="CENTER" layoutX="18.0" layoutY="25.0" onMouseClicked="#goBack" prefHeight="45.0" prefWidth="45.0" styleClass="back-btn">
                <children>
                   <ImageView fx:id="icon" fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                      <image>

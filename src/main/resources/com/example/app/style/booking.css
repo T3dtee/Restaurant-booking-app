@@ -426,6 +426,15 @@
     -fx-background-color: linear-gradient(to right,rgba(156,230,51,.9),rgba(65,137,28,.9));
     -fx-text-fill: #fff;
 }
+.side-bar-btn-current,
+.side-bar-btn-current:hover {
+    -fx-background-color: #eef7e2;
+    -fx-text-fill: #2e7d32;
+}
+.side-bar-close-btn {
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+}
 .side-bar-btn-danger{
     -fx-background-color: rgba(201,54,54,.06);
     -fx-background-radius: 12;

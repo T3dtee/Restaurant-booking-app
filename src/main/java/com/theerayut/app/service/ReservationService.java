@@ -69,6 +69,31 @@ public class ReservationService {
                 .toList();
     }
 
+    /** Read-only Home summary; selection does not expire or persist reservations. */
+    public Optional<Reservation> getHomeReservation(Customer customer, LocalDateTime now) {
+        return selectHomeReservation(reservationMap.values(), customer.getId(), now,
+                AppData.config.getGapTimeMinutes());
+    }
+
+    static Optional<Reservation> selectHomeReservation(Collection<Reservation> reservations,
+                                                       String customerId, LocalDateTime now,
+                                                       int durationMinutes) {
+        return reservations.stream()
+                .filter(r -> customerId.equals(r.getCustomerId()))
+                .filter(r -> {
+                    LocalDateTime start = LocalDateTime.of(r.getDate(), r.getTime());
+                    return (r.getStatus() == ReservationStatus.CHECKED_IN
+                            || r.getStatus() == ReservationStatus.BOOKED)
+                            && !start.plusMinutes(durationMinutes).isBefore(now);
+                })
+                .min(Comparator.comparing((Reservation r) ->
+                                r.getStatus() == ReservationStatus.CHECKED_IN ? 0 : 1)
+                        .thenComparing(Reservation::getDate)
+                        .thenComparing(Reservation::getTime)
+                        .thenComparing(Reservation::getTableNo)
+                        .thenComparing(Reservation::getReservationId));
+    }
+
     public List<Reservation> getReservationsByDate(LocalDate date) {
         updateReservations();
         return reservationMap.values().stream()

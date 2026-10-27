@@ -32,7 +32,7 @@ public class bookingHistoryController {
     @FXML private Label noBookingText;
 
     @FXML
-    private void goToBooking() {SceneManager.switchScene("booking.fxml", SceneManager.TransitionType.SLIDE_OUT);}
+    private void goToBooking() {SceneManager.switchScene(AppData.bookingHistoryReturnPage, SceneManager.TransitionType.SLIDE_OUT);}
 
     public void initialize() {
         AnimationUtils.buttonHover(backBtnBox, 11, 100);

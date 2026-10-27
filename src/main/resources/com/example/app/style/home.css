@@ -1,0 +1,115 @@
+.home-page {
+    -fx-background-color: #f7f8f5;
+    -fx-font-family: "Roboto";
+}
+.home-icon-button {
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+}
+.home-muted, .home-empty-guidance {
+    -fx-font-family: "Roboto";
+    -fx-font-size: 12;
+    -fx-text-fill: #656565;
+    -fx-padding: 0;
+}
+.home-greeting, .home-empty-title {
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 18;
+    -fx-padding: 0;
+}
+.home-greeting {
+    -fx-text-fill: #2e7d32;
+}
+.home-card {
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+    -fx-border-color: #ececec;
+    -fx-border-width: 1;
+    -fx-border-radius: 18;
+}
+.home-reservation-card {
+    -fx-padding: 17;
+}
+.home-card-heading {
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 13;
+    -fx-text-fill: #656565;
+}
+.home-status {
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 12;
+    -fx-background-color: #eaf3de;
+    -fx-background-radius: 20;
+    -fx-text-fill: #3b6d11;
+    -fx-padding: 0;
+}
+.home-status-checked-in {
+    -fx-background-color: #ece4c6;
+    -fx-text-fill: #958200;
+}
+.home-when, .home-detail, .home-empty-title {
+    -fx-text-fill: #1f2317;
+}
+.home-when {
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 20;
+    -fx-padding: 0;
+}
+.home-detail {
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 16;
+    -fx-padding: 0;
+}
+.home-view-button {
+    -fx-font-family: "Roboto";
+    -fx-font-size: 13;
+    -fx-text-fill: #2e7d32;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-radius: 8;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+}
+.home-view-button:hover {
+    -fx-underline: true;
+}
+.home-book-button {
+    -fx-font-family: "Roboto Condensed SemiBold";
+    -fx-font-size: 15;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+}
+.home-book-secondary {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-border-color: #2e7d32;
+    -fx-border-radius: 15;
+    -fx-text-fill: #2e7d32;
+}
+.home-book-secondary:hover {
+    -fx-background-color: #eef7e2;
+}
+.home-book-primary {
+    -fx-background-color: #2e7d32;
+    -fx-background-radius: 16;
+    -fx-border-color: transparent;
+    -fx-border-radius: 16;
+    -fx-text-fill: white;
+}
+.home-book-primary:hover {
+    -fx-background-color: #256629;
+}
+.home-book-button:pressed {
+    -fx-translate-y: 1;
+}
+.home-empty-card {
+    -fx-padding: 20 19;
+}
+.home-calendar-ring {
+    -fx-background-color: #eef7e2;
+    -fx-background-radius: 64;
+}
+.home-empty-guidance {
+    -fx-line-spacing: 4;
+}

@@ -36,6 +36,7 @@ public class bookingController {
     @FXML private VBox sideBar;
     @FXML private ImageView sbCloseIcon;
     @FXML private ImageView sbHomeIcon;
+    @FXML private ImageView sbDiningPlanIcon;
     @FXML private ImageView sbHistoryIcon;
     @FXML private ImageView sbLogoutIcon;
     @FXML private Label avatarInitial;
@@ -124,10 +125,11 @@ public class bookingController {
 
         Color gray = Color.web("#424242");
         historyBtn.setImage(AnimationUtils.recolor(historyBtn.getImage(), gray));
-        sbCloseIcon.setImage(AnimationUtils.recolor(sbCloseIcon.getImage(), Color.web("#41891C")));
+        sbCloseIcon.setImage(AnimationUtils.recolor(sbCloseIcon.getImage(), Color.web("#2e7d32")));
         sbHomeIcon.setImage(AnimationUtils.recolor(sbHomeIcon.getImage(), gray));
+        sbDiningPlanIcon.setImage(AnimationUtils.recolor(sbDiningPlanIcon.getImage(), Color.web("#2e7d32")));
         sbHistoryIcon.setImage(AnimationUtils.recolor(sbHistoryIcon.getImage(), gray));
-        sbLogoutIcon.setImage(AnimationUtils.recolor(sbLogoutIcon.getImage(), gray));
+        sbLogoutIcon.setImage(AnimationUtils.recolor(sbLogoutIcon.getImage(), Color.web("#c93636")));
     }
 
     @FXML
@@ -136,11 +138,12 @@ public class bookingController {
     }
     @FXML
     private void hideSideBarOnClick() {
+        if (!sideBar.isVisible()) return;
         AnimationUtils.sideBarHide(mainContent, popUp, blurOverlay, sideBar);
     }
     @FXML
     private void homeOnClick() {
-        AnimationUtils.sideBarHide(mainContent, popUp, blurOverlay, sideBar);
+        SceneManager.switchScene("home.fxml", SceneManager.TransitionType.FADE);
     }
     @FXML
     private void historySideOnClick() {
@@ -276,5 +279,6 @@ public class bookingController {
     private void goToSuccess() { SceneManager.switchScene("success.fxml");}
 
     private void goToHistory(SceneManager.TransitionType type) {
+        AppData.bookingHistoryReturnPage = "booking.fxml";
         SceneManager.switchSceneAsync("bookingHistory.fxml", type);}
 }

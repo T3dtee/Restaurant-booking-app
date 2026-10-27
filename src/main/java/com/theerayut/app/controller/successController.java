@@ -142,10 +142,11 @@ public class successController {
     }
 
     @FXML
-    private void goToBooking() {SceneManager.switchScene("booking.fxml");}
+    private void goBack() {SceneManager.switchScene("booking.fxml");}
     @FXML
     private void doneOnClicked() {
         reservation.setDoneBooking(true);
+        AppData.bookingHistoryReturnPage = "home.fxml";
         SceneManager.switchSceneAsync("bookingHistory.fxml", SceneManager.TransitionType.FADE);
     }
 }

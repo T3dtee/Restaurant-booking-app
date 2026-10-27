@@ -81,7 +81,7 @@ public class loginUserController {
                 invalidText.setVisible(true);
             } else {
                 AppData.loginUserData = c;
-                goToBooking(c.isFirstTimeLogin());
+                goToHome(c.isFirstTimeLogin());
                 c.setFirstTimeLogin(false);
             }
 
@@ -102,12 +102,12 @@ public class loginUserController {
     }
 
     @FXML
-    private void goToBooking(boolean firstTimeLogin) {
+    private void goToHome(boolean firstTimeLogin) {
         if (firstTimeLogin) {
-            SceneManager.switchScene("booking.fxml", SceneManager.TransitionType.FADE);
+            SceneManager.switchScene("home.fxml", SceneManager.TransitionType.FADE);
         }
         else {
-            SceneManager.switchScene("booking.fxml", SceneManager.TransitionType.SLIDE_IN);
+            SceneManager.switchScene("home.fxml", SceneManager.TransitionType.SLIDE_IN);
         }
 
     }
