@@ -35,6 +35,15 @@ build/
 ### Mac OS ###
 .DS_Store
 
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Logs and Java heap dumps
+*.log
+*.hprof
+
 ### App data (JSON storage) ###
 data/
 
