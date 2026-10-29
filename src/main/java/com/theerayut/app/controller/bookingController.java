@@ -147,7 +147,7 @@ public class bookingController {
     }
     @FXML
     private void historySideOnClick() {
-        goToHistory(SceneManager.TransitionType.SLIDE_LEFT);
+        goToHistory(SceneManager.TransitionType.OVERLAID_SLIDE);
     }
     @FXML
     private void logOutOnClick() {

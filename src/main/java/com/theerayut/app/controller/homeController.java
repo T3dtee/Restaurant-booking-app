@@ -105,7 +105,7 @@ public class homeController {
 
     private void goToHistory() {
         AppData.bookingHistoryReturnPage = "home.fxml";
-        SceneManager.switchSceneAsync("bookingHistory.fxml", SceneManager.TransitionType.SLIDE_LEFT);
+        SceneManager.switchSceneAsync("bookingHistory.fxml", SceneManager.TransitionType.OVERLAID_SLIDE);
     }
 
     @FXML
@@ -116,13 +116,11 @@ public class homeController {
     @FXML
     private void menuOnClick() {
         AnimationUtils.sideBarShow(mainContent, popUp, blurOverlay, sideBar);
-        //closeMenuButton.requestFocus();
     }
 
     @FXML
     private void hideSideBarOnClick() {
         AnimationUtils.sideBarHide(mainContent, popUp, blurOverlay, sideBar);
-        //menuButton.requestFocus();
     }
 
     @FXML

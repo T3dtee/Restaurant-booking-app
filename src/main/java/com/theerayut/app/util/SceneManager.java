@@ -32,12 +32,11 @@ public class SceneManager {
         FADE,
         SLIDE_IN,
         SLIDE_OUT,
-        SLIDE_LEFT
+        OVERLAID_SLIDE
     }
 
     public static void setStage(Stage s) {
         stage = s;
-        // สร้าง Container หลักรอไว้ครั้งแรกครั้งเดียว
         mainContainer = new StackPane();
         mainContainer.setStyle("-fx-background-color: #ffffff");
         Scene scene = new Scene(mainContainer, 360, 800);
@@ -62,7 +61,7 @@ public class SceneManager {
                             case FADE -> playFadeAnimation(nextRoot);
                             case SLIDE_IN -> playSlideInAnimation(nextRoot);
                             case SLIDE_OUT -> playSlideOutAnimation(nextRoot);
-                            case SLIDE_LEFT -> playSlideToLeftAnimation(nextRoot);
+                            case OVERLAID_SLIDE -> playSlideToLeftOverlapAnimation(nextRoot);
                         }
                         fireAfterTransition();
                     }
@@ -161,7 +160,7 @@ public class SceneManager {
         timeline.play();
     }
 
-    private static void playSlideToLeftAnimation(Parent nextScene) {
+    private static void playSlideToLeftOverlapAnimation(Parent nextScene) {
         if (mainContainer.getChildren().isEmpty()) {
             mainContainer.getChildren().add(nextScene);
             return;
@@ -170,14 +169,19 @@ public class SceneManager {
         mainContainer.getChildren().add(nextScene);
         nextScene.setTranslateX(360);
 
-        ScaleTransition scaleDown = new ScaleTransition(Duration.millis(450), mainContainer.getChildren().getFirst());
+        ScaleTransition scaleDown = new ScaleTransition(Duration.millis(370), mainContainer.getChildren().getFirst());
         scaleDown.setFromX(1);
         scaleDown.setFromY(1);
-        scaleDown.setToX(0.95);
-        scaleDown.setToY(0.95);
-        scaleDown.setInterpolator(Interpolator.EASE_OUT);
+        scaleDown.setToX(0.96);
+        scaleDown.setToY(0.96);
+        scaleDown.setInterpolator(Interpolator.SPLINE(0.2,0,0.85,1));
 
-        TranslateTransition moveIn = new TranslateTransition(Duration.millis(450), nextScene);
+        TranslateTransition moveDown = new TranslateTransition(Duration.millis(370), mainContainer.getChildren().getFirst());
+        moveDown.setFromX(0);
+        moveDown.setToX(5);
+        moveDown.setInterpolator(Interpolator.SPLINE(0.2,0,0.85,1));
+
+        TranslateTransition moveIn = new TranslateTransition(Duration.millis(370), nextScene);
         moveIn.setToX(0);
         moveIn.setInterpolator(Interpolator.SPLINE(0.25, 0.9, 0.15, 1));
 
@@ -192,6 +196,7 @@ public class SceneManager {
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.ZERO, event ->  {
                     scaleDown.play();
+                    moveDown.play();
                 }),
                 new KeyFrame(Duration.millis(30), event -> {
                     moveIn.play();
