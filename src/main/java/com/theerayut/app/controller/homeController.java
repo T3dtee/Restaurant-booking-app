@@ -95,15 +95,12 @@ public class homeController {
     @FXML
     private void viewBookingOnClick() {
         if (homeReservation != null) AppData.bookingId = homeReservation.getReservationId();
-        goToHistory();
+        AppData.bookingHistoryReturnPage = "home.fxml";
+        SceneManager.switchSceneAsync("bookingHistory.fxml", SceneManager.TransitionType.SLIDE_IN);
     }
 
     @FXML
     private void historyOnClick() {
-        goToHistory();
-    }
-
-    private void goToHistory() {
         AppData.bookingHistoryReturnPage = "home.fxml";
         SceneManager.switchSceneAsync("bookingHistory.fxml", SceneManager.TransitionType.OVERLAID_SLIDE);
     }
