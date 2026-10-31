@@ -94,7 +94,10 @@ public class homeController {
 
     @FXML
     private void viewBookingOnClick() {
-        if (homeReservation != null) AppData.bookingId = homeReservation.getReservationId();
+        if (homeReservation != null) {
+            AppData.bookingId = homeReservation.getReservationId();
+            homeReservation.setHighlight(true);
+        }
         goToHistory();
     }
 

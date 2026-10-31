@@ -14,7 +14,23 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class BookingService {
 
-    /** เหตุผลที่วันหนึ่ง ๆ จองได้หรือไม่ได้ — UI เอาไปตัดสินใจแสดงผลได้โดยไม่ต้องรู้กฎเอง */
+    public enum SubmitStatus { BOOKED, ALREADY_BOOKED, FULL, UNAVAILABLE }
+
+    public record SubmitResult(SubmitStatus status, Reservation reservation) {}
+
+    public SubmitResult submitBooking(LocalDate date, LocalTime time, Customer customer, byte guest) {
+        if (!timeSlotAvailable(date, time)) {
+            return new SubmitResult(AppData.allBookingData.isTableFull(date, time)
+                    ? SubmitStatus.FULL : SubmitStatus.UNAVAILABLE, null);
+        }
+        if (AppData.allBookingData.isCustomerBooked(customer, date, time)) {
+            return new SubmitResult(SubmitStatus.ALREADY_BOOKED, null);
+        }
+        Reservation reservation = book(date, time, customer, guest);
+        return new SubmitResult(reservation != null ? SubmitStatus.BOOKED : SubmitStatus.UNAVAILABLE,
+                reservation);
+    }
+
     public enum DateStatus {
         OPEN,        // จองได้
         CLOSED_DAY,  // ร้านหยุดประจำสัปดาห์

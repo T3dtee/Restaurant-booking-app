@@ -11,6 +11,7 @@ import javafx.scene.CacheHint;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 public class bookingHistoryController {
+    @FXML private ScrollPane historyScroll;
     @FXML private VBox itemBox;
     @FXML private AnchorPane mainContent;
     @FXML private AnchorPane popUp;
@@ -41,6 +43,8 @@ public class bookingHistoryController {
     }
 
     private Runnable pendingCancelAction;
+    private Button popupTrigger;
+    private double scrollBeforePopup;
     private Runnable cardMoveInAction;
 
     private void loadItems() throws IOException {
@@ -64,6 +68,9 @@ public class bookingHistoryController {
         }
 
         Set<ReservationStatus> expandedStatuses = resolveExpandedStatuses(customerReservations);
+        customerReservations.stream()
+                .filter(r -> r.getReservationId().equals(AppData.bookingId) && r.isHighlight())
+                .findFirst().ifPresent(r -> expandedStatuses.add(r.getStatus()));
 
         for (Reservation data : customerReservations) {
             if (lastStatus == null || lastStatus != data.getStatus()) {
@@ -101,9 +108,33 @@ public class bookingHistoryController {
             final double naturalHeight = regionItem.getPrefHeight();
 
             final int cardIndex = groupIndex;
+            final bookingHeadStatusCard groupController = statusController;
+            boolean lockGroup = data.getReservationId().equals(AppData.bookingId)
+                    && (data.isHighlight()
+                    || (data.getStatus() == ReservationStatus.BOOKED && data.isDoneBooking()));
+            if (lockGroup) groupController.setCollapseLocked(true);
+            controller.setOnHighlightFinished(() -> {
+                if (lockGroup) groupController.setCollapseLocked(false);
+            });
 
             controller.setOnHide(() -> AnimationUtils.cardHide(regionItem));
-            controller.setOnAdd(() -> AnimationUtils.cardMoveInAt(regionItem, naturalHeight, cardIndex));
+            controller.setOnScrollIntoView(onVisible ->
+                    AnimationUtils.scrollToCard(historyScroll, regionItem, onVisible));
+            controller.setOnBookingEntry(onFinished -> {
+                // A booking may have expired while the success screen was open.
+                // Keep it hidden if its current status group starts collapsed.
+                if (!expandedStatuses.contains(data.getStatus())) {
+                    if (onFinished != null) onFinished.run();
+                    return;
+                }
+                AnimationUtils.scrollThenCardMoveIn(historyScroll, regionItem, naturalHeight, () -> {
+                    // Keep the lock if the entrance is followed by a highlight.
+                    if (lockGroup && !data.isHighlight()) groupController.setCollapseLocked(false);
+                    if (onFinished != null) onFinished.run();
+                });
+            });
+            controller.setOnAdd(() ->
+                    AnimationUtils.cardMoveInAt(regionItem, naturalHeight, cardIndex));
 
             if (statusController != null) {
                 statusController.addHideCard(controller::handleHide);
@@ -149,7 +180,7 @@ public class bookingHistoryController {
     }
     @FXML
     private void confirmOnClick() {
-        hidePopUp();
+        hidePopUp(false);
         if (pendingCancelAction != null) {
             pendingCancelAction.run();
             pendingCancelAction = null;
@@ -157,10 +188,22 @@ public class bookingHistoryController {
     }
 
     private void showPopUp(Button button) {
+        popupTrigger = button;
+        scrollBeforePopup = historyScroll.getVvalue();
         AnimationUtils.popUpShow(mainContent, popUp, blurOverlay, popUpBox, button);
     }
 
     private void hidePopUp() {
+        hidePopUp(true);
+    }
+
+    private void hidePopUp(boolean restoreTriggerFocus) {
+        Button trigger = popupTrigger;
+        // Confirming cancellation hides the trigger; focus a control that will remain visible.
+        if (restoreTriggerFocus && trigger != null && trigger.isVisible()) trigger.requestFocus();
+        else historyScroll.requestFocus();
+        historyScroll.setVvalue(scrollBeforePopup);
         AnimationUtils.popUpHide(mainContent, popUp, blurOverlay, popUpBox);
+        popupTrigger = null;
     }
 }

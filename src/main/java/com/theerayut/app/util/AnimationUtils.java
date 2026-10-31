@@ -1,14 +1,18 @@
 package com.theerayut.app.util;
 
 import javafx.animation.*;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -17,6 +21,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 
 public class AnimationUtils {
 
@@ -102,6 +107,11 @@ public class AnimationUtils {
     }
 
     public static void popUpHide(AnchorPane mainContent, AnchorPane popUp, Pane blurPane, Node popUpBox) {
+        popUpHide(mainContent, popUp, blurPane, popUpBox, null);
+    }
+
+    public static void popUpHide(AnchorPane mainContent, AnchorPane popUp, Pane blurPane,
+                                 Node popUpBox, Runnable onHidden) {
         GaussianBlur blur = new GaussianBlur(15);
         mainContent.setEffect(blur);
 
@@ -117,7 +127,9 @@ public class AnimationUtils {
         f.setOnFinished(e -> {
             popUp.setVisible(false);
             popUpBox.setVisible(false);
-            mainContent.setEffect(null);});
+            mainContent.setEffect(null);
+            if (onHidden != null) onHidden.run();
+        });
 
         ScaleTransition s2 = new ScaleTransition(Duration.millis(200), mainContent);
         s2.setFromX(0.985);
@@ -330,6 +342,197 @@ public class AnimationUtils {
 
         timeline.setDelay(Duration.millis(Math.min(index, STAGGER_MAX) * STAGGER_STEP));
         timeline.play();
+    }
+
+    private static final Object HIGHLIGHT_ANIMATION_KEY = new Object();
+
+    public static void cardHighlight(Region card) {
+        cardHighlight(card, null, null);
+    }
+
+    public static void cardHighlight(Region card, Consumer<Runnable> beforeHighlight, Runnable onStarted) {
+        cardHighlight(card, beforeHighlight, onStarted, null);
+    }
+
+    public static void cardHighlight(Region card, Consumer<Runnable> beforeHighlight,
+                                     Runnable onStarted, Runnable onFinished) {
+        Object previous = card.getProperties().get(HIGHLIGHT_ANIMATION_KEY);
+        if (previous instanceof Animation animation) animation.stop();
+        // Resolve CSS after the scene has had time to attach and process its ancestors.
+        PauseTransition delay = new PauseTransition(Duration.millis(250));
+        delay.setOnFinished(event -> {
+            card.getProperties().remove(HIGHLIGHT_ANIMATION_KEY);
+            if (card.getScene() == null) {
+                if (onFinished != null) onFinished.run();
+                return;
+            }
+            Runnable play = () -> {
+                if (card.getScene() != null) playCardHighlight(card, onStarted, onFinished);
+                else if (onFinished != null) onFinished.run();
+            };
+            if (beforeHighlight != null) beforeHighlight.accept(play);
+            else play.run();
+        });
+        card.getProperties().put(HIGHLIGHT_ANIMATION_KEY, delay);
+        delay.play();
+    }
+
+    private static void playCardHighlight(Region card, Runnable onStarted, Runnable onFinished) {
+        card.setScaleX(1);
+        card.setScaleY(1);
+
+        // Resolve both borders from CSS so animation colors stay in the stylesheet.
+        Node cssRoot = card.getScene().getRoot();
+        cssRoot.applyCss();
+        Border originalBorder = card.getBorder();
+        card.getStyleClass().add("reservation-highlight");
+        cssRoot.applyCss();
+        Border highlightBorder = card.getBorder();
+        card.getStyleClass().remove("reservation-highlight");
+        cssRoot.applyCss();
+        if (originalBorder == null || highlightBorder == null) {
+            if (onFinished != null) onFinished.run();
+            return;
+        }
+        card.setBorder(originalBorder);
+
+        Interpolator ease = Interpolator.SPLINE(0.4, 0, 0.2, 1);
+        Timeline pulse = new Timeline(
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(card.borderProperty(), originalBorder),
+                        new KeyValue(card.scaleXProperty(), 1),
+                        new KeyValue(card.scaleYProperty(), 1)),
+                new KeyFrame(Duration.millis(150),
+                        new KeyValue(card.borderProperty(), highlightBorder, ease),
+                        new KeyValue(card.scaleXProperty(), 1.03, ease),
+                        new KeyValue(card.scaleYProperty(), 1.03, ease)),
+                new KeyFrame(Duration.millis(400),
+                        new KeyValue(card.borderProperty(), originalBorder, ease),
+                        new KeyValue(card.scaleXProperty(), 1, ease),
+                        new KeyValue(card.scaleYProperty(), 1, ease))
+        );
+        pulse.statusProperty().addListener((observable, oldStatus, newStatus) -> {
+            if (newStatus == Animation.Status.STOPPED) {
+                card.setBorder(originalBorder);
+                card.setScaleX(1);
+                card.setScaleY(1);
+                card.getProperties().remove(HIGHLIGHT_ANIMATION_KEY);
+                if (onFinished != null) onFinished.run();
+            }
+        });
+        card.getProperties().put(HIGHLIGHT_ANIMATION_KEY, pulse);
+        if (onStarted != null) onStarted.run();
+        pulse.play();
+    }
+
+    public static void scrollThenCardMoveIn(ScrollPane scroll, Region card, double height, Runnable onFinished) {
+        if (scroll.getScene() == null) return;
+        scroll.getScene().getRoot().applyCss();
+        scroll.getScene().getRoot().layout();
+        if (card.getScene() != scroll.getScene()) return;
+        card.setPrefHeight(0);
+        card.setOpacity(0);
+        PauseTransition waitForScene = new PauseTransition(Duration.millis(250));
+        waitForScene.setOnFinished(ready -> {
+            if (card.getScene() == null || card.getScene() != scroll.getScene()) return;
+            scroll.getScene().getRoot().layout();
+            Node content = scroll.getContent();
+            double viewportHeight = scroll.getViewportBounds().getHeight();
+            double range = Math.max(0, content.getLayoutBounds().getHeight() - viewportHeight);
+            double valueRange = scroll.getVmax() - scroll.getVmin();
+            double top = content.sceneToLocal(card.localToScene(card.getLayoutBounds())).getMinY()
+                    - content.getLayoutBounds().getMinY();
+            double finalRange = Math.max(0, content.getLayoutBounds().getHeight() + height - viewportHeight);
+            // Center the expanded card where possible, without scrolling beyond either end.
+            double desiredOffset = top + height / 2 - viewportHeight / 2;
+            double finalOffset = Math.clamp(desiredOffset, 0, finalRange);
+            double beforeOffset = Math.min(finalOffset, range);
+            DoubleProperty offset = new SimpleDoubleProperty(beforeOffset);
+            Runnable updateScroll = () -> {
+                if (card.getScene() == null || card.getScene() != scroll.getScene()) return;
+                scroll.getScene().getRoot().layout();
+                double actualRange = Math.max(0, content.getLayoutBounds().getHeight()
+                        - scroll.getViewportBounds().getHeight());
+                scroll.setVvalue(actualRange > 0
+                        ? scroll.getVmin() + Math.clamp(offset.get() / actualRange, 0, 1) * valueRange
+                        : scroll.getVmin());
+            };
+            Interpolator ease = Interpolator.SPLINE(0.5, 0, 0.25, 1);
+            double beforeValue = range > 0
+                    ? scroll.getVmin() + beforeOffset / range * valueRange : scroll.getVmin();
+            double currentOffset = valueRange > 0
+                    ? (scroll.getVvalue() - scroll.getVmin()) / valueRange * range : 0;
+            double scrollDistance = Math.abs(beforeOffset - currentOffset);
+            double scrollMillis = Math.clamp(scrollDistance * 0.75, 200, 500);
+            // Drive the actual scroll property directly, independently of the entrance's offset.
+            Timeline approach = new Timeline(
+                    new KeyFrame(Duration.ZERO,
+                            new KeyValue(scroll.vvalueProperty(), scroll.getVvalue())),
+                    new KeyFrame(Duration.millis(scrollMillis),
+                            new KeyValue(scroll.vvalueProperty(), beforeValue, ease)));
+            card.setTranslateX(-180);
+            Timeline entrance = new Timeline(
+                    new KeyFrame(Duration.ZERO,
+                            new KeyValue(card.prefHeightProperty(), 0),
+                            new KeyValue(offset, beforeOffset),
+                            new KeyValue(card.opacityProperty(), 0),
+                            new KeyValue(card.translateXProperty(), -180)),
+                    new KeyFrame(Duration.millis(280),
+                            new KeyValue(card.opacityProperty(), 1, Interpolator.EASE_OUT)),
+                    new KeyFrame(Duration.millis(430),
+                            new KeyValue(card.prefHeightProperty(), height, ease),
+                            new KeyValue(offset, finalOffset, ease),
+                            new KeyValue(card.translateXProperty(), 0,
+                                    ease))
+            );
+            entrance.currentTimeProperty().addListener((observable, oldTime, newTime) -> updateScroll.run());
+            SequentialTransition sequence = new SequentialTransition();
+            if (scrollDistance > 2) sequence.getChildren().add(approach);
+            else scroll.setVvalue(beforeValue);
+            sequence.getChildren().add(new PauseTransition(Duration.millis(120)));
+            sequence.getChildren().add(entrance);
+            sequence.setOnFinished(event -> {
+                updateScroll.run();
+                if (card.getScene() != null && onFinished != null) onFinished.run();
+            });
+            sequence.play();
+        });
+        waitForScene.play();
+    }
+
+    public static void scrollToCard(ScrollPane scroll, Region card, Runnable onVisible) {
+        if (scroll.getScene() == null) return;
+        scroll.getScene().getRoot().applyCss();
+        scroll.getScene().getRoot().layout();
+        if (card.getScene() != scroll.getScene()) return;
+        Node content = scroll.getContent();
+        Bounds bounds = content.sceneToLocal(card.localToScene(card.getLayoutBounds()));
+        double viewportHeight = scroll.getViewportBounds().getHeight();
+        double contentMinY = content.getLayoutBounds().getMinY();
+        double range = content.getLayoutBounds().getHeight() - viewportHeight;
+        double valueRange = scroll.getVmax() - scroll.getVmin();
+        double offset = range > 0 && valueRange > 0
+                ? (scroll.getVvalue() - scroll.getVmin()) / valueRange * range : 0;
+        double top = bounds.getMinY() - contentMinY;
+        double bottom = bounds.getMaxY() - contentMinY;
+        if (range <= 0 || valueRange <= 0
+                || (top >= offset + 16 && bottom <= offset + viewportHeight - 16)) {
+            if (onVisible != null) onVisible.run();
+            return;
+        }
+        double targetOffset = Math.max(0, Math.min(range, (top + bottom - viewportHeight) / 2));
+        double targetValue = scroll.getVmin() + targetOffset / range * valueRange;
+        Timeline movement = new Timeline(
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(scroll.vvalueProperty(), scroll.getVvalue())),
+                new KeyFrame(Duration.millis(400),
+                        new KeyValue(scroll.vvalueProperty(), targetValue,
+                                Interpolator.SPLINE(0.4, 0, 0.2, 1))));
+        movement.setOnFinished(event -> {
+            if (card.getScene() != null && card.getScene() == scroll.getScene()
+                    && onVisible != null) onVisible.run();
+        });
+        movement.play();
     }
 
     public static Image recolor(Image source, Color color) {

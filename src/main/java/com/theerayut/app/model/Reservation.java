@@ -23,6 +23,15 @@ public class Reservation {
     private LocalDateTime checkInTime;
 
     private transient boolean doneBooking = false;
+    private transient boolean highlight = false;
+
+    public boolean isHighlight() {
+        return highlight;
+    }
+
+    public void setHighlight(boolean highlight) {
+        this.highlight = highlight;
+    }
     public boolean isDoneBooking() {
         return doneBooking;
     }

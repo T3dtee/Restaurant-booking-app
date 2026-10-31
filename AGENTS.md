@@ -28,11 +28,15 @@ Use four-space indentation and match surrounding Java formatting. Prefer `UpperC
 
 Keep visual styling in CSS, prefer style classes over inline styles, and reuse `SceneManager` and `AnimationUtils`. No formatter or lint plugin is configured.
 
+Keep controllers focused on UI events, rendering, navigation, and calling services. Prefer implementing business rules, data lookup/filtering, and reusable domain logic in the appropriate service; reuse existing service methods or extract a shared method instead of duplicating logic in controllers. Keep UI-specific state and animation coordination in controllers or UI utilities.
+
 ## Testing Guidelines
 
 JUnit Jupiter 5.12.1 is configured, but no `src/test/` suite or coverage threshold exists. Add tests under `src/test/java/com/theerayut/app/`, mirroring production packages, with names such as `BookingServiceTest`.
 
-For behavior changes, cover relevant booking boundaries and persistence behavior. Compile and manually exercise affected customer, staff, or admin flows; inspect layout changes at 360×800.
+For behavior changes, cover relevant booking boundaries and persistence behavior. Compile production code and run relevant non-visual checks.
+
+UI appearance and animation checks that require visual observation are performed by the user. Do not launch the app, take screenshots, or write/run visual tests for these checks. Instead, provide a concise checklist of the affected flows and expected visual behavior for the user to verify, including the 360×800 layout when relevant. Continue to compile and test non-visual business logic where appropriate.
 
 ## Commit & Pull Request Guidelines
 

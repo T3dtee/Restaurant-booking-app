@@ -180,20 +180,16 @@ public class bookingController {
     }
     @FXML
     private void confirmSubmit() {
-        LocalDate date = datePicker.getValue();
-        if (AppData.bookingService.timeSlotAvailable(datePicker.getValue(), time)) { //ว่าง
-            if (!AppData.allBookingData.isCustomerBooked(AppData.loginUserData, datePicker.getValue(), time)) { //ยังไม่เคยจอง
-                AppData.bookingId = AppData.bookingService.book(date,time,AppData.loginUserData,guest).getReservationId();
-                if (AppData.bookingId != null){
-                    goToSuccess();
-                }
+        BookingService.SubmitResult result = AppData.bookingService.submitBooking(
+                datePicker.getValue(), time, AppData.loginUserData, guest);
+        switch (result.status()) {
+            case BOOKED -> {
+                AppData.bookingId = result.reservation().getReservationId();
+                goToSuccess();
             }
-            else { //จองแล้ว
-                showPopUp(confirm);
-            }
-        }
-        else { //ไม่ว่างแล้วพยายามกด
-            if (AppData.allBookingData.isTableFull(date,time)) fullBookedAnimation();
+            case ALREADY_BOOKED -> showPopUp(confirm);
+            case FULL -> fullBookedAnimation();
+            case UNAVAILABLE -> { }
         }
     }
 
@@ -204,6 +200,11 @@ public class bookingController {
     @FXML
     private void popUpBHClick() {
         hidePopUp();
+        AppData.allBookingData.findCustomerBooking(AppData.loginUserData, datePicker.getValue(), time)
+                .ifPresent(reservation -> {
+                    AppData.bookingId = reservation.getReservationId();
+                    reservation.setHighlight(true);
+                });
         goToHistory(SceneManager.TransitionType.SLIDE_IN);
     }
 

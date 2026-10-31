@@ -108,14 +108,18 @@ public class ReservationService {
     }
 
     public boolean isCustomerBooked(Customer customer, LocalDate date, LocalTime time) {
+        return findCustomerBooking(customer, date, time).isPresent();
+    }
+
+    public Optional<Reservation> findCustomerBooking(Customer customer, LocalDate date, LocalTime time) {
         for (Reservation r : getReservationsByCustomer(customer)) {
             if (r.getDate().equals(date)
                     && r.getTime().equals(time)
                     && (r.getStatus() == ReservationStatus.BOOKED
                     || r.getStatus() == ReservationStatus.CHECKED_IN))
-                return true;
+                return Optional.of(r);
         }
-        return false;
+        return Optional.empty();
     }
 
     public void updateReservations() {
