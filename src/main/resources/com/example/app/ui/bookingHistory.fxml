@@ -17,7 +17,7 @@
    <children>
       <AnchorPane fx:id="mainContent" pickOnBounds="false" prefHeight="369.0" prefWidth="360.0" styleClass="app-background">
          <children>
-            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="800.0" prefWidth="360.0" vbarPolicy="NEVER">
+            <ScrollPane fx:id="historyScroll" fitToWidth="true" hbarPolicy="NEVER" prefHeight="800.0" prefWidth="360.0" vbarPolicy="NEVER">
                <content>
                   <VBox alignment="TOP_CENTER" prefWidth="360.0">
                      <children>

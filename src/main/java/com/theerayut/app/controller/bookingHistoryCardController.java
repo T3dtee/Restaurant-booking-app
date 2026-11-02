@@ -4,14 +4,18 @@ import com.theerayut.app.AppData;
 import com.theerayut.app.model.Person;
 import com.theerayut.app.model.Reservation;
 import com.theerayut.app.model.ReservationStatus;
+import com.theerayut.app.util.AnimationUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 
 import java.time.format.DateTimeFormatter;
+import java.util.function.Consumer;
 
 public class bookingHistoryCardController {
+    @FXML private HBox box;
     @FXML
     private Label status;
     @FXML
@@ -97,13 +101,36 @@ public class bookingHistoryCardController {
     }
 
     private Runnable onAdd;
+    private Consumer<Runnable> onScrollIntoView;
+    private Consumer<Runnable> onBookingEntry;
+    private Runnable onHighlightFinished;
+
+    public void setOnHighlightFinished(Runnable onHighlightFinished) {
+        this.onHighlightFinished = onHighlightFinished;
+    }
+
+    public void setOnBookingEntry(Consumer<Runnable> onBookingEntry) {
+        this.onBookingEntry = onBookingEntry;
+    }
+
+    public void setOnScrollIntoView(Consumer<Runnable> onScrollIntoView) {
+        this.onScrollIntoView = onScrollIntoView;
+    }
+
     public void setOnAdd(Runnable onAdd) {
         this.onAdd = onAdd;
     }
     public void moveInAction() {
+        Runnable afterMoveIn = null;
+        if (reservation.isHighlight()) {
+            afterMoveIn = () -> AnimationUtils.cardHighlight(box, onScrollIntoView,
+                    () -> reservation.setHighlight(false), onHighlightFinished);
+        }
         if (reservation.isDoneBooking()){
             reservation.setDoneBooking(false);
-            onAdd.run();
+            if (onBookingEntry != null) onBookingEntry.accept(afterMoveIn);
+        } else if (afterMoveIn != null) {
+            afterMoveIn.run();
         }
     }
     public void showCard(){
