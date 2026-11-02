@@ -103,6 +103,10 @@ public class homeController {
 
     @FXML
     private void historyOnClick() {
+        goToHistory();
+    }
+
+    private void goToHistory() {
         AppData.bookingHistoryReturnPage = "home.fxml";
         SceneManager.switchSceneAsync("bookingHistory.fxml", SceneManager.TransitionType.OVERLAID_SLIDE);
     }
