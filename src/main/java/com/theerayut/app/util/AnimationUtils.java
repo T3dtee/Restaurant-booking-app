@@ -270,19 +270,32 @@ public class AnimationUtils {
         timeline.play();
     }
 
-    public static void cardHide(Region regionItem) {
-        // Keep the inner content at its real size so the collapse doesn't squash it.
+    private static Rectangle prepareCardResize(Region regionItem, double expandedHeight) {
+        // Prepare the full-size content even when the card has never been expanded.
         if (!regionItem.getChildrenUnmodifiable().isEmpty()
                 && regionItem.getChildrenUnmodifiable().getFirst() instanceof Region inner) {
-            inner.setMinHeight(inner.getHeight());
-            inner.setPrefHeight(inner.getHeight());
+            double innerHeight = expandedHeight;
+            if (regionItem instanceof AnchorPane) {
+                Double top = AnchorPane.getTopAnchor(inner);
+                Double bottom = AnchorPane.getBottomAnchor(inner);
+                innerHeight -= regionItem.getInsets().getTop() + regionItem.getInsets().getBottom()
+                        + (top == null ? 0 : top) + (bottom == null ? 0 : bottom);
+            }
+            innerHeight = Math.max(0, innerHeight);
+            inner.setMinHeight(innerHeight);
+            inner.setPrefHeight(innerHeight);
         }
 
-        // Clip to the card's shrinking bounds — the content is hidden as it rolls up, not resized.
-        Rectangle clip = new Rectangle(regionItem.getWidth(), regionItem.getHeight());
+        // Use the same clipping on the first entrance and every subsequent resize.
+        Rectangle clip = new Rectangle();
         clip.widthProperty().bind(regionItem.widthProperty());
         clip.heightProperty().bind(regionItem.heightProperty());
         regionItem.setClip(clip);
+        return clip;
+    }
+
+    public static void cardHide(Region regionItem) {
+        prepareCardResize(regionItem, regionItem.getHeight());
 
         FadeTransition ft = new FadeTransition(Duration.millis(250), regionItem);
         ft.setFromValue(1);
@@ -314,6 +327,7 @@ public class AnimationUtils {
 
     /** index = the card's position within its group (0, 1, 2, ...); drives the cascade. */
     public static void cardMoveInAt(Region regionItem, double height, int index) {
+        Rectangle entranceClip = prepareCardResize(regionItem, height);
         // Collapse and hide immediately — before the stagger delay — so a queued
         // card takes up no space and stays invisible until its turn comes.
         regionItem.setPrefHeight(0);
@@ -341,6 +355,10 @@ public class AnimationUtils {
         );
 
         timeline.setDelay(Duration.millis(Math.min(index, STAGGER_MAX) * STAGGER_STEP));
+        // Expanded cards must allow the highlight pulse to extend past their bounds.
+        timeline.setOnFinished(event -> {
+            if (regionItem.getClip() == entranceClip) regionItem.setClip(null);
+        });
         timeline.play();
     }
 
@@ -430,6 +448,7 @@ public class AnimationUtils {
         scroll.getScene().getRoot().applyCss();
         scroll.getScene().getRoot().layout();
         if (card.getScene() != scroll.getScene()) return;
+        Rectangle entranceClip = prepareCardResize(card, height);
         card.setPrefHeight(0);
         card.setOpacity(0);
         PauseTransition waitForScene = new PauseTransition(Duration.millis(250));
@@ -492,6 +511,7 @@ public class AnimationUtils {
             sequence.getChildren().add(new PauseTransition(Duration.millis(120)));
             sequence.getChildren().add(entrance);
             sequence.setOnFinished(event -> {
+                if (card.getClip() == entranceClip) card.setClip(null);
                 updateScroll.run();
                 if (card.getScene() != null && onFinished != null) onFinished.run();
             });
