@@ -134,13 +134,13 @@ public class SceneManager {
         mainContainer.getChildren().add(nextScene);
         nextScene.setTranslateX(360);
 
-        TranslateTransition moveOut = new TranslateTransition(Duration.millis(430), mainContainer.getChildren().getFirst());
-        moveOut.setToX(-130);
-        moveOut.setInterpolator(Interpolator.SPLINE(0.4, 0.9, 0.2, 1));
+        TranslateTransition moveOut = new TranslateTransition(Duration.millis(400), mainContainer.getChildren().getFirst());
+        moveOut.setToX(-100);
+        moveOut.setInterpolator(Interpolator.SPLINE(0.35, 1, 0.3, 1));
 
-        TranslateTransition moveIn = new TranslateTransition(Duration.millis(430), nextScene);
+        TranslateTransition moveIn = new TranslateTransition(Duration.millis(400), nextScene);
         moveIn.setToX(0);
-        moveIn.setInterpolator(Interpolator.SPLINE(0.25, 0.9, 0.15, 1));
+        moveIn.setInterpolator(Interpolator.SPLINE(0.25, 0.85, 0.15, 1));
 
         moveIn.setOnFinished(event -> {
             if (mainContainer.getChildren().size() > 1) {
@@ -211,7 +211,7 @@ public class SceneManager {
         }
 
         mainContainer.getChildren().addFirst(nextScene);
-        nextScene.setTranslateX(-130);
+        nextScene.setTranslateX(-100);
 
         TranslateTransition moveOut = new TranslateTransition(Duration.millis(260), mainContainer.getChildren().getLast());
         moveOut.setToX(360);
