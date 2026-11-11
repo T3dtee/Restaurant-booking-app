@@ -32,6 +32,11 @@ public class bookingHeadStatusCard {
         HIDE
     }
     private State state = State.SHOW;
+    private boolean collapseLocked;
+
+    public void setCollapseLocked(boolean locked) {
+        collapseLocked = locked;
+    }
     private Boolean inAnimation = false;
     private final List<Runnable> hideCard = new ArrayList<>();
     private final List<Runnable> showCard = new ArrayList<>();
@@ -80,6 +85,7 @@ public class bookingHeadStatusCard {
 
     @FXML
     private void onClick(){
+        if (collapseLocked && state == State.SHOW) return;
         if (inAnimation == false){
             inAnimation = true;
             switch (state){

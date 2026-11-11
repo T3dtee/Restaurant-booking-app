@@ -14,6 +14,10 @@
     -fx-border-width: 1;
     -fx-border-color: #ececec;
 }
+.box.reservation-highlight {
+    -fx-border-color: #8caf72;
+}
+
 .id {
     -fx-font-family: 'Roboto Condensed SemiBold';
     -fx-text-fill: #1f2317;
